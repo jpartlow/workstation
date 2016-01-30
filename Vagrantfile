@@ -2,6 +2,8 @@
 # vi: set ft=ruby :
 
 pl_dev_remote_origin_url = `git config remote.origin.url`
+pl_dev_user_name = `git config user.name`
+pl_dev_user_email = `git config user.email`
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
@@ -38,6 +40,9 @@ Vagrant.configure(2) do |config|
       :name => "clone-pl-dev",
       :inline => "
         [ ! -e pl-dev ] && git clone #{pl_dev_remote_origin_url}
+        cd pl-dev
+        git config user.name '#{pl_dev_user_name}'
+        git config user.email '#{pl_dev_user_email}'
       "
   end
 end
