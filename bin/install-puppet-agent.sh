@@ -5,16 +5,12 @@ set -e
 bin_dir=$(dirname ${0?})
 # The root of the project
 project_dir=$(dirname ${bin_dir?})
+# Ephemeral build files
+pkg_dir="${project_dir?}/pkg"
 # The location of the installed puppet-agent's binaries
 puppet_bin_dir='/opt/puppetlabs/puppet/bin'
-# The local project's modules
-modules_dir="${project_dir?}/modules"
-# Ephemeral build files
-build_dir="${project_dir?}/build"
-# Third party modules managed by r10k which the project modules depend on
-r10k_modules_dir="${build_dir?}/modules"
-# Modulepath needed to locate all required modules
-modulepath="${modules_dir?}:${r10k_modules_dir}"
+# Where to install modules to so we can apply them 
+modules_dir="/opt/puppetlabs/workstation-modules"
 
 if [ -z "$1" ]; then
   echo "Usage: install-puppet-agent.sh <ver>"
@@ -47,6 +43,6 @@ case $platform in
     ;;
 esac
 
-"${puppet_bin_dir?}/puppet" apply --modulepath "${modules_dir?}" -e "include 'workstation::r10k'"
+module=$("${puppet_bin_dir?}/puppet" module build "${project_dir?}")
 
-"${puppet_bin_dir?}/r10k" puppetfile install --puppetfile "${project_dir?}/Puppetfile" --moduledir "${r10k_modules_dir?}"
+"${puppet_bin_dir?}/puppet" module install --target-dir "${modules_dir}" "${module?}"
