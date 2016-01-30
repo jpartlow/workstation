@@ -38,6 +38,5 @@
 # Josh Partlow <joshua.partlow@puppetlabs.com>
 #
 class workstation {
-
-
+  include workstation::ruby
 }
