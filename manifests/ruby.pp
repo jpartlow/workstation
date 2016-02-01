@@ -29,8 +29,8 @@ class workstation::ruby(
   $ruby_versions.each |$index, $version| {
 
     $global = $index ? {
-      1       => true
-      default => false
+      1       => true,
+      default => false,
     }
 
     rbenv::build { $version:
