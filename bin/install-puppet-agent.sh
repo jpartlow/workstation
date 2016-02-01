@@ -45,4 +45,5 @@ esac
 
 module=$("${puppet_bin_dir?}/puppet" module build "${project_dir?}" | grep 'Module built:' | grep -Eo '/.*$')
 
+rm -rf "${modules_dir?}"
 "${puppet_bin_dir?}/puppet" module install --target-dir "${modules_dir}" "${module?}"
