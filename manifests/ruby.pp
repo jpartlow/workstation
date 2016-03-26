@@ -16,8 +16,8 @@
 #   global interpreter. (Required)
 #
 class workstation::ruby(
-  String $install_dir 	       = '/usr/local/rbenv',
-  Array[String] $ruby_versions = ['2.3.0', '2.2.4', '1.9.3-p551', '1.8.7-p335']
+  String $install_dir          = '/usr/local/rbenv',
+  Array[String] $ruby_versions = ['2.1.8']
 ) {
 
   class { 'rbenv':
