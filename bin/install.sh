@@ -22,6 +22,7 @@ usage() {
   echo "  -h <user@host> - if provided ssh to this host before attempting install"
   echo "     (module will be scp'd first)"
   echo "  -i <ssh-key> - if needed for reaching host"
+  echo "  -c <path/to/hieradata/common.yaml> - hieradata  file for workstation classes"
   echo "  -y - do not prompt"
   echo "  -d - run with debug output (set -x trace)"
   echo "  -? - this help message"
@@ -82,6 +83,10 @@ install_agent() {
   "${puppet_bin_dir?}/puppet" module install --target-dir "${modules_dir}" "${module?}"
 }
 
+copy_hieradata() {
+  cp "${HIERADATA:-${modules_dir?}/hieradata/common.yaml}" /etc/puppetlabs/code/environments/production/hieradata
+}
+
 apply_workstation() {
   ask "This will apply the workstation manifests to this local machine, installing rbenv, cloning repositories and configuring for a workstion environment.  Is this what you what?"
 
@@ -110,14 +115,14 @@ cp ${module_file?} /root/
 cd /root
 tar -xzf ${module_file?}
 cd ${module_dir?}
-bin/install.sh -a ${AGENT_VERSION?} -y ${debug_arg}
+bin/install.sh -a ${AGENT_VERSION?} -y ${debug_arg} -c ./hieradata/common.yaml
 script
 
   scp_file "${pkg_dir?}/unpack_and_invoke.sh"
   ssh "${USER_HOST?}" ${IDENTITY_ARG} sudo bash unpack_and_invoke.sh
 }
 
-while getopts a:h:i:dy? name; do
+while getopts a:h:i:c:dy? name; do
   case "$name" in
     \?)
         usage
@@ -140,6 +145,9 @@ while getopts a:h:i:dy? name; do
           IDENTITY_ARG=""
         fi
         ;;
+    c)
+        HIERADATA="${OPTARG?}"
+        ;;
     y)
         ASSUME_YES='true'
         ;;
@@ -154,5 +162,6 @@ elif [ -n "$USER_HOST" ]; then
   bootstrap_remote "${module?}"
 else
   install_agent
+  copy_hieradata
   apply_workstation
 fi
