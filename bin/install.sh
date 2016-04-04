@@ -64,8 +64,10 @@ install_agent() {
 
   case $platform in
     debian)
-      apt-get update
-      apt-get install --allow-unauthenticated -y puppet-agent
+      if ! dpkg -l puppet-agent | grep '^ii'; then
+        apt-get update
+        apt-get install --allow-unauthenticated -y puppet-agent
+      fi
       ;;
 
     *)
