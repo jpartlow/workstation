@@ -39,4 +39,5 @@
 #
 class workstation {
   include workstation::ruby
+  include workstation::user
 }

@@ -1,0 +1,2 @@
+# The developer user account to be built on the workstation host.
+#workstation::user::account: <USER>
