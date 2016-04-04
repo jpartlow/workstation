@@ -48,16 +48,20 @@ this repository checked out in.
 * rbenv
 * TODO
 
-### Setup Requirements 
+### Setup Requirements
 
 The scripts in bin/ provide bootstrapping for installing a puppet-agent into a
 new workstation so that the module may then be run.
 
 ### Beginning with workstation
 
-The very basic steps needed for a user to get the module up and running. This
-can include setup steps, if necessary, or it can be an example of the most
-basic use of the module.
+You may manually clone pl-dev onto a host and run bin/install.sh, but you will likely need to have already prepared the host with your ssh keys.
+
+If you are preparing a vm, and you have an account with root or sudo root privileges and ssh keys, then you can just invoke this to install puppet-agent 1.4.1 and apply the workstation manifest on the given host:
+
+``` sh
+$ bin/install.sh -a 1.4.1 -h <user>@<host.vm> [-i ssh-keyfile]
+```
 
 ## Usage
 
