@@ -6,6 +6,8 @@
 # Parameters
 # ----------
 #
+# @param account [String] Account name to ensure is created.
+# @param groups [Array<String>] Of groups the account should belong to.  Default is 'sudo'.
 class workstation::user(
   String $account,
   Array[String] $groups = ['sudo'],
