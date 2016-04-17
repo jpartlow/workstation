@@ -30,7 +30,7 @@ development testing.
 
 Because the purpose of the module is to setup a workstation suitable for
 developing Puppet and Puppet Enterprise tools and packaging, from scratch, it
-has a bootstrap shell script in vim to handle the initial ruby and puppet
+has a bootstrap shell script in bin to handle the initial ruby and puppet
 dependencies by installing the standalone puppet-agent (which includes its own
 ruby).  Because this is installed into /opt, it is isolated from the rest of
 the system.  The script can than use the puppet module tool to install this
@@ -57,7 +57,7 @@ new workstation so that the module may then be run.
 
 You may manually clone pl-dev onto a host and run bin/install.sh, but you will likely need to have already prepared the host with your ssh keys.
 
-If you are preparing a vm, and you have an account with root or sudo root privileges and ssh keys, then you can just invoke this to install puppet-agent 1.4.1 and apply the workstation manifest on the given host:
+If you are preparing a vm or host with sshd that you have network access to, and you have an account with root or sudo root privileges and ssh keys, then you can just invoke this to install puppet-agent 1.4.1 and apply the workstation manifest on the given host:
 
 ``` sh
 $ bin/install.sh -a 1.4.1 -h <user>@<host.vm> [-i ssh-keyfile]
@@ -65,29 +65,20 @@ $ bin/install.sh -a 1.4.1 -h <user>@<host.vm> [-i ssh-keyfile]
 
 ## Usage
 
-This section is where you describe how to customize, configure, and do the
-fancy stuff with your module here. It's especially helpful if you include usage
-examples and code samples for doing things with your module.
+You can customize the modules actions by editing a version of hieradata/common.yaml to change any parameters.  This file can be supplied to bin/install.sh by using the -c flag.
 
 ## Reference
 
-Here, include a complete list of your module's classes, types, providers,
-facts, along with the parameters for each. Users refer to this section (thus
-the name "Reference") to find specific details; most users don't read it per
-se.
+workstation
+workstation::ruby - installs a ruby via rbenv
+workstation::user - sets up up a user account
+workstation::git  - ensures git is installed and configured
+workstation::repos - clones a set of git repositories
 
 ## Limitations
 
-This is where you list OS compatibility, version compatibility, etc. If there
-are Known Issues, you might want to include them under their own heading here.
+Currently only written and tested for an Ubuntu host (14.04 specifically).
 
 ## Development
 
-Since your module is awesome, other users will want to play with it. Let them
-know what the ground rules for contributing are.
-
-## Release Notes/Contributors/Etc. **Optional**
-
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You can also add any additional sections you feel
-are necessary or important to include here. Please use the `## ` header.
+joshua.partlow@puppetlabs.com
