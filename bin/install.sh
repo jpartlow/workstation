@@ -22,7 +22,7 @@ usage() {
   echo "  -h <user@host> - if provided ssh to this host before attempting install"
   echo "     (module will be scp'd first)"
   echo "  -i <ssh-key> - if needed for reaching host"
-  echo "  -c <path/to/hieradata/common.yaml> - hieradata  file for workstation classes"
+  echo "  -c <path/to/hieradata/common.yaml> - hieradata file for workstation classes"
   echo "  -y - do not prompt"
   echo "  -d - run with debug output (set -x trace)"
   echo "  -? - this help message"
