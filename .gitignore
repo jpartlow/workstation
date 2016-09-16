@@ -2,3 +2,4 @@ pkg
 *.sw?
 .vagrant
 Gemfile.lock
+spec/fixtures/modules

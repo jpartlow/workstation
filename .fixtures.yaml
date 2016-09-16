@@ -1,0 +1,13 @@
+fixtures:
+  repositories:
+    rbenv:
+      repo: "git@github.com:justindowning/puppet-rbenv.git"
+      ref: 2.1.0
+    stdlib:
+      repo: "git@github.com:puppetlabs/puppetlabs-stdlib.git"
+      ref: master
+    vcsrepo:
+      repo: "git@github.com:puppetlabs/puppetlabs-vcsrepo.git"
+      ref: 1.3.2
+  symlinks:
+    workstation: "#{source_dir}"

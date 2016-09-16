@@ -1,0 +1,4 @@
+workstation::account: hiera
+workstation::repository_sources:
+    - "git@github.com:foo/bar'
+    - "git@github.com:foo/baz'
