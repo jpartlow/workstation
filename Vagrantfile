@@ -33,7 +33,7 @@ Vagrant.configure(2) do |config|
       :inline => "
         mkdir ~/.ssh
         chmod 700 ~/.ssh
-        echo 'Host github.com'
+        echo 'Host github.com' >> ~/.ssh/config
         echo '  StrictHostKeyChecking=no' >> ~/.ssh/config
       "
     dev.vm.provision "shell",
