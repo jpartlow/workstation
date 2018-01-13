@@ -19,13 +19,18 @@ class workstation(
   Array[String] $repository_sources,
 ){
   include workstation::ruby
+
   class { workstation::user:
     account => $::workstation::account,
   }
   contain workstation::user
+
   contain workstation::git
+
   workstation::repos { "main":
     repository_sources => $::workstation::repository_sources,
     require            => Class["Workstation::Git"],
   }
+
+  contain workstation::dotfiles
 }
