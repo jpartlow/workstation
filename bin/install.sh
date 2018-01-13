@@ -100,7 +100,7 @@ apply_workstation() {
 
 scp_file() {
   local file="${1?}"
-  scp "${file?}" "${USER_HOST?}:" ${IDENTITY_ARG}
+  scp -i "${IDENTITY_ARG}" "${file?}" "${USER_HOST?}:"
 }
 
 bootstrap_remote() {
@@ -122,7 +122,7 @@ bin/install.sh -a ${AGENT_VERSION?} -y ${debug_arg} -c ./hieradata/common.yaml
 script
 
   scp_file "${pkg_dir?}/unpack_and_invoke.sh"
-  ssh "${USER_HOST?}" ${IDENTITY_ARG} sudo bash unpack_and_invoke.sh
+  ssh "${USER_HOST?}" -i "${IDENTITY_ARG}" sudo bash unpack_and_invoke.sh
 }
 
 while getopts a:h:i:c:dy? name; do
@@ -143,7 +143,7 @@ while getopts a:h:i:c:dy? name; do
     i)
         identity="${OPTARG?}"
         if [ -n "${identity}" ]; then
-          IDENTITY_ARG="-i ${identity}"
+          IDENTITY_ARG="${identity}"
         else
           IDENTITY_ARG=""
         fi
