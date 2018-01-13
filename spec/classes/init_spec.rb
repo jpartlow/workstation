@@ -10,7 +10,7 @@ describe 'workstation' do
 
   it { is_expected.to compile.with_all_deps }
   it { is_expected.to contain_class('Rbenv') }
-  it { is_expected.to contain_rbenv__build('2.1.8') }
+  it { is_expected.to contain_rbenv__build('2.3.1') }
   it { is_expected.to contain_package('git') }
   it { is_expected.to contain_user('rspec') }
   it { is_expected.to contain_vcsrepo('/home/rspec/work/src/repo') }
