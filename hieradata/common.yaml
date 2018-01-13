@@ -1,1 +1,3 @@
-workstation::user::account: jpartlow
+workstation::account: jpartlow
+workstation::repository_sources:
+    - "git@github.com:puppetlabs/enterprise-dist"
