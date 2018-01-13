@@ -41,8 +41,8 @@ ask() {
   local question="${1?}"
   if [ "${ASSUME_YES}" != 'true' ]; then
     echo "${question?} (y/N)"
-    read answer
-    if [ "${answer}" != 'y' -a "${answer}" != "Y" ]; then
+    read -r answer
+    if [ "${answer}" != 'y' ] && [ "${answer}" != "Y" ]; then
       usage
     fi
   fi
@@ -54,7 +54,8 @@ install_agent() {
   if [ -e '/etc/lsb-release' ]; then
     local platform='debian'
     local package_type='deb'
-    local repo_platform=$(lsb_release -c | sed "{ s/Codename:[ \t]*\([a-z]\+\)/\1/ }")
+    local repo_platform
+    repo_platform=$(lsb_release -c | sed "{ s/Codename:[ \t]*\([a-z]\+\)/\1/ }")
     local repo_config_file='/etc/apt/sources.list.d/puppet-agent.list'
   else
     echo "!! Installing puppet-agent on this platform isn't handled yet."
@@ -77,7 +78,8 @@ install_agent() {
       ;;
   esac
 
-  local module=$(build "${puppet_bin_dir?}/puppet")
+  local module
+  module=$(build "${puppet_bin_dir?}/puppet")
 
   rm -rf "${modules_dir?}"
   "${puppet_bin_dir?}/puppet" module install --target-dir "${modules_dir}" "${module?}"
@@ -104,7 +106,8 @@ scp_file() {
 bootstrap_remote() {
   local module="${1?}"
 
-  local module_file=$(basename "${module?}")
+  local module_file
+  module_file=$(basename "${module?}")
   local module_dir="${module_file%%.tar.gz}"
   if [ "${IS_DEBUG}" = 'true' ]; then
     local debug_arg="-d"
