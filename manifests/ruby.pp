@@ -29,12 +29,16 @@ class workstation::ruby(
   $ruby_versions.each |$index, $version| {
 
     $global = $index ? {
-      1       => true,
+      0       => true,
       default => false,
     }
 
     rbenv::build { $version:
       global => $global,
+    }
+    rbenv::gem { "vmfloaty on ${version}":
+      gem          => 'vmfloaty',
+      ruby_version => $version,
     }
   }
 }

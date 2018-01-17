@@ -10,12 +10,14 @@
 # @param groups [Array<String>] Of groups the account should belong to.  Default is 'sudo'.
 class workstation::user(
   String $account,
-  Array[String] $groups = ['sudo'],
+  Array[String] $groups = ['sudo','admin'],
+  String $shell = '/bin/bash',
 ) {
 
   user { $account:
     ensure     => present,
     managehome => true,
     groups     => $groups,
+    shell      => $shell,
   }
 }

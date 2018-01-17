@@ -86,7 +86,7 @@ install_agent() {
 }
 
 copy_hieradata() {
-  cp "${HIERADATA:-${modules_dir?}/hieradata/common.yaml}" /etc/puppetlabs/code/environments/production/hieradata
+  cp "${HIERADATA:-${modules_dir?}/hieradata/common.yaml}" /etc/puppetlabs/code/environments/production/data
 }
 
 apply_workstation() {
@@ -100,7 +100,26 @@ apply_workstation() {
 
 scp_file() {
   local file="${1?}"
-  scp -i "${IDENTITY_ARG}" "${file?}" "${USER_HOST?}:"
+  declare -a args
+  args=(
+    "${file?}"
+    "${USER_HOST?}:"
+  )
+  if [ -n "${IDENTITY_ARG}" ]; then
+    args+=("${IDENTITY_ARG}")
+  fi
+  scp "${args[@]}"
+}
+
+ssh_execute() {
+  local command="${1?}"
+  declare -a args
+  args=("${USER_HOST?}")
+  if [ -n "${IDENTITY_ARG}" ]; then
+    args+=("${IDENTITY_ARG}")
+  fi
+  args+=("${command?}")
+  ssh "${args[@]}"
 }
 
 bootstrap_remote() {
@@ -111,9 +130,12 @@ bootstrap_remote() {
   local module_dir="${module_file%%.tar.gz}"
   if [ "${IS_DEBUG}" = 'true' ]; then
     local debug_arg="-d"
+    local set_x='set -x'
   fi
 
   cat >"${pkg_dir?}/unpack_and_invoke.sh" <<-script
+#! /usr/bin/env bash
+${set_x}
 cp ${module_file?} /root/
 cd /root
 tar -xzf ${module_file?}
@@ -122,7 +144,8 @@ bin/install.sh -a ${AGENT_VERSION?} -y ${debug_arg} -c ./hieradata/common.yaml
 script
 
   scp_file "${pkg_dir?}/unpack_and_invoke.sh"
-  ssh "${USER_HOST?}" -i "${IDENTITY_ARG}" sudo bash unpack_and_invoke.sh
+  # Need -E to ensure SSH_AUTH_SOCK so git ssh can find puppet-agent keys
+  ssh_execute 'chmod 750 unpack_and_invoke.sh; sudo -E ./unpack_and_invoke.sh'
 }
 
 while getopts a:h:i:c:dy? name; do
@@ -143,9 +166,7 @@ while getopts a:h:i:c:dy? name; do
     i)
         identity="${OPTARG?}"
         if [ -n "${identity}" ]; then
-          IDENTITY_ARG="${identity}"
-        else
-          IDENTITY_ARG=""
+          IDENTITY_ARG="-i ${identity}"
         fi
         ;;
     c)

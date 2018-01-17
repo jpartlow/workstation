@@ -25,11 +25,26 @@ class workstation(
   }
   contain workstation::user
 
+  contain workstation::packages
+
   contain workstation::git
 
-  workstation::repos { "main":
+  contain workstation::known_hosts
+
+  contain workstation::ssh
+
+  File {
+    ensure => directory,
+    owner  => $account,
+    group  => $account,
+  }
+  file { "/home/${account}": }
+  file { "/home/${account}/work": }
+  file { "/home/${account}/work/src": }
+
+  workstation::repos { 'main':
     repository_sources => $::workstation::repository_sources,
-    require            => Class["Workstation::Git"],
+    require            => Class['Workstation::Git'],
   }
 
   contain workstation::dotfiles
