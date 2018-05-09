@@ -1,13 +1,17 @@
 # Class: workstation
 # ===========================
 #
-# Controls baseline setup of a development workstation. 
+# Controls baseline setup of a development workstation.
 #
 # Parameters
 # ----------
 #
 # @param account [String] Account name to ensure is created.
-# @param repository_sources [Array<String>] Of repository source urls.
+# @param repository_data [Array<Hash>] Of repositories to clone. This is
+#   passed to the workstation::repositories class.
+# @param ssh_public_keys [Array<Array<String>>] Of SSH public keys to
+#   authorize for access to the $account on the workstation. (see
+#   workstation::ssh::public_keys)
 #
 # Authors
 # -------
@@ -16,11 +20,12 @@
 #
 class workstation(
   String $account,
-  Array[String] $repository_sources,
+  Array[Hash] $repository_data,
+  Array[Array[String]] $ssh_public_keys,
 ){
   include workstation::ruby
 
-  class { workstation::user:
+  class { 'workstation::user':
     account => $::workstation::account,
   }
   contain workstation::user
@@ -31,6 +36,9 @@ class workstation(
 
   contain workstation::known_hosts
 
+  class { 'workstation::ssh':
+    public_keys => $ssh_public_keys,
+  }
   contain workstation::ssh
 
   File {
@@ -41,11 +49,26 @@ class workstation(
   file { "/home/${account}": }
   file { "/home/${account}/work": }
   file { "/home/${account}/work/src": }
+  file { "/home/${account}/work/src/pe-modules": }
+  file { "/home/${account}/work/src/puppetlabs": }
+  file { "/home/${account}/work/src/alternates": }
 
-  workstation::repos { 'main':
-    repository_sources => $::workstation::repository_sources,
-    require            => Class['Workstation::Git'],
+  class { 'workstation::repositories':
+    repository_data => $::workstation::repository_data,
+    user               => $::workstation::user::account,
+    identity           => 'id_rsa',
+    require            => [
+      Class['Workstation::Git'],
+      File["/home/${account}/work/src/pe-modules"],
+      File["/home/${account}/work/src/puppetlabs"],
+      File["/home/${account}/work/src/alternates"],
+    ],
   }
+  contain workstation::repositories
 
+  class { 'workstation::dotfiles':
+    user => $::workstation::user::account,
+    identity    => 'id_rsa',
+  }
   contain workstation::dotfiles
 }

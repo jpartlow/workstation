@@ -1,7 +1,125 @@
+# YAML Macros
+team_github_accounts: &team_github_accounts
+  - "highb"
+  - "mwbutcher"
+  - "barleyj-puppet"
+  - "cthorn42"
+  - "shaigy"
+  - "npwalker"
+
+# Puppet parameters
 workstation::account: jpartlow
-workstation::repository_sources:
-    - "git@github.com:puppetlabs/enterprise-dist"
-    - "git@github.com:puppetlabs/frankenbuilder"
-workstation::ssh::public_keys:
+workstation::repository_data:
+    - path: "work/src"
+      defaults:
+        upstream: "puppetlabs"
+        remotes: *team_github_accounts
+      repos:
+        - source: "git@github.com:jpartlow/puppet-enterprise-vanagon"
+
+        - source: "git@github.com:jpartlow/beaker"
+        - source: "git@github.com:jpartlow/beaker-answers"
+        - source: "git@github.com:jpartlow/beaker-hostgenerator"
+        - source: "git@github.com:jpartlow/beaker-pe"
+        - source: "git@github.com:jpartlow/beaker-pe-large-environments"
+
+        - source: "git@github.com:jpartlow/ci-job-configs"
+
+        - source: "git@github.com:jpartlow/facter"
+        - source: "git@github.com:jpartlow/puppet"
+        - source: "git@github.com:jpartlow/puppet-debugging-kit"
+
+        - source: "git@github.com:jpartlow/chloride"
+        - source: "git@github.com:jpartlow/higgs"
+        - source: "git@github.com:jpartlow/pe-installer-vanagon"
+
+        - source: "git@github.com:jpartlow/merge-monitor"
+        - source: "git@github.com:jpartlow/peteam-statusboard"
+        - source: "git@github.com:jpartlow/frankenbuilder"
+        - source: "git@github.com:jpartlow/vmfloaty"
+        - source: "git@github.com:jpartlow/pe-modules-vanagon"
+        - source: "git@github.com:jpartlow/pe-installer-shim"
+        - source: "git@github.com:jpartlow/pe_acceptance_tests"
+        - source: "git@github.com:jpartlow/puppet-scale-control"
+        - source: "git@github.com:jpartlow/rspec-meep"
+        - source: "git@github.com:jpartlow/rspec-puppet"
+
+        - source: "git@github.com:jpartlow/puppetlabs-stdlib"
+
+        - source: "git@github.com:jpartlow/puppetlabs-modules"
+
+    - path: "work/src"
+      repos:
+        - source: "git@github.com:jpartlow/integration-tools"
+
+    - path: "work/src/pe-modules"
+      defaults:
+        upstream: "puppetlabs"
+        remotes: *team_github_accounts
+      repos:
+        - source: "git@github.com:jpartlow/puppetlabs-pe_infrastructure"
+        - source: "git@github.com:jpartlow/puppetlabs-pe_install"
+        - source: "git@github.com:jpartlow/puppetlabs-pe_manager"
+        - source: "git@github.com:jpartlow/puppetlabs-pe_postgresql"
+        - source: "git@github.com:jpartlow/puppetlabs-pe_r10k"
+        - source: "git@github.com:jpartlow/puppetlabs-pe_razor"
+        - source: "git@github.com:jpartlow/puppetlabs-pe_repo"
+        - source: "git@github.com:jpartlow/puppetlabs-pe_staging"
+        - source: "git@github.com:jpartlow/puppetlabs-puppet_agent"
+        - source: "git@github.com:jpartlow/puppetlabs-puppet_enterprise"
+
+    - path: "work/src/pe-modules"
+      defaults:
+        remotes: *team_github_accounts
+      repos:
+        - source: "git@github.com:puppetlabs/puppetlabs-pe_accounts"
+        - source: "git@github.com:puppetlabs/puppetlabs-pe_concat"
+        - source: "git@github.com:puppetlabs/puppetlabs-pe_hocon"
+        - source: "git@github.com:puppetlabs/puppetlabs-pe_inifile"
+        - source: "git@github.com:puppetlabs/puppetlabs-pe_java_ks"
+        - source: "git@github.com:puppetlabs/puppetlabs-pe_nginx"
+        - source: "git@github.com:puppetlabs/puppetlabs-pe_puppet_authorization"
+        - source: "git@github.com:puppetlabs/puppetlabs-pe_support_script"
+
+    - path: "work/src/puppetlabs"
+      repos:
+        - source: "git@github.com:puppetlabs/beaker-puppet"
+        - source: "git@github.com:puppetlabs/ez-bake"
+        - source: "git@github.com:puppetlabs/kerminator"
+        - source: "git@github.com:puppetlabs/pe_acceptance_tests-control"
+        - source: "git@github.com:puppetlabs/vanagon"
+
+    - path: "work/src/alternates"
+      repos:
+          - source: "git@github.com:jpartlow/puppetlabs-puppet_enterprise"
+          - source: "git@github.com:jpartlow/puppetlabs-pe_install"
+          - source: "git@github.com:jpartlow/puppetlabs-pe_manager"
+          - source: "git@github.com:jpartlow/puppetlabs-pe_infrastructure"
+          -
+            clone_name: "frankenbuilder_2"
+            source: "git@github.com:jpartlow/frankenbuilder"
+          -
+            clone_name: "pe_acceptance_tests_2"
+            source: "git@github.com:jpartlow/pe_acceptance_tests"
+          -
+            clone_name: "frankenbuilder_3"
+            source: "git@github.com:jpartlow/frankenbuilder"
+          -
+            clone_name: "pe_acceptance_tests_3"
+            source: "git@github.com:jpartlow/pe_acceptance_tests"
+          -
+            clone_name: "frankenbuilder_4"
+            source: "git@github.com:jpartlow/frankenbuilder"
+          -
+            clone_name: "pe_acceptance_tests_4"
+            source: "git@github.com:jpartlow/pe_acceptance_tests"
+          -
+            clone_name: "frankenbuilder_5"
+            source: "git@github.com:jpartlow/frankenbuilder"
+          -
+            clone_name: "pe_acceptance_tests_5"
+            source: "git@github.com:jpartlow/pe_acceptance_tests"
+
+workstation::ssh_public_keys:
     -   - "jpartlow-id_rsa.pub"
         - "AAAAB3NzaC1yc2EAAAABIwAAAgEA6s8UlgPFIjN9K4EBNGmY49FwYzEot88kDJLDyDy2OuxSAVXi2rfTqHacpXTHz7XXS6REQR79P/G6uYARoRXYIiiZ5yh9+e07inm+4pNw22sp/tx5Ek7BRLVYBTbaGbO8shnznPUEv4P2LlB+Is1kFOoPnM8h21NbnGbZzJj12S5/9k7zTEG4VIlLuMJPvXOxvxjzJ9n/WDZdjIXhdUhJFGb/pWgv9SH6RP7dAYp1DYeDoGcDze3vLn3w8/2Pr31DOlx4YsDqLq+C14kfDPDUfXOwpQvxnn9MQAgM5yx2wCpSixdubvKBnJyt0YdNJgQUAvKRDGFcbHoIOfj+bAGhfOTgLAuIGsYIZzxr2h/AIyMsmePcnOMBIt0D678pcdHyveXAgDgVZKN30aSSAmU4PNkYInFRGY/JOS65e1k4FANY51BBNYCLx3IwR0vVlwhLF1yQDPWcTudEpv8LNSj35lWW9kKcC/gsavvPxjkDtllsFolD7UKPqD71w+oKEizOWAJBwFFlPCAaz8jHBkA8ooeoTDFMPiW2Uvcuk8Dl85XheUqirQBo2+xx3s2nfVkOZVsEoCW4gTPc3r7LKigKhxwI9K/FIyHzSSOwAKiMyoUv/nG3RJzjlVgFlWfDqID/VkjBcB7PXiEZ/F+Fk4jvRet7YuSLZ+iWLQ4iKARsh4E="
