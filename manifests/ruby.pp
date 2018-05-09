@@ -17,7 +17,7 @@
 #
 class workstation::ruby(
   String $install_dir          = '/usr/local/rbenv',
-  Array[String] $ruby_versions = ['2.3.1']
+  Array[String] $ruby_versions = ['2.4.3']
 ) {
 
   class { 'rbenv':
