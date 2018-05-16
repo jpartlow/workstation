@@ -18,7 +18,8 @@ define workstation::repo::remote(
 ) {
   exec { "Set ${remote} remote for ${repo_dir}":
     command => "git remote add ${remote} ${git_source_url}",
-    path    => "/usr/bin:/usr/bin/local",
+    unless  => "git remote | grep -q ${remote}",
+    path    => "/usr/bin:/usr/bin/local:/bin",
     cwd     => $repo_dir,
     user    => $local_user,
   }

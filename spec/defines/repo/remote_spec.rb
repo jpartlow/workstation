@@ -15,5 +15,6 @@ describe 'workstation::repo::remote' do
   it do
     is_expected.to contain_exec("Set fork remote for /path/to/repo")
       .with_command("git remote add fork git@github.com:fork/repo")
+      .with_unless("git remote | grep -q fork")
   end
 end
