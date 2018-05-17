@@ -41,7 +41,6 @@ workstation::repository_data:
         - source: "git@github.com:jpartlow/pe-installer-shim"
         - source: "git@github.com:jpartlow/pe_acceptance_tests"
         - source: "git@github.com:jpartlow/puppet-scale-control"
-        - source: "git@github.com:jpartlow/rspec-meep"
         - source: "git@github.com:jpartlow/rspec-puppet"
 
         - source: "git@github.com:jpartlow/puppetlabs-stdlib"
@@ -51,6 +50,7 @@ workstation::repository_data:
     - path: "work/src"
       repos:
         - source: "git@github.com:jpartlow/integration-tools"
+        - source: "git@github.com:puppetlabs/rspec-meep"
 
     - path: "work/src/pe-modules"
       defaults:
@@ -84,7 +84,6 @@ workstation::repository_data:
     - path: "work/src/puppetlabs"
       repos:
         - source: "git@github.com:puppetlabs/beaker-puppet"
-        - source: "git@github.com:puppetlabs/ez-bake"
         - source: "git@github.com:puppetlabs/kerminator"
         - source: "git@github.com:puppetlabs/pe_acceptance_tests-control"
         - source: "git@github.com:puppetlabs/vanagon"
