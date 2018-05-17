@@ -95,7 +95,12 @@ apply_workstation() {
   if [ "${IS_DEBUG}" = 'true' ]; then
     local debug_arg="--debug"
   fi
-  "${puppet_bin_dir?}/puppet" apply "${debug_arg}" --modulepath "${modules_dir?}" -e 'include workstation'
+  "${puppet_bin_dir?}/puppet" apply "${debug_arg}" --detailed-exitcodes --modulepath "${modules_dir?}" -e 'include workstation'
+  exit_code=$?
+  if [ "$exit_code" != "2" ] && [ "$exit_code" != "0" ]; then
+    fail "Returned '$exit_code' from apply...exiting", $exit_code
+  fi
+  return 0
 }
 
 scp_file() {
@@ -146,6 +151,14 @@ script
   scp_file "${pkg_dir?}/unpack_and_invoke.sh"
   # Need -E to ensure SSH_AUTH_SOCK so git ssh can find puppet-agent keys
   ssh_execute 'chmod 750 unpack_and_invoke.sh; sudo -E ./unpack_and_invoke.sh'
+}
+
+fail() {
+  local message=$1
+  local exit_code=$2
+
+  echo "$message"
+  exit "$exit_code"
 }
 
 while getopts a:h:i:c:dy? name; do
