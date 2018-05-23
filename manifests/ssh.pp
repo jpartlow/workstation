@@ -4,6 +4,12 @@ class workstation::ssh(
   String $user  = $::workstation::user::account,
   String $sshdir = "/home/${user}/.ssh"
 ) {
+  
+  file { $sshdir:
+    ensure => 'directory',
+    mode   => '0600',
+  }
+
   $public_keys.each |$pub| {
     $comment = $pub[0]
     $key = $pub[1]
