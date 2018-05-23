@@ -16,15 +16,22 @@ class workstation::dotfiles(
   String $identity,
   String $repo_source = "git@github.com:${user}/dotfiles",
   String $homedir     = "/home/${user}",
-  String $clone_path  = $homedir,
 ) {
   workstation::repo { 'dotfiles':
-    source             => $repo_source,
-    github_user        => $user,
-    identity           => $identity,
-    path               => $clone_path,
+    bare        => true,
+    source      => $repo_source,
+    github_user => $user,
+    identity    => $identity,
+    path        => $homedir,
+    clone_name  => '.dotfiles',
   }
-  -> exec { 'sync dotfiles':
-    command => "${clone_path}/dotfiles/synch.sh -d ${homedir}"
+
+  $_git_command = "/usr/bin/git --git-dir='${homedir}/.dotfiles' --work-tree='${homedir}'"
+  $command = "${_git_command} checkout && ${_git_command} config --local status.showUntrackedFiles no"
+  exec { 'initial checkout':
+    command => $command,
+    path    => '/usr/bin:/bin',
+    onlyif  => "${_git_command} status --porcelain | grep '^D'",
+    require => Workstation::Repo['dotfiles'],
   }
 }

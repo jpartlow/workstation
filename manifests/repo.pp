@@ -23,6 +23,7 @@
 #   with $upstream as the account.
 # @param remotes [Array<String>] an array of github accounts representing
 #   additional remote forks to be added. May be empty.
+# @param bare [Boolean] if true then the checkout will be a bare git clone.
 define workstation::repo(
   String $source,
   String $path,
@@ -32,6 +33,7 @@ define workstation::repo(
   Optional[String] $clone_name = undef,
   Optional[String] $upstream = undef,
   Array[String] $remotes = [],
+  Boolean $bare = false,
 ) {
   $matches = $source.match(/^(.+):([^:]+)\/([^\/]+)$/)
   $protocol = $matches[1]
@@ -44,8 +46,12 @@ define workstation::repo(
   }
   $repo_dir = "${path}/${_clone_name}"
 
+  $_ensure = $bare ? {
+    true    => 'bare',
+    default => 'present',
+  }
   vcsrepo { $repo_dir:
-    ensure   => present,
+    ensure   => $_ensure,
     provider => git,
     source   => $source,
     owner    => $local_user,

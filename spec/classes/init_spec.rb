@@ -42,5 +42,5 @@ describe 'workstation' do
   it { is_expected.to contain_vcsrepo('/home/rspec/some/path/foo') }
   it { is_expected.to contain_vcsrepo('/home/rspec/some/path/bar') }
   it { is_expected.to contain_vcsrepo('/home/rspec/some/other/path/baz') }
-  it { is_expected.to contain_vcsrepo('/home/rspec/dotfiles') }
+  it { is_expected.to contain_vcsrepo('/home/rspec/.dotfiles') }
 end
