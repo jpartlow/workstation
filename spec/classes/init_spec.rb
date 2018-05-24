@@ -30,7 +30,8 @@ describe 'workstation' do
       "repository_data" => repo_params,
       "ssh_public_keys"        => [
         [ 'foo', 'abcde12345' ]
-      ]
+      ],
+      "vim_bundles" => [],
     }
   end
 
@@ -39,8 +40,19 @@ describe 'workstation' do
   it { is_expected.to contain_rbenv__build('2.4.3') }
   it { is_expected.to contain_package('git') }
   it { is_expected.to contain_user('rspec') }
+
+  it { is_expected.to contain_file('/home/rspec/work/src') }
+  it { is_expected.to contain_file('/home/rspec/work/src/pe-modules') }
+  it { is_expected.to contain_file('/home/rspec/work/src/puppetlabs') }
+  it { is_expected.to contain_file('/home/rspec/work/src/alternates') }
+  it { is_expected.to contain_file('/home/rspec/work/src/other') }
+
   it { is_expected.to contain_vcsrepo('/home/rspec/some/path/foo') }
   it { is_expected.to contain_vcsrepo('/home/rspec/some/path/bar') }
   it { is_expected.to contain_vcsrepo('/home/rspec/some/other/path/baz') }
   it { is_expected.to contain_vcsrepo('/home/rspec/.dotfiles') }
+  it do
+    is_expected.to contain_class('workstation::vim')
+      .that_requires('Class[Workstation::Repositories]')
+  end
 end

@@ -12,8 +12,10 @@
 #
 # @param source [String] the github url for the repository.
 # @param path [String] the local filesystem directory we will clone the repository into.
-# @param github_user [String] the github user to clone as.
-# @param identity [String] the ssh key to authenticate to github with.
+# @param github_user [Optional[String]] the github user to clone as. Optional if source is
+#   public.
+# @param identity [Optional[String]] the ssh key to authenticate to github with. Optional
+#   if source is public.
 # @param local_user [String] the local user account owning the repo.
 # @param clone_name [Optional[String]] the local name of the repo directory we
 #   will clone into in $path. If not set, this is taken from $source repo name.
@@ -27,8 +29,8 @@
 define workstation::repo(
   String $source,
   String $path,
-  String $github_user,
-  String $identity,
+  Optional[String] $github_user,
+  Optional[String] $identity,
   String $local_user = $github_user,
   Optional[String] $clone_name = undef,
   Optional[String] $upstream = undef,
@@ -41,7 +43,8 @@ define workstation::repo(
   $repo_name = $matches[3]
 
   $_clone_name = $clone_name ? {
-    undef => $repo_name,
+    undef   => $repo_name,
+    ''      => $repo_name,
     default => $clone_name,
   }
   $repo_dir = "${path}/${_clone_name}"

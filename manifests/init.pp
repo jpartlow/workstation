@@ -12,6 +12,8 @@
 # @param ssh_public_keys [Array<Array<String>>] Of SSH public keys to
 #   authorize for access to the $account on the workstation. (see
 #   workstation::ssh::public_keys)
+# @param vim_bundles [Array<Hash>] Of vim plugin repository info passed to
+#   workstation::vim.
 #
 # Authors
 # -------
@@ -22,6 +24,7 @@ class workstation(
   String $account,
   Array[Hash] $repository_data,
   Array[Array[String]] $ssh_public_keys,
+  Array[Hash] $vim_bundles,
 ){
   include workstation::ruby
 
@@ -52,12 +55,13 @@ class workstation(
   file { "/home/${account}/work/src/pe-modules": }
   file { "/home/${account}/work/src/puppetlabs": }
   file { "/home/${account}/work/src/alternates": }
+  file { "/home/${account}/work/src/other": }
 
   class { 'workstation::repositories':
     repository_data => $::workstation::repository_data,
-    user               => $::workstation::user::account,
-    identity           => 'id_rsa',
-    require            => [
+    user            => $::workstation::user::account,
+    identity        => 'id_rsa',
+    require         => [
       Class['Workstation::Git'],
       File["/home/${account}/work/src/pe-modules"],
       File["/home/${account}/work/src/puppetlabs"],
@@ -67,8 +71,15 @@ class workstation(
   contain workstation::repositories
 
   class { 'workstation::dotfiles':
-    user => $::workstation::user::account,
-    identity    => 'id_rsa',
+    user     => $::workstation::user::account,
+    identity => 'id_rsa',
   }
   contain workstation::dotfiles
+
+  class { 'workstation::vim':
+    user    => $::workstation::user::account,
+    bundles => $vim_bundles,
+    require => Class['Workstation::Repositories'],
+  }
+  contain workstation::vim
 }

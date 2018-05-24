@@ -36,6 +36,19 @@ describe 'workstation::repo' do
       is_expected.to contain_vcsrepo('/path/to/repo/foo')
         .with_source('git@github.com:fork/arepo')
     end
+
+    context 'that is empty' do
+      let(:params) do
+        required_params.merge(
+          :clone_name => ''
+        )
+      end
+
+      it do
+        is_expected.to contain_vcsrepo('/path/to/repo/arepo')
+          .with_source('git@github.com:fork/arepo')
+      end
+    end
   end
 
   context 'with upstream' do
