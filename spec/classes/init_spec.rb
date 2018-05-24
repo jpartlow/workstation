@@ -31,7 +31,6 @@ describe 'workstation' do
       "ssh_public_keys"        => [
         [ 'foo', 'abcde12345' ]
       ],
-      "vim_bundles" => [],
     }
   end
 
@@ -50,7 +49,9 @@ describe 'workstation' do
   it { is_expected.to contain_vcsrepo('/home/rspec/some/path/foo') }
   it { is_expected.to contain_vcsrepo('/home/rspec/some/path/bar') }
   it { is_expected.to contain_vcsrepo('/home/rspec/some/other/path/baz') }
+
   it { is_expected.to contain_vcsrepo('/home/rspec/.dotfiles') }
+
   it do
     is_expected.to contain_class('workstation::vim')
       .that_requires('Class[Workstation::Repositories]')

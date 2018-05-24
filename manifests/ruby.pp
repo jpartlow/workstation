@@ -14,10 +14,13 @@
 # @param ruby_versions [Array] List of ruby versions to be installed via
 #   ruby-build plugin.  The first ruby in the list will be set as the default
 #   global interpreter. (Required)
+# @param gems [Array<String>] Simple list of gem names to install.  Does not
+#   accept versions yet.
 #
 class workstation::ruby(
   String $install_dir          = '/usr/local/rbenv',
-  Array[String] $ruby_versions = ['2.4.3']
+  Array[String] $ruby_versions = ['2.4.3'],
+  Array[String] $gems = [],
 ) {
 
   class { 'rbenv':
@@ -36,9 +39,12 @@ class workstation::ruby(
     rbenv::build { $version:
       global => $global,
     }
-    rbenv::gem { "vmfloaty on ${version}":
-      gem          => 'vmfloaty',
-      ruby_version => $version,
+
+    $gems.each |$gem_name| {
+      rbenv::gem { "${gem_name} on ${version}":
+        gem          => $gem_name,
+        ruby_version => $version,
+      }
     }
   }
 }

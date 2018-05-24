@@ -24,9 +24,13 @@ class workstation(
   String $account,
   Array[Hash] $repository_data,
   Array[Array[String]] $ssh_public_keys,
-  Array[Hash] $vim_bundles,
+  Array[Hash] $vim_bundles = [],
+  Array[String] $gems = [],
 ){
-  include workstation::ruby
+  class { 'workstation::ruby':
+    gems => $gems,
+  }
+  contain workstation::ruby
 
   class { 'workstation::user':
     account => $::workstation::account,
