@@ -54,13 +54,14 @@ define workstation::repo(
     default => 'present',
   }
   vcsrepo { $repo_dir:
-    ensure   => $_ensure,
-    provider => git,
-    source   => $source,
-    owner    => $local_user,
-    group    => $local_user,
-    user     => $github_user,
-    identity => $identity, # required for git to find the key from ssh-agent
+    ensure     => $_ensure,
+    provider   => git,
+    submodules => false,
+    source     => $source,
+    owner      => $local_user,
+    group      => $local_user,
+    user       => $github_user,
+    identity   => $identity, # required for git to find the key from ssh-agent
   }
 
   $remote_options = {
