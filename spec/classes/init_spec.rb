@@ -31,12 +31,19 @@ describe 'workstation' do
       "ssh_public_keys"        => [
         [ 'foo', 'abcde12345' ]
       ],
+      "gems" => [
+        'foo',
+      ],
+      "packages" => [
+        'bar',
+      ],
     }
   end
 
   it { is_expected.to compile.with_all_deps }
   it { is_expected.to contain_class('Rbenv') }
   it { is_expected.to contain_rbenv__build('2.4.3') }
+  it { is_expected.to contain_rbenv__gem('foo on 2.4.3') }
   it { is_expected.to contain_package('git') }
   it { is_expected.to contain_user('rspec') }
 
@@ -55,5 +62,21 @@ describe 'workstation' do
   it do
     is_expected.to contain_class('workstation::vim')
       .that_requires('Class[Workstation::Repositories]')
+  end
+
+  it { is_expected.to contain_package('bar') }
+
+  context 'with minimal params' do
+    let(:params) do
+      {
+        "account"            => "rspec",
+        "repository_data" => repo_params,
+        "ssh_public_keys"        => [
+          [ 'foo', 'abcde12345' ]
+        ],
+      }
+    end
+
+    it { is_expected.to compile.with_all_deps }
   end
 end

@@ -14,6 +14,9 @@
 #   workstation::ssh::public_keys)
 # @param vim_bundles [Array<Hash>] Of vim plugin repository info passed to
 #   workstation::vim.
+# @param gems [Array<String>] List of gems to install by defalt in the versions
+#   of ruby being installed.
+# @param packages [Array<String>] List of packages to install.
 #
 # Authors
 # -------
@@ -26,6 +29,7 @@ class workstation(
   Array[Array[String]] $ssh_public_keys,
   Array[Hash] $vim_bundles = [],
   Array[String] $gems = [],
+  Array[String] $packages = [],
 ){
   class { 'workstation::ruby':
     gems => $gems,
@@ -37,7 +41,9 @@ class workstation(
   }
   contain workstation::user
 
-  contain workstation::packages
+  package { $packages:
+    ensure => latest,
+  }
 
   contain workstation::git
 
