@@ -15,6 +15,9 @@ workstation::repository_data:
       upstream: "puppetlabs"
       remotes: *team_github_accounts
     repos:
+      -
+        source: "git@github.com:jpartlow/enterprise-dist"
+        remotes: []
       - source: "git@github.com:jpartlow/puppet-enterprise-vanagon"
 
       - source: "git@github.com:jpartlow/beaker"
