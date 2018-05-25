@@ -6,6 +6,8 @@ require 'puppetlabs_spec_helper/module_spec_helper'
 
 RSpec.configure do |config|
   config.default_facts = {
-    :osfamily => 'Debian',
+    :osfamily        => 'Debian',
+    :operatingsystem => 'Ubuntu',
+    :puppetversion   => '5.5.1',
   }
 end

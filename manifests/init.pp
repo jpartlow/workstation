@@ -92,4 +92,6 @@ class workstation(
     require => Class['Workstation::Repositories'],
   }
   contain workstation::vim
+
+  contain 'workstation::sudo'
 }
