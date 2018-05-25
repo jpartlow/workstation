@@ -30,7 +30,9 @@ class workstation::dotfiles(
   $command = "${_git_command} checkout && ${_git_command} config --local status.showUntrackedFiles no"
   exec { 'initial checkout':
     command => $command,
+    cwd     => $homedir,
     path    => '/usr/bin:/bin',
+    user    => $user,
     onlyif  => "${_git_command} status --porcelain | grep '^D'",
     require => Workstation::Repo['dotfiles'],
   }
