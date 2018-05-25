@@ -169,6 +169,7 @@ workstation::vim_bundles:
 workstation::packages:
   - 'ack-grep'
   - 'curl'
+  - 'openjdk-8-jre-headless'
   - 'python'
   - 'rsync'
   - 'tree'

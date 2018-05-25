@@ -41,9 +41,7 @@ class workstation(
   }
   contain workstation::user
 
-  package { $packages:
-    ensure => latest,
-  }
+  contain workstation::packages
 
   contain workstation::git
 
@@ -60,6 +58,7 @@ class workstation(
     group  => $account,
   }
   file { "/home/${account}": }
+  file { "/home/${account}/bin": }
   file { "/home/${account}/work": }
   file { "/home/${account}/work/src": }
   file { "/home/${account}/work/src/pe-modules": }
@@ -94,4 +93,12 @@ class workstation(
   contain workstation::vim
 
   contain 'workstation::sudo'
+
+  class { 'workstation::lein':
+    require => [
+      Class['Workstation::Packages'],
+      File["/home/${account}/bin"],
+    ],
+  }
+  contain 'workstation::lein'
 }
