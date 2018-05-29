@@ -101,4 +101,11 @@ class workstation(
     ],
   }
   contain 'workstation::lein'
+
+  file { "/home/${account}/.vmfloaty.yml":
+    source => '/home/ubuntu/.vmfloaty.yml',
+    owner  => $account,
+    group  => $account,
+    mode   => '0600',
+  }
 }
