@@ -19,5 +19,6 @@ class workstation::lein(
     cwd         => $homedir,
     user        => $user,
     environment => "HOME=${homedir}",
+    unless      => "test -f ${homedir}/.lein/self-installs/leiningen-*-standalone.jar",
   }
 }
