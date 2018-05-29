@@ -39,7 +39,9 @@ workstation::repository_data:
       - source: "git@github.com:jpartlow/merge-monitor"
       - source: "git@github.com:jpartlow/peteam-statusboard"
       - source: "git@github.com:jpartlow/frankenbuilder"
-      - source: "git@github.com:jpartlow/vmfloaty"
+      -
+        source: "git@github.com:jpartlow/vmfloaty"
+        upstream: "briancain"
       - source: "git@github.com:jpartlow/pe-modules-vanagon"
       - source: "git@github.com:jpartlow/pe-installer-shim"
       - source: "git@github.com:jpartlow/pe_acceptance_tests"
@@ -90,6 +92,7 @@ workstation::repository_data:
       - source: "git@github.com:puppetlabs/kerminator"
       - source: "git@github.com:puppetlabs/pe_acceptance_tests-control"
       - source: "git@github.com:puppetlabs/vanagon"
+      - source: "git@github.com:puppetlabs/puppet-agent"
 
   - path: "work/src/alternates"
     repos:
