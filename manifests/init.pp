@@ -102,6 +102,8 @@ class workstation(
   }
   contain 'workstation::lein'
 
+  contain 'workstation::frankenbuilder'
+
   file { "/home/${account}/.vmfloaty.yml":
     source => '/home/ubuntu/.vmfloaty.yml',
     owner  => $account,
