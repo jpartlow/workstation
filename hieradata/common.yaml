@@ -95,6 +95,8 @@ workstation::repository_data:
       - source: "git@github.com:puppetlabs/puppet-agent"
 
   - path: "work/src/alternates"
+    defaults:
+      upstream: "puppetlabs"
     repos:
       - source: "git@github.com:jpartlow/puppetlabs-puppet_enterprise"
       - source: "git@github.com:jpartlow/puppetlabs-pe_install"
