@@ -28,4 +28,20 @@ class workstation::ssh(
       mode   => '0600',
     }
   }
+
+  Ssh::Config_entry {
+    ensure => present,
+    path   => "${sshdir}/config",
+    owner  => $user,
+    group  => $user,
+  }
+
+  ssh::config_entry { 'pooler hosts':
+    host  => '10.16.* 10.18.* *.delivery.puppetlabs.net',
+    lines => [
+      '  StrictHostKeyChecking=no',
+      '  UserKnownHostsFile=/dev/null',
+    ],
+    order => '10',
+  }
 }
