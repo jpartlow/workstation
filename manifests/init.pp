@@ -118,4 +118,8 @@ class workstation(
     source => '/home/ubuntu/.fog',
     *      => $_pooler_file_args,
   }
+  file { '/s':
+    ensure => 'link',
+    target => "/home/${account}/work/src",
+  }
 }
