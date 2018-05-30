@@ -196,8 +196,10 @@ if [ -z "$AGENT_VERSION" ]; then
 elif [ -n "$USER_HOST" ]; then
   module=$(build "bundle exec puppet")
   scp_file "${module?}"
-  echo "Copying .vmfloaty.yml so tokens are in place"
+  echo "Copying .vmfloaty.yml so vmpooler tokens are available"
   scp_file "${HOME}/.vmfloaty.yml"
+  echo "Copying .fog so vmpooler tokens are in place available"
+  scp_file "${HOME}/.fog"
   bootstrap_remote "${module?}"
 else
   install_agent

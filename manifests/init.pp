@@ -104,10 +104,18 @@ class workstation(
 
   contain 'workstation::frankenbuilder'
 
-  file { "/home/${account}/.vmfloaty.yml":
-    source => '/home/ubuntu/.vmfloaty.yml',
+  $_pooler_file_args = {
+    ensure => 'present',
     owner  => $account,
     group  => $account,
     mode   => '0600',
+  }
+  file { "/home/${account}/.vmfloaty.yml":
+    source => '/home/ubuntu/.vmfloaty.yml',
+    *      => $_pooler_file_args,
+  }
+  file { "/home/${account}/.fog":
+    source => '/home/ubuntu/.fog',
+    *      => $_pooler_file_args,
   }
 }
