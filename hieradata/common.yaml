@@ -180,6 +180,9 @@ workstation::packages:
   - 'tree'
   - 'vim'
   - 'wget'
+  - 'shellcheck'
+  - 'aptitude'
+  - 'nfs-kernel-server'
 
 workstation::gems:
   - 'vmfloaty'

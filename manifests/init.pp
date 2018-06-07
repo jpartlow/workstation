@@ -122,4 +122,13 @@ class workstation(
     ensure => 'link',
     target => "/home/${account}/work/src",
   }
+
+  # Prep an exports file for nfs mounts from test hosts
+  file { '/etc/exports':
+    ensure  => 'present',
+    content => template('workstation/exports.erb'),
+    owner   => 'root',
+    group   => $account,
+    mode    => '0664',
+  }
 }
