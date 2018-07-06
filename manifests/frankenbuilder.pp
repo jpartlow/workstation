@@ -8,7 +8,7 @@ class workstation::frankenbuilder(
   String $alternates = 'work/src/alternates',
   Integer $count = 5,
 ) {
-  $homedir = "/home/$user"
+  $homedir = "/home/${user}"
 
   $file_args = {
     owner => $user,
