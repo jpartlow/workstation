@@ -102,6 +102,9 @@ class workstation(
   }
   contain 'workstation::lein'
 
+  class { 'workstation::frankenbuilder':
+    require => Class['workstation::Repositories'],
+  }
   contain 'workstation::frankenbuilder'
 
   $_pooler_file_args = {
