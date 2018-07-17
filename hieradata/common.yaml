@@ -191,6 +191,7 @@ workstation::packages:
   - 'shellcheck'
   - 'aptitude'
   - 'nfs-kernel-server'
+  - 'redis-tools'
 
 workstation::gems:
   - 'vmfloaty'
