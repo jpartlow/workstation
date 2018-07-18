@@ -57,6 +57,10 @@ workstation::repository_data:
         remotes: []
 
       -
+        source: "git@github.com:jpartlow/pe-backup-tools-vanagon"
+        remotes: []
+
+      -
         source: "git@github.com:jpartlow/pe-opsworks-tools"
         remotes: []
 
