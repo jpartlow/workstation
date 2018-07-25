@@ -65,6 +65,7 @@ class workstation(
   file { "/home/${account}/work/src/puppetlabs": }
   file { "/home/${account}/work/src/alternates": }
   file { "/home/${account}/work/src/other": }
+  file { "/home/${account}/work/tmp": }
 
   class { 'workstation::repositories':
     repository_data => $::workstation::repository_data,
