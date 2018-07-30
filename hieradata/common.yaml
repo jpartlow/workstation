@@ -109,6 +109,7 @@ workstation::repository_data:
       - source: "git@github.com:puppetlabs/pe_acceptance_tests-control"
       - source: "git@github.com:puppetlabs/vanagon"
       - source: "git@github.com:puppetlabs/puppet-agent"
+      - source: "git@github.com:puppetlabs/puppet-enterprise-marketplace-image"
 
   - path: "work/src/alternates"
     defaults:
