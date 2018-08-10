@@ -26,6 +26,8 @@
 # @param remotes [Array<String>] an array of github accounts representing
 #   additional remote forks to be added. May be empty.
 # @param bare [Boolean] if true then the checkout will be a bare git clone.
+# @param checkout_branch [Optional[String]] An optional branch to checkout.
+#   Will also set to upstream if an upstream remote is set.
 define workstation::repo(
   String $source,
   String $path,
@@ -36,6 +38,7 @@ define workstation::repo(
   Optional[String] $upstream = undef,
   Array[String] $remotes = [],
   Boolean $bare = false,
+  Optional[String] $checkout_branch = undef,
 ) {
   $matches = $source.match(/^(.+):([^:]+)\/([^\/]+)$/)
   $protocol = $matches[1]
@@ -74,6 +77,7 @@ define workstation::repo(
       remote         => 'upstream',
       git_source_url => "${protocol}:${upstream}/${repo_name}",
       repo_dir       => $repo_dir,
+      fetch_remote   => true,
       *              => $remote_options,
     }
   }
@@ -84,6 +88,35 @@ define workstation::repo(
       git_source_url => "${protocol}:${remote}/${repo_name}",
       repo_dir       => $repo_dir,
       *              => $remote_options,
+    }
+  }
+
+  if !empty($checkout_branch) {
+    $_remote = !empty($upstream) ? {
+      true    => $upstream,
+      default => 'origin',
+    }
+
+    $_checkout_branch_exec = "Setup branch ${checkout_branch}"
+    exec { $_checkout_branch_exec:
+      command => "git checkout -b ${checkout_branch} -t ${_remote}/${checkout_branch}",
+      unless  => "git branch | grep -qE '^\\s+${checkout_branch}$'",
+      path    => '/usr/bin:/usr/bin/local:/bin',
+      cwd     => $repo_dir,
+      user    => $local_user,
+    }
+
+    # A branch that is already in the fork will not get set by the above checkout,
+    # so ensure upstream tracking here.
+    if !empty($upstream) {
+      exec { "Ensure upstream tracking for ${checkout_branch}":
+        command => "git checkout ${checkout_branch} && git branch -u ${_remote}/${checkout_branch} && git pull",
+        unless  => "git config get branch.${checkout_branch}.remote | grep -qE '^${checkout_branch}$'",
+        path    => '/usr/bin:/usr/bin/local:/bin',
+        cwd     => $repo_dir,
+        user    => $local_user,
+        require => Exec[$_checkout_branch_exec],
+      }
     }
   }
 }

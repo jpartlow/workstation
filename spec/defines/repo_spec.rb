@@ -93,4 +93,42 @@ describe 'workstation::repo' do
         .with_git_source_url('git@github.com:mary/arepo')
     end
   end
+
+  context 'with checkout_branch' do
+    let(:params) do
+      required_params.merge(
+        :checkout_branch => 'master'
+      )
+    end
+
+    it do
+      is_expected.to contain_exec('Setup branch master')
+        .with_command('git checkout -b master -t origin/master')
+        .with_unless("git branch | grep -qE '^\\s+master$'")
+    end
+
+    it { is_expected.to_not contain_exec('Ensure upstream tracking for master') }
+
+    context 'and upstream' do
+      let(:params) do
+        required_params.merge(
+          :checkout_branch => 'master',
+          :upstream        => 'puppetlabs',
+        )
+      end
+
+      it do
+        is_expected.to contain_exec('Setup branch master')
+          .with_command('git checkout -b master -t puppetlabs/master')
+          .with_unless("git branch | grep -qE '^\\s+master$'")
+      end
+
+      it do
+        is_expected.to contain_exec('Ensure upstream tracking for master')
+          .with_command('git checkout master && git branch -u puppetlabs/master && git pull')
+          .with_unless("git config get branch.master.remote | grep -qE '^master$'")
+          .with_require('Exec[Setup branch master]')
+      end
+    end
+  end
 end
