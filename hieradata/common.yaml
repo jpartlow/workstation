@@ -88,6 +88,11 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/pe-opsworks-tools-vanagon"
         remotes: []
 
+      -
+        source: "git@github.com:jpartlow/winston"
+        checkout_branch: "master"
+        remotes: []
+
   - path: "work/src"
     repos:
       - source: "git@github.com:jpartlow/integration-tools"
