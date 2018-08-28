@@ -20,16 +20,32 @@ workstation::repository_data:
         remotes: []
       - source: "git@github.com:jpartlow/puppet-enterprise-vanagon"
 
-      - source: "git@github.com:jpartlow/beaker"
-      - source: "git@github.com:jpartlow/beaker-answers"
-      - source: "git@github.com:jpartlow/beaker-hostgenerator"
-      - source: "git@github.com:jpartlow/beaker-pe"
-      - source: "git@github.com:jpartlow/beaker-pe-large-environments"
+      -
+        source: "git@github.com:jpartlow/beaker"
+        checkout_branch: "master"
+      -
+        source: "git@github.com:jpartlow/beaker-answers"
+        checkout_branch: "master"
+      -
+        source: "git@github.com:jpartlow/beaker-hostgenerator"
+        checkout_branch: "master"
+      -
+        source: "git@github.com:jpartlow/beaker-pe"
+        checkout_branch: "master"
+      -
+        source: "git@github.com:jpartlow/beaker-pe-large-environments"
+        checkout_branch: "master"
 
-      - source: "git@github.com:jpartlow/ci-job-configs"
+      -
+        source: "git@github.com:jpartlow/ci-job-configs"
+        checkout_branch: "master"
 
-      - source: "git@github.com:jpartlow/facter"
-      - source: "git@github.com:jpartlow/puppet"
+      -
+        source: "git@github.com:jpartlow/facter"
+        checkout_branch: "master"
+      -
+        source: "git@github.com:jpartlow/puppet"
+        checkout_branch: "master"
       - source: "git@github.com:jpartlow/puppet-debugging-kit"
 
       - source: "git@github.com:jpartlow/chloride"
@@ -38,13 +54,17 @@ workstation::repository_data:
 
       - source: "git@github.com:jpartlow/merge-monitor"
       - source: "git@github.com:jpartlow/peteam-statusboard"
-      - source: "git@github.com:jpartlow/frankenbuilder"
+      -
+        source: "git@github.com:jpartlow/frankenbuilder"
+        checkout_branch: "master"
       -
         source: "git@github.com:jpartlow/vmfloaty"
         upstream: "briancain"
       - source: "git@github.com:jpartlow/pe-modules-vanagon"
       - source: "git@github.com:jpartlow/pe-installer-shim"
-      - source: "git@github.com:jpartlow/pe_acceptance_tests"
+      -
+        source: "git@github.com:jpartlow/pe_acceptance_tests"
+        checkout_branch: "2018.1.x"
       - source: "git@github.com:jpartlow/puppet-scale-control"
       - source: "git@github.com:jpartlow/rspec-puppet"
 
@@ -78,16 +98,30 @@ workstation::repository_data:
       upstream: "puppetlabs"
       remotes: *team_github_accounts
     repos:
-      - source: "git@github.com:jpartlow/puppetlabs-pe_infrastructure"
-      - source: "git@github.com:jpartlow/puppetlabs-pe_install"
-      - source: "git@github.com:jpartlow/puppetlabs-pe_manager"
+      -
+        source: "git@github.com:jpartlow/puppetlabs-pe_infrastructure"
+        checkout_branch: "irving"
+      -
+        source: "git@github.com:jpartlow/puppetlabs-pe_install"
+        checkout_branch: "irving"
+      -
+        source: "git@github.com:jpartlow/puppetlabs-pe_manager"
+        checkout_branch: "irving"
       - source: "git@github.com:jpartlow/puppetlabs-pe_postgresql"
       - source: "git@github.com:jpartlow/puppetlabs-pe_r10k"
-      - source: "git@github.com:jpartlow/puppetlabs-pe_razor"
-      - source: "git@github.com:jpartlow/puppetlabs-pe_repo"
+      -
+        source: "git@github.com:jpartlow/puppetlabs-pe_razor"
+        checkout_branch: "master"
+      -
+        source: "git@github.com:jpartlow/puppetlabs-pe_repo"
+        checkout_branch: "irving"
       - source: "git@github.com:jpartlow/puppetlabs-pe_staging"
-      - source: "git@github.com:jpartlow/puppetlabs-puppet_agent"
-      - source: "git@github.com:jpartlow/puppetlabs-puppet_enterprise"
+      -
+        source: "git@github.com:jpartlow/puppetlabs-puppet_agent"
+        checkout_branch: "master"
+      -
+        source: "git@github.com:jpartlow/puppetlabs-puppet_enterprise"
+        checkout_branch: "irving"
 
   - path: "work/src/pe-modules"
     defaults:
@@ -122,27 +156,35 @@ workstation::repository_data:
       -
         clone_name: "frankenbuilder_2"
         source: "git@github.com:jpartlow/frankenbuilder"
+        checkout_branch: "master"
       -
         clone_name: "pe_acceptance_tests_2"
         source: "git@github.com:jpartlow/pe_acceptance_tests"
+        checkout_branch: "2018.1.x"
       -
         clone_name: "frankenbuilder_3"
         source: "git@github.com:jpartlow/frankenbuilder"
+        checkout_branch: "master"
       -
         clone_name: "pe_acceptance_tests_3"
         source: "git@github.com:jpartlow/pe_acceptance_tests"
+        checkout_branch: "2018.1.x"
       -
         clone_name: "frankenbuilder_4"
         source: "git@github.com:jpartlow/frankenbuilder"
+        checkout_branch: "master"
       -
         clone_name: "pe_acceptance_tests_4"
         source: "git@github.com:jpartlow/pe_acceptance_tests"
+        checkout_branch: "2018.1.x"
       -
         clone_name: "frankenbuilder_5"
         source: "git@github.com:jpartlow/frankenbuilder"
+        checkout_branch: "master"
       -
         clone_name: "pe_acceptance_tests_5"
         source: "git@github.com:jpartlow/pe_acceptance_tests"
+        checkout_branch: "2018.1.x"
 
 workstation::vim_bundles:
   -
