@@ -62,7 +62,8 @@ install_agent() {
     exit 1
   fi
 
-  curl -f -o "${repo_config_file?}" "http://builds.delivery.puppetlabs.net/puppet-agent/${AGENT_VERSION?}/repo_configs/${package_type?}/pl-puppet-agent-${AGENT_VERSION?}-${repo_platform?}.list"
+  curl -f -o "${repo_config_file?}" "http://builds.delivery.puppetlabs.net/puppet-agent/${AGENT_VERSION?}/signed_repo_configs/${package_type?}/pl-puppet-agent-${AGENT_VERSION?}-${repo_platform?}.list"
+  apt-key adv --fetch-keys http://apt.puppetlabs.com/DEB-GPG-KEY-puppet
 
   case $platform in
     debian)
