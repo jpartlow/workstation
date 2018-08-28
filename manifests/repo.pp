@@ -92,29 +92,32 @@ define workstation::repo(
   }
 
   if !empty($checkout_branch) {
-    $_remote = !empty($upstream) ? {
-      true    => $upstream,
-      default => 'origin',
+    if !empty($upstream) {
+      $_remote = 'upstream'
+      $_checkout_requires = [Workstation::Repo::Remote["${repo_dir}:upstream"]]
+    } else {
+      $_remote = 'origin'
+      $_checkout_requires = []
     }
 
-    $_checkout_branch_exec = "Setup branch ${checkout_branch}"
+    $_checkout_branch_exec = "Setup branch ${checkout_branch} for ${repo_dir}"
     exec { $_checkout_branch_exec:
       command => "git checkout -b ${checkout_branch} -t ${_remote}/${checkout_branch}",
-      unless  => "git branch | grep -qE '^\\s+${checkout_branch}$'",
+      unless  => "git branch | grep -qE '^[ *]+${checkout_branch}$'",
       path    => '/usr/bin:/usr/bin/local:/bin',
       cwd     => $repo_dir,
       user    => $local_user,
+      require => $_checkout_requires,
     }
 
     # A branch that is already in the fork will not get set by the above checkout,
     # so ensure upstream tracking here.
     if !empty($upstream) {
-      exec { "Ensure upstream tracking for ${checkout_branch}":
-        command => "git checkout ${checkout_branch} && git branch -u ${_remote}/${checkout_branch} && git pull",
+      exec { "Ensure upstream tracking for ${checkout_branch} in ${repo_dir}":
+        command => "git checkout ${checkout_branch} && git branch -u ${_remote}/${checkout_branch} && git pull && chown -R ${local_user}:${local_user} ${repo_dir}",
         unless  => "git config get branch.${checkout_branch}.remote | grep -qE '^${checkout_branch}$'",
         path    => '/usr/bin:/usr/bin/local:/bin',
         cwd     => $repo_dir,
-        user    => $local_user,
         require => Exec[$_checkout_branch_exec],
       }
     }

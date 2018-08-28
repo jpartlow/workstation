@@ -102,12 +102,13 @@ describe 'workstation::repo' do
     end
 
     it do
-      is_expected.to contain_exec('Setup branch master')
+      is_expected.to contain_exec('Setup branch master for /path/to/repo/arepo')
         .with_command('git checkout -b master -t origin/master')
-        .with_unless("git branch | grep -qE '^\\s+master$'")
+        .with_unless("git branch | grep -qE '^[ *]+master$'")
+        .with_require([])
     end
 
-    it { is_expected.to_not contain_exec('Ensure upstream tracking for master') }
+    it { is_expected.to_not contain_exec('Ensure upstream tracking for master in /path/to/repo/arepo') }
 
     context 'and upstream' do
       let(:params) do
@@ -118,16 +119,17 @@ describe 'workstation::repo' do
       end
 
       it do
-        is_expected.to contain_exec('Setup branch master')
-          .with_command('git checkout -b master -t puppetlabs/master')
-          .with_unless("git branch | grep -qE '^\\s+master$'")
+        is_expected.to contain_exec('Setup branch master for /path/to/repo/arepo')
+          .with_command('git checkout -b master -t upstream/master')
+          .with_unless("git branch | grep -qE '^[ *]+master$'")
+          .with_require(["Workstation::Repo::Remote[/path/to/repo/arepo:upstream]"])
       end
 
       it do
-        is_expected.to contain_exec('Ensure upstream tracking for master')
-          .with_command('git checkout master && git branch -u puppetlabs/master && git pull')
+        is_expected.to contain_exec('Ensure upstream tracking for master in /path/to/repo/arepo')
+          .with_command('git checkout master && git branch -u upstream/master && git pull && chown -R agituser:agituser /path/to/repo/arepo')
           .with_unless("git config get branch.master.remote | grep -qE '^master$'")
-          .with_require('Exec[Setup branch master]')
+          .with_require('Exec[Setup branch master for /path/to/repo/arepo]')
       end
     end
   end

@@ -19,14 +19,14 @@ describe 'workstation::repo::remote' do
   end
 
   it 'does not fetch' do
-    is_expected.to_not contain_exec("Fetch fork")
+    is_expected.to_not contain_exec("Fetch fork for /path/to/repo")
   end
 
   context 'with fetch' do
     it do
       params[:fetch_remote] = true
-      is_expected.to contain_exec("Fetch fork")
-        .with_command("git remote fetch fork")
+      is_expected.to contain_exec("Fetch fork for /path/to/repo")
+        .with_command("git fetch fork && chown -R auser:auser /path/to/repo")
         .with_unless("git branch -r | grep -qE '^\\s+fork'")
     end
   end

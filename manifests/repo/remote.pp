@@ -26,14 +26,12 @@ define workstation::repo::remote(
     cwd     => $repo_dir,
     user    => $local_user,
   }
-
   if $fetch_remote {
-    exec { "Fetch ${remote}":
-      command => "git remote fetch ${remote}",
+    exec { "Fetch ${remote} for ${repo_dir}":
+      command => "git fetch ${remote} && chown -R ${local_user}:${local_user} ${repo_dir}",
       unless  => "git branch -r | grep -qE '^\\s+${remote}'",
       path    => '/usr/bin:/usr/bin/local:/bin',
       cwd     => $repo_dir,
-      user    => $local_user,
       require => Exec[$_add_remote_exec],
     }
   }
