@@ -249,6 +249,7 @@ workstation::packages:
   - 'nfs-kernel-server'
   - 'redis-tools'
   - 'graphviz'
+  - 'rdesktop'
 
 workstation::gems:
   - 'vmfloaty'
