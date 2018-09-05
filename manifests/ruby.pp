@@ -27,7 +27,7 @@ class workstation::ruby(
     install_dir => $install_dir,
   }
 
-  rbenv::plugin { 'sstephenson/ruby-build': }
+  rbenv::plugin { 'rbenv/ruby-build': }
 
   $ruby_versions.each |$index, $version| {
 
