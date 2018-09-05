@@ -128,7 +128,7 @@ describe 'workstation::repo' do
       it do
         is_expected.to contain_exec('Ensure upstream tracking for master in /path/to/repo/arepo')
           .with_command('git checkout master && git branch -u upstream/master && git pull && chown -R agituser:agituser /path/to/repo/arepo')
-          .with_unless("git config get branch.master.remote | grep -qE '^master$'")
+          .with_unless("git config --get branch.master.remote | grep -qE '^upstream$'")
           .with_require('Exec[Setup branch master for /path/to/repo/arepo]')
       end
     end

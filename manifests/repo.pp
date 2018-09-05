@@ -115,7 +115,7 @@ define workstation::repo(
     if !empty($upstream) {
       exec { "Ensure upstream tracking for ${checkout_branch} in ${repo_dir}":
         command => "git checkout ${checkout_branch} && git branch -u ${_remote}/${checkout_branch} && git pull && chown -R ${local_user}:${local_user} ${repo_dir}",
-        unless  => "git config get branch.${checkout_branch}.remote | grep -qE '^${checkout_branch}$'",
+        unless  => "git config --get branch.${checkout_branch}.remote | grep -qE '^${_remote}$'",
         path    => '/usr/bin:/usr/bin/local:/bin',
         cwd     => $repo_dir,
         require => Exec[$_checkout_branch_exec],
