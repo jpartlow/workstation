@@ -19,7 +19,7 @@
 #
 class workstation::ruby(
   String $install_dir          = '/usr/local/rbenv',
-  Array[String] $ruby_versions = ['2.4.3'],
+  Array[String] $ruby_versions = ['2.5.1'],
   Array[String] $gems = [],
 ) {
 

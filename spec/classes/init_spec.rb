@@ -42,8 +42,8 @@ describe 'workstation' do
 
   it { is_expected.to compile.with_all_deps }
   it { is_expected.to contain_class('Rbenv') }
-  it { is_expected.to contain_rbenv__build('2.4.3') }
-  it { is_expected.to contain_rbenv__gem('foo on 2.4.3') }
+  it { is_expected.to contain_rbenv__build('2.5.1') }
+  it { is_expected.to contain_rbenv__gem('foo on 2.5.1') }
   it { is_expected.to contain_package('git') }
   it { is_expected.to contain_user('rspec') }
 
