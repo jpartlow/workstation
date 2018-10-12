@@ -1,6 +1,16 @@
 require 'spec_helper'
 
 describe 'workstation::ruby' do
+  let(:os_major) { '16.04' }
+  let(:facts) do
+    {
+      'os'        => {
+        'release' => {
+          'major' => os_major,
+        },
+      },
+    }
+  end
   let(:params) do
     {
       :owner => 'biscuit',
@@ -8,6 +18,8 @@ describe 'workstation::ruby' do
   end
 
   it { is_expected.to compile.with_all_deps }
+  it { is_expected.to contain_package('build-essential') }
+  it { is_expected.to contain_package('libgdbm3') }
   it do
     is_expected.to contain_class('Rbenv')
       .with_owner('biscuit')
@@ -30,5 +42,13 @@ describe 'workstation::ruby' do
 
     it { is_expected.to contain_rbenv__gem('foo on 2.5.1') }
     it { is_expected.to contain_rbenv__gem('bar on 2.5.1') }
-  end 
+  end
+
+  context 'ubuntu 18.04' do
+    let(:os_major) { '18.04' }
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_package('build-essential') }
+    it { is_expected.to_not contain_package('libgdbm3') }
+  end
 end

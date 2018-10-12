@@ -9,8 +9,11 @@
 # Parameters
 # ----------
 #
-# @param install_dir [String] System wide path rbenv should be installed in.
-#   Defaults to '/usr/local/rbenv'.
+# @param owner [String] The system account that should own the ruby installation. Required.
+# @param group [String] The system account that should be the group for the
+#   ruby installation. Defaults to $owner
+# @param install_dir [String] The path rbenv should be installed in.
+#   Defaults to '/home/${owner}/.rbenv'.
 # @param ruby_versions [Array] List of ruby versions to be installed via
 #   ruby-build plugin.  The first ruby in the list will be set as the default
 #   global interpreter. (Required)
@@ -26,12 +29,21 @@ class workstation::ruby(
   Array[String] $gems = [],
 ) {
 
+  $os_major = split($facts['os']['release']['major'], '\.')[0]
+  $_manage_deps = Integer($os_major) < 18
+
   class { 'rbenv':
     owner          => $owner,
     group          => $group,
     install_dir    => $install_dir,
     manage_profile => $manage_profile,
+    manage_deps    => $_manage_deps,
   }
+
+  class { 'workstation::ruby::dependencies':
+    ubuntu_18 => Integer($os_major) >= 18,
+  }
+  contain 'workstation::ruby::dependencies'
 
   rbenv::plugin { 'rbenv/ruby-build': }
 
@@ -43,7 +55,8 @@ class workstation::ruby(
     }
 
     rbenv::build { $version:
-      global => $global,
+      global  => $global,
+      require => Class['Workstation::Ruby::Dependencies'],
     }
 
     $gems.each |$gem_name| {
