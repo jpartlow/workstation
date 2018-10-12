@@ -18,13 +18,19 @@
 #   accept versions yet.
 #
 class workstation::ruby(
-  String $install_dir          = '/usr/local/rbenv',
+  String $owner,
+  String $group                = $owner,
+  String $install_dir          = "/home/${owner}/.rbenv",
+  Boolean $manage_profile      = false,
   Array[String] $ruby_versions = ['2.5.1'],
   Array[String] $gems = [],
 ) {
 
   class { 'rbenv':
-    install_dir => $install_dir,
+    owner          => $owner,
+    group          => $group,
+    install_dir    => $install_dir,
+    manage_profile => $manage_profile,
   }
 
   rbenv::plugin { 'rbenv/ruby-build': }

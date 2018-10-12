@@ -31,15 +31,17 @@ class workstation(
   Array[String] $gems = [],
   Array[String] $packages = [],
 ){
-  class { 'workstation::ruby':
-    gems => $gems,
-  }
-  contain workstation::ruby
-
   class { 'workstation::user':
     account => $::workstation::account,
   }
   contain workstation::user
+
+  class { 'workstation::ruby':
+    owner => $account,
+    gems  => $gems,
+  }
+  contain workstation::ruby
+  Class['Workstation::User'] -> Class['Workstation::Ruby']
 
   contain workstation::packages
 
