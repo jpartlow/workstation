@@ -40,6 +40,21 @@ class workstation::ruby(
     manage_deps    => $_manage_deps,
   }
 
+  if !$manage_profile {
+    $bashrc_snippet = @(EOS/$)
+      export PATH="\$HOME/.rbenv/bin:\$PATH"
+      eval "\$(rbenv init -)"
+      | EOS
+
+    exec { 'add rbenv to .bashrc':
+      command => "echo '${bashrc_snippet}' >> /home/${owner}/.bashrc",
+      cwd     => "/home/${owner}",
+      path    => '/usr/bin:/usr/bin/local:/bin',
+      user    => $owner,
+      unless  => "grep -qE 'rbenv init -'",
+    }
+  }
+
   class { 'workstation::ruby::dependencies':
     ubuntu_18 => Integer($os_major) >= 18,
   }

@@ -28,6 +28,12 @@ describe 'workstation::ruby' do
       .with_manage_profile(false)
   end
   it { is_expected.to contain_rbenv__build('2.5.1') }
+  it do
+    is_expected.to contain_exec('add rbenv to .bashrc')
+      .with_command(%r{echo .*rbenv init.* >> /home/biscuit/.bashrc}m)
+      .with_user('biscuit')
+      .with_unless(%r{grep .*rbenv init})
+  end
 
   context 'with gems' do
     let(:params) do
