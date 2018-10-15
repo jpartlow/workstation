@@ -39,6 +39,16 @@ describe 'workstation' do
       ],
     }
   end
+  let(:os_major) { '18.04' }
+  let(:facts) do
+    {
+      'os'        => {
+        'release' => {
+          'major' => os_major,
+        },
+      },
+    }
+  end
 
   it { is_expected.to compile.with_all_deps }
   it { is_expected.to contain_class('Rbenv') }
