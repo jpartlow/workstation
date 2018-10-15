@@ -62,23 +62,16 @@ class workstation::ruby(
 
   rbenv::plugin { 'rbenv/ruby-build': }
 
-  $ruby_versions.each |$index, $version| {
+  class { 'workstation::ruby::versions':
+    ruby_versions => $ruby_versions,
+    gems          => $gems,
+    require       => [Rbenv::Plugin['rbenv/ruby-build'],Class['Workstation::Ruby::Dependencies']],
+  }
+  contain 'workstation::ruby::versions'
 
-    $global = $index ? {
-      0       => true,
-      default => false,
-    }
-
-    rbenv::build { $version:
-      global  => $global,
-      require => Class['Workstation::Ruby::Dependencies'],
-    }
-
-    $gems.each |$gem_name| {
-      rbenv::gem { "${gem_name} on ${version}":
-        gem          => $gem_name,
-        ruby_version => $version,
-      }
-    }
+  workstation::set_owner_group { "/home/${owner}/.rbenv":
+    owner   => $owner,
+    group   => $group,
+    require => Class['Workstation::Ruby::Versions'],
   }
 }

@@ -1,4 +1,5 @@
 # Class: workstation::ruby::dependencies
+# ======================================
 #
 # The rbenv module includes dependencies automatically, but they are out of
 # date for Ubuntu 18.04. This class provides a fresher list.
