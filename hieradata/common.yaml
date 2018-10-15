@@ -5,6 +5,8 @@ team_github_accounts: &team_github_accounts
   - "barleyj-puppet"
   - "cthorn42"
   - "shaigy"
+  - "barriserloth"
+  - "nmburgan"
   - "npwalker"
 
 # Puppet parameters
