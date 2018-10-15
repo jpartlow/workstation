@@ -24,7 +24,7 @@ class workstation::ruby(
   String $owner,
   String $group                = $owner,
   String $install_dir          = "/home/${owner}/.rbenv",
-  Boolean $manage_profile      = false,
+  Boolean $manage_profile      = $owner == 'root',
   Array[String] $ruby_versions = ['2.5.1'],
   Array[String] $gems = [],
 ) {
