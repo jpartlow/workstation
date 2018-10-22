@@ -137,4 +137,11 @@ class workstation(
     group   => $account,
     mode    => '0664',
   }
+
+  # If the image has LANG=C.UTF-8, for example, facter complains
+  exec { 'ensure sane locale':
+    command => 'update-locale LANG=en_US.UTF-8',
+    path    => '/usr/bin:/usr/sbin:/usr/bin/local:/bin',
+    unless  => "grep -q 'LANG=en_US.UTF-8' /etc/default/locale",
+  }
 }
