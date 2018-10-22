@@ -51,7 +51,7 @@ class workstation::ruby(
       cwd     => "/home/${owner}",
       path    => '/usr/bin:/usr/bin/local:/bin',
       user    => $owner,
-      unless  => "grep -qE 'rbenv init -'",
+      unless  => "grep -qE 'rbenv init -' /home/${owner}/.bashrc",
     }
   }
 
