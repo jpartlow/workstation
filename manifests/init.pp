@@ -30,6 +30,7 @@ class workstation(
   Array[Hash] $vim_bundles = [],
   Array[String] $gems = [],
   Array[String] $packages = [],
+  Workstation::Package_repo_struct $package_repositories = [],
 ){
   class { 'workstation::user':
     account => $::workstation::account,
@@ -44,6 +45,8 @@ class workstation(
   Class['Workstation::User'] -> Class['Workstation::Ruby']
 
   contain workstation::packages
+
+  contain workstation::package_repositories
 
   contain workstation::git
 

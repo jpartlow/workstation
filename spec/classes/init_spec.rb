@@ -37,6 +37,15 @@ describe 'workstation' do
       "packages" => [
         'bar',
       ],
+      "package_repositories" => [
+        {
+          'repo_package_url' => 'http://foo/arepo.deb',
+          'packages'         => [
+            'baz',
+            'biff',
+          ]
+        }
+      ]
     }
   end
   let(:os_major) { '18.04' }
@@ -75,6 +84,11 @@ describe 'workstation' do
   end
 
   it { is_expected.to contain_package('bar') }
+
+  it { is_expected.to contain_apt__key('puppetlabs') }
+  it { is_expected.to contain_exec('install arepo.deb repository package') }
+  it { is_expected.to contain_package('baz') }
+  it { is_expected.to contain_package('biff') }
 
   it do
     is_expected.to contain_class('workstation::lein')
