@@ -70,11 +70,17 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/puppet"
         checkout_branch: "master"
       - source: "git@github.com:jpartlow/puppet-debugging-kit"
-      - source: "git@github.com:jpartlow/puppet-enterprise-vanagon"
+      - source: "git@github.com:jpartlow/puppet-enterprise-modules"
+      - 
+        source: "git@github.com:jpartlow/puppet-enterprise-vanagon"
+        remotes: []
       - source: "git@github.com:jpartlow/puppet-scale-control"
       - source: "git@github.com:jpartlow/puppetlabs-stdlib"
       - source: "git@github.com:jpartlow/puppetlabs-modules"
       - source: "git@github.com:jpartlow/rspec-puppet"
+      - 
+        source: "git@github.com:puppetlabs/vanagon"
+        remotes: []
       -
         source: "git@github.com:jpartlow/vmfloaty"
         upstream: "briancain"
@@ -135,10 +141,12 @@ workstation::repository_data:
     repos:
       - source: "git@github.com:puppetlabs/beaker-puppet"
       - source: "git@github.com:puppetlabs/kerminator"
+      - source: "git@github.com:puppetlabs/packaging"
       - source: "git@github.com:puppetlabs/pe_acceptance_tests-control"
+      - source: "git@github.com:puppetlabs/pe-rbac-service"
       - source: "git@github.com:puppetlabs/puppet-agent"
       - source: "git@github.com:puppetlabs/puppet-enterprise-marketplace-image"
-      - source: "git@github.com:puppetlabs/vanagon"
+      - source: "git@github.com:puppetlabs/puppetdb"
 
   - path: "work/src/alternates"
     defaults:
