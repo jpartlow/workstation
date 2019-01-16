@@ -18,11 +18,6 @@ workstation::repository_data:
       remotes: *team_github_accounts
     repos:
       -
-        source: "git@github.com:jpartlow/enterprise-dist"
-        remotes: []
-      - source: "git@github.com:jpartlow/puppet-enterprise-vanagon"
-
-      -
         source: "git@github.com:jpartlow/beaker"
         checkout_branch: "master"
       -
@@ -37,59 +32,52 @@ workstation::repository_data:
       -
         source: "git@github.com:jpartlow/beaker-pe-large-environments"
         checkout_branch: "master"
-
+      - source: "git@github.com:jpartlow/chloride"
       -
         source: "git@github.com:jpartlow/ci-job-configs"
         checkout_branch: "master"
-
+      -
+        source: "git@github.com:jpartlow/enterprise-dist"
+        remotes: []
       -
         source: "git@github.com:jpartlow/facter"
         checkout_branch: "master"
       -
-        source: "git@github.com:jpartlow/puppet"
-        checkout_branch: "master"
-      - source: "git@github.com:jpartlow/puppet-debugging-kit"
-
-      - source: "git@github.com:jpartlow/chloride"
-      - source: "git@github.com:jpartlow/higgs"
-      - source: "git@github.com:jpartlow/pe-installer-vanagon"
-
-      - source: "git@github.com:jpartlow/merge-monitor"
-      - source: "git@github.com:jpartlow/peteam-statusboard"
-      -
         source: "git@github.com:jpartlow/frankenbuilder"
         checkout_branch: "master"
-      -
-        source: "git@github.com:jpartlow/vmfloaty"
-        upstream: "briancain"
-      - source: "git@github.com:jpartlow/pe-modules-vanagon"
-      - source: "git@github.com:jpartlow/pe-installer-shim"
+      - source: "git@github.com:jpartlow/higgs"
+      - source: "git@github.com:jpartlow/merge-monitor"
       -
         source: "git@github.com:jpartlow/pe_acceptance_tests"
         checkout_branch: "2018.1.x"
-      - source: "git@github.com:jpartlow/puppet-scale-control"
-      - source: "git@github.com:jpartlow/rspec-puppet"
-
-      - source: "git@github.com:jpartlow/puppetlabs-stdlib"
-
-      - source: "git@github.com:jpartlow/puppetlabs-modules"
-
       -
         source: "git@github.com:jpartlow/pe-backup-tools"
         remotes: []
-
       -
         source: "git@github.com:jpartlow/pe-backup-tools-vanagon"
         remotes: []
-
+      - source: "git@github.com:jpartlow/pe-installer-shim"
+      - source: "git@github.com:jpartlow/pe-installer-vanagon"
+      - source: "git@github.com:jpartlow/pe-modules-vanagon"
       -
         source: "git@github.com:jpartlow/pe-opsworks-tools"
         remotes: []
-
       -
         source: "git@github.com:jpartlow/pe-opsworks-tools-vanagon"
         remotes: []
-
+      - source: "git@github.com:jpartlow/peteam-statusboard"
+      -
+        source: "git@github.com:jpartlow/puppet"
+        checkout_branch: "master"
+      - source: "git@github.com:jpartlow/puppet-debugging-kit"
+      - source: "git@github.com:jpartlow/puppet-enterprise-vanagon"
+      - source: "git@github.com:jpartlow/puppet-scale-control"
+      - source: "git@github.com:jpartlow/puppetlabs-stdlib"
+      - source: "git@github.com:jpartlow/puppetlabs-modules"
+      - source: "git@github.com:jpartlow/rspec-puppet"
+      -
+        source: "git@github.com:jpartlow/vmfloaty"
+        upstream: "briancain"
       -
         source: "git@github.com:jpartlow/winston"
         checkout_branch: "master"
@@ -148,20 +136,28 @@ workstation::repository_data:
       - source: "git@github.com:puppetlabs/beaker-puppet"
       - source: "git@github.com:puppetlabs/kerminator"
       - source: "git@github.com:puppetlabs/pe_acceptance_tests-control"
-      - source: "git@github.com:puppetlabs/vanagon"
       - source: "git@github.com:puppetlabs/puppet-agent"
       - source: "git@github.com:puppetlabs/puppet-enterprise-marketplace-image"
+      - source: "git@github.com:puppetlabs/vanagon"
 
   - path: "work/src/alternates"
     defaults:
       upstream: "puppetlabs"
     repos:
-      - source: "git@github.com:jpartlow/puppetlabs-puppet_enterprise"
-      - source: "git@github.com:jpartlow/puppetlabs-pe_install"
-      - source: "git@github.com:jpartlow/puppetlabs-pe_manager"
-      - source: "git@github.com:jpartlow/puppetlabs-pe_infrastructure"
       -
         clone_name: "frankenbuilder_2"
+        source: "git@github.com:jpartlow/frankenbuilder"
+        checkout_branch: "master"
+      -
+        clone_name: "frankenbuilder_3"
+        source: "git@github.com:jpartlow/frankenbuilder"
+        checkout_branch: "master"
+      -
+        clone_name: "frankenbuilder_4"
+        source: "git@github.com:jpartlow/frankenbuilder"
+        checkout_branch: "master"
+      -
+        clone_name: "frankenbuilder_5"
         source: "git@github.com:jpartlow/frankenbuilder"
         checkout_branch: "master"
       -
@@ -169,29 +165,21 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/pe_acceptance_tests"
         checkout_branch: "2018.1.x"
       -
-        clone_name: "frankenbuilder_3"
-        source: "git@github.com:jpartlow/frankenbuilder"
-        checkout_branch: "master"
-      -
         clone_name: "pe_acceptance_tests_3"
         source: "git@github.com:jpartlow/pe_acceptance_tests"
         checkout_branch: "2018.1.x"
-      -
-        clone_name: "frankenbuilder_4"
-        source: "git@github.com:jpartlow/frankenbuilder"
-        checkout_branch: "master"
       -
         clone_name: "pe_acceptance_tests_4"
         source: "git@github.com:jpartlow/pe_acceptance_tests"
         checkout_branch: "2018.1.x"
       -
-        clone_name: "frankenbuilder_5"
-        source: "git@github.com:jpartlow/frankenbuilder"
-        checkout_branch: "master"
-      -
         clone_name: "pe_acceptance_tests_5"
         source: "git@github.com:jpartlow/pe_acceptance_tests"
         checkout_branch: "2018.1.x"
+      - source: "git@github.com:jpartlow/puppetlabs-pe_install"
+      - source: "git@github.com:jpartlow/puppetlabs-pe_manager"
+      - source: "git@github.com:jpartlow/puppetlabs-pe_infrastructure"
+      - source: "git@github.com:jpartlow/puppetlabs-puppet_enterprise"
 
 workstation::vim_bundles:
   -
