@@ -1,8 +1,6 @@
 # YAML Macros
 team_github_accounts: &team_github_accounts
   - "highb"
-  - "mwbutcher"
-  - "barleyj-puppet"
   - "cthorn42"
   - "shaigy"
   - "barriserloth"
@@ -140,6 +138,7 @@ workstation::repository_data:
   - path: "work/src/puppetlabs"
     repos:
       - source: "git@github.com:puppetlabs/beaker-puppet"
+      - source: "git@github.com:puppetlabs/bolt"
       - source: "git@github.com:puppetlabs/kerminator"
       - source: "git@github.com:puppetlabs/packaging"
       - source: "git@github.com:puppetlabs/pe_acceptance_tests-control"
