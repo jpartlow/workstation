@@ -253,6 +253,7 @@ workstation::package_repositories:
     repo_package_url: 'http://apt.puppet.com/puppet6-release-bionic.deb'
     packages:
       - puppet-bolt
+      - pdk
 
 workstation::gems:
   - 'vmfloaty'
