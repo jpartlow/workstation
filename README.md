@@ -16,10 +16,10 @@
 
 This module will bootstrap a fresh development vm or laptop into a known state
 suitable for PE integration development.  Currently only working with Ubuntu
-14.04 as the base platform.
+18.04 as the base platform.
 
 Primarily for integration.  Currently this is my way of capturing set up for an
-Ubuntu 14.04 dev box, so that I can recreate my dev environment automatically,
+Ubuntu 18.04 dev box, so that I can recreate my dev environment automatically,
 either to restore on a new laptop or to do dev work from a vm.  Intention is to
 allow me to work with new/clean configuration without risking my current dev
 environment's stability for handling day to day work items.  From there can be
@@ -45,8 +45,16 @@ this repository checked out in.
 
 ### What workstation affects
 
-* rbenv
-* TODO
+* user account
+* homedir
+* jpartlow/dotfiles (base $HOME config from a repo checkout)
+* $HOME workstation structure (directories)
+* rbenv/ruby-build
+* packages
+* git repositories, cloning, remotes, upstream link, branch checkout
+* ssh public keys
+* vim plugins/config
+* gems
 
 ### Setup Requirements
 
@@ -69,15 +77,25 @@ You can customize the modules actions by editing a version of hieradata/common.y
 
 ## Reference
 
-workstation
-workstation::ruby - installs a ruby via rbenv
-workstation::user - sets up up a user account
-workstation::git  - ensures git is installed and configured
-workstation::repos - clones a set of git repositories
+* workstation
+* workstation::ruby - installs a ruby via rbenv
+* workstation::user - sets up up a user account
+* workstation::packages - installs system packages
+* workstation::package_repositories - configures a particular package repository
+  and installs packages that it provides
+* workstation::git  - ensures git is installed and configured
+* workstation::known_hosts - adds ssh keys to known_hosts config (Github)
+* workstation::ssh - adds authorized public keys and .ssh/config settings
+* workstation::repositories - clones and configures a set of git repositories
+* workstation::dotfiles - sets up an isolated dotfiles repository in $HOME
+* workstation::vim - configures vim and installs plugins
+* workstation::sudo - adds user to sudoers
+* workstation::lein - installs leiningen
+* workstation::frankenbuilder - some customization for frankenbuilder work clones
 
 ## Limitations
 
-Currently only written and tested for an Ubuntu host (14.04 specifically).
+Currently only written and tested for an Ubuntu host (18.04 specifically).
 
 ## Development
 
