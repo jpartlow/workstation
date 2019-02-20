@@ -92,7 +92,45 @@ workstation::repository_data:
       - source: "git@github.com:jpartlow/integration-tools"
       - source: "git@github.com:puppetlabs/rspec-meep"
 
+  - path: "work/src/pem"
+    defaults:
+      upstream: "puppetlabs"
+      remotes: *team_github_accounts
+    repos:
+      -
+        clone_name: "irving"
+        source: "git@github.com:jpartlow/puppet-enterprise-modules"
+        checkout_branch: "irving"
+      -
+        clone_name: "johnson"
+        source: "git@github.com:jpartlow/puppet-enterprise-modules"
+        checkout_branch: "johnson"
+      -
+        clone_name: "kearney"
+        source: "git@github.com:jpartlow/puppet-enterprise-modules"
+        checkout_branch: "kearney"
+
   - path: "work/src/pe-modules"
+    defaults:
+      upstream: "puppetlabs"
+      remotes: *team_github_accounts
+    repos:
+      - source: "git@github.com:jpartlow/puppetlabs-pe_r10k"
+      -
+        source: "git@github.com:jpartlow/puppetlabs-pe_razor"
+        checkout_branch: "master"
+      -
+        source: "git@github.com:jpartlow/puppetlabs-puppet_agent"
+        checkout_branch: "master"
+
+  - path: "work/src/pe-modules"
+    defaults:
+      remotes: *team_github_accounts
+    repos:
+      - source: "git@github.com:puppetlabs/puppetlabs-pe_support_script"
+      - source: "git@github.com:puppetlabs/puppetlabs-pe_bootstrap"
+
+  - path: "work/src/legacy-pe-modules"
     defaults:
       upstream: "puppetlabs"
       remotes: *team_github_accounts
@@ -122,7 +160,7 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/puppetlabs-puppet_enterprise"
         checkout_branch: "irving"
 
-  - path: "work/src/pe-modules"
+  - path: "work/src/legacy-pe-modules"
     defaults:
       remotes: *team_github_accounts
     repos:
