@@ -11,7 +11,7 @@
 # @param user [String] User account being configured.
 # @param path [String] Path to the directory containing all of the
 #   frankenbuilder/pe_acceptance_tests checkout.
-# @param suffixes Array[String] Array of suffixes that pair each $path/frankenbuilder_$suffix
+# @param suffixes [Array[String]] Array of suffixes that pair each $path/frankenbuilder_$suffix
 #   repo with a $path/pe_acceptance_tests_$suffix repo. Empty array by default, so does nothing.
 class workstation::frankenbuilder(
   String $user = $::workstation::user::account,

@@ -5,13 +5,17 @@ describe 'workstation::ssh' do
     {
       :user        => 'rspec',
       :public_keys => [
-        [
-          'foo-id_rsa.pub',
-          'AAAAA...=',
-        ],
-      ]
+        'foo-id_rsa.pub',
+      ],
+      :sshdir => '/tmp/ssh-test',
     }
   end
 
+  include_context('fake ssh public key', '/tmp/ssh-test/foo-id_rsa.pub', 'ssh-rsa abcde foo')
+
   it { is_expected.to compile.with_all_deps }
+  it do
+    is_expected.to contain_ssh_authorized_key('foo-id_rsa.pub')
+      .with_key('abcde')
+  end
 end

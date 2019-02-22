@@ -26,10 +26,10 @@ describe 'workstation' do
   end
   let(:params) do
     {
-      "account"            => "rspec",
+      "account"         => "rspec",
       "repository_data" => repo_params,
-      "ssh_public_keys"        => [
-        [ 'foo', 'abcde12345' ]
+      "ssh_public_keys" => [
+        'foo.pub',
       ],
       "gems" => [
         'foo',
@@ -58,6 +58,8 @@ describe 'workstation' do
       },
     }
   end
+
+  include_context('fake ssh public key', '/home/rspec/.ssh/foo.pub', 'ssh-rsa abcde foo')
 
   it { is_expected.to compile.with_all_deps }
   it { is_expected.to contain_class('Rbenv') }
@@ -96,7 +98,7 @@ describe 'workstation' do
         "account"            => "rspec",
         "repository_data" => repo_params,
         "ssh_public_keys"        => [
-          [ 'foo', 'abcde12345' ]
+          'foo.pub'
         ],
       }
     end

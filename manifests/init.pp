@@ -9,7 +9,7 @@
 # @param account [String] Account name to ensure is created.
 # @param repository_data [Array<Hash>] Of repositories to clone. This is
 #   passed to the workstation::repositories class.
-# @param ssh_public_keys [Array<Array<String>>] Of SSH public keys to
+# @param ssh_public_keys [Array<String>] Of SSH public keys to
 #   authorize for access to the $account on the workstation. (see
 #   workstation::ssh::public_keys)
 # @param vim_bundles [Array<Hash>] Of vim plugin repository info passed to
@@ -26,7 +26,7 @@
 class workstation(
   String $account,
   Array[Hash] $repository_data,
-  Array[Array[String]] $ssh_public_keys,
+  Array[String] $ssh_public_keys,
   Array[Hash] $vim_bundles = [],
   Array[String] $gems = [],
   Array[String] $packages = [],
