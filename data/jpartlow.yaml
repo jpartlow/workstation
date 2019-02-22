@@ -1,5 +1,6 @@
 # YAML Macros
-team_github_accounts: &team_github_accounts
+# (Note this is namespaced 'workstation' so that hiera doesn't complain about its presence)
+workstation::team_github_accounts: &team_github_accounts
   - "highb"
   - "cthorn42"
   - "shaigy"

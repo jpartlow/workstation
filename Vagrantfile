@@ -1,10 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-pl_dev_remote_origin_url = `git config remote.origin.url`
-pl_dev_user_name = `git config user.name`
-pl_dev_user_email = `git config user.email`
-
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -12,37 +8,13 @@ pl_dev_user_email = `git config user.email`
 Vagrant.configure(2) do |config|
   # So that local keys can be used to clone repositories from Github
   config.ssh.forward_agent = true
-
   config.vm.define "dev-test" do |dev|
     dev.vm.hostname = "dev-test"
-    dev.vm.box = "puppetlabs/ubuntu-14.04-64-nocm"
+    dev.vm.box = "ubuntu/bionic64"
     dev.vm.provider "virtualbox" do |v|
-      v.memory = 1024 * 8
-      v.cpus = 4
+      v.memory = 1024 * 4
+      v.cpus = 2
     end
-
-    dev.vm.provision "shell",
-      :name => "install-git",
-      :inline => "
-        apt-get update
-        apt-get install -y git
-      "
-    # Without this step, the git clone fails because the github.com ssh key is unknown
-    dev.vm.provision "shell",
-      :name => "modify-ssh",
-      :inline => "
-        mkdir ~/.ssh
-        chmod 700 ~/.ssh
-        echo 'Host github.com' >> ~/.ssh/config
-        echo '  StrictHostKeyChecking=no' >> ~/.ssh/config
-      "
-    dev.vm.provision "shell",
-      :name => "clone-pl-dev",
-      :inline => "
-        [ ! -e pl-dev ] && git clone #{pl_dev_remote_origin_url}
-        cd pl-dev
-        git config user.name '#{pl_dev_user_name}'
-        git config user.email '#{pl_dev_user_email}'
-      "
+    dev.vm.network "private_network", ip: "172.16.0.2"
   end
 end

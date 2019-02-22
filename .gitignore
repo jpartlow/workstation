@@ -3,3 +3,5 @@ pkg
 .vagrant
 Gemfile.lock
 spec/fixtures/modules
+data/common.yaml
+Boltdir/modules

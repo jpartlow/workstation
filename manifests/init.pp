@@ -119,13 +119,16 @@ class workstation(
     group  => $account,
     mode   => '0600',
   }
+
+  # Copying in .fog and .vmfloaty assumes that the account we are generating on the
+  # workstation is the same as the account we are running the plan from...
   file { "/home/${account}/.vmfloaty.yml":
-    source => '/home/ubuntu/.vmfloaty.yml',
-    *      => $_pooler_file_args,
+    content => file("/home/${account}/.vmfloaty.yml", '/dev/null'),
+    *       => $_pooler_file_args,
   }
   file { "/home/${account}/.fog":
-    source => '/home/ubuntu/.fog',
-    *      => $_pooler_file_args,
+    content => file("/home/${account}/.fog", '/dev/null'),
+    *       => $_pooler_file_args,
   }
   file { '/s':
     ensure => 'link',

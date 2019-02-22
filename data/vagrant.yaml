@@ -1,0 +1,47 @@
+# This is a test dataset for use with the vagrant instance.
+
+# YAML Macros
+# (Note this is namespaced 'workstation' so that hiera doesn't complain about its presence)
+workstation::team_github_accounts: &team_github_accounts
+  - "highb"
+  - "cthorn42"
+  - "shaigy"
+  - "barriserloth"
+  - "nmburgan"
+  - "npwalker"
+
+# Puppet parameters
+workstation::account: jpartlow
+workstation::repository_data:
+  - path: "work/src"
+    defaults:
+      upstream: "puppetlabs"
+      remotes: *team_github_accounts
+    repos:
+      -
+        source: "git@github.com:jpartlow/puppet-enterprise-modules"
+        checkout_branch: "kearney"
+
+workstation::vim_bundles:
+  -
+    clone_name: "vim-ack"
+    source: "https://github.com/mileszs/ack.vim.git"
+
+workstation::packages:
+  - 'ack-grep'
+  - 'vim'
+  - 'wget'
+  # Bolt's apply-prep should install puppet-release repo, allowing other puppet packages to be installed
+  - 'puppet-bolt'
+  - 'pdk'
+
+workstation::gems:
+  - 'vmfloaty'
+  - 'tmuxinator'
+
+workstation::ssh_public_keys:
+  -  - "jpartlow-id_rsa.pub"
+     - "AAAAB3NzaC1yc2EAAAABIwAAAgEA6s8UlgPFIjN9K4EBNGmY49FwYzEot88kDJLDyDy2OuxSAVXi2rfTqHacpXTHz7XXS6REQR79P/G6uYARoRXYIiiZ5yh9+e07inm+4pNw22sp/tx5Ek7BRLVYBTbaGbO8shnznPUEv4P2LlB+Is1kFOoPnM8h21NbnGbZzJj12S5/9k7zTEG4VIlLuMJPvXOxvxjzJ9n/WDZdjIXhdUhJFGb/pWgv9SH6RP7dAYp1DYeDoGcDze3vLn3w8/2Pr31DOlx4YsDqLq+C14kfDPDUfXOwpQvxnn9MQAgM5yx2wCpSixdubvKBnJyt0YdNJgQUAvKRDGFcbHoIOfj+bAGhfOTgLAuIGsYIZzxr2h/AIyMsmePcnOMBIt0D678pcdHyveXAgDgVZKN30aSSAmU4PNkYInFRGY/JOS65e1k4FANY51BBNYCLx3IwR0vVlwhLF1yQDPWcTudEpv8LNSj35lWW9kKcC/gsavvPxjkDtllsFolD7UKPqD71w+oKEizOWAJBwFFlPCAaz8jHBkA8ooeoTDFMPiW2Uvcuk8Dl85XheUqirQBo2+xx3s2nfVkOZVsEoCW4gTPc3r7LKigKhxwI9K/FIyHzSSOwAKiMyoUv/nG3RJzjlVgFlWfDqID/VkjBcB7PXiEZ/F+Fk4jvRet7YuSLZ+iWLQ4iKARsh4E="
+
+workstation::ruby::ruby_versions:
+  - '2.5.1'

@@ -8,40 +8,43 @@
     * [Setup requirements](#setup-requirements)
     * [Beginning with workstation](#beginning-with-workstation)
 1. [Usage - Configuration options and additional functionality](#usage)
-1. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+1. [Reference - Short list of class/defined type references](#reference)
+1. [Testing](#testing)
+    * [Vagrantfile - A test host](#vagrantfile)
+    * [Specs](#specs)
 1. [Limitations - OS compatibility, etc.](#limitations)
 1. [Development - Guide for contributing to the module](#development)
 
 ## Description
 
 This module will bootstrap a fresh development vm or laptop into a known state
-suitable for PE integration development.  Currently only working with Ubuntu
+suitable for PE management development.  Currently only working with Ubuntu
 18.04 as the base platform.
 
-Primarily for integration.  Currently this is my way of capturing set up for an
-Ubuntu 18.04 dev box, so that I can recreate my dev environment automatically,
-either to restore on a new laptop or to do dev work from a vm.  Intention is to
-allow me to work with new/clean configuration without risking my current dev
-environment's stability for handling day to day work items.  From there can be
-expanded to other platforms (notably OSX) for onboarding, or throw away
-development testing.
+Currently this is my way of capturing set up for an Ubuntu 18.04 dev box, so
+that I can recreate my dev environment automatically, either to restore on a
+new laptop or to do dev work from a vm.  Intention is to allow me to work with
+new/clean configuration without risking my current dev environment's stability
+for handling day to day work items.  From there can be expanded to other
+platforms (notably OSX) for onboarding, or throw away development testing.
+
+The module makes use of Bolt to manage the workstation.  The
+workstation::manage plan (in plans/manage.pp) uses apply_prep to get
+puppet-agent installed on the node, and then can apply 'include workstation'
+building the catalog locally (after a `bolt puppetfile install` has installed
+dependencies), and then shipping it to remote workstation and applying it
+there.
+
+Configuration of the module is handled by Hiera, through data/common.yaml (see
+below for details)
 
 ## Setup
 
 Because the purpose of the module is to setup a workstation suitable for
 developing Puppet and Puppet Enterprise tools and packaging, from scratch, it
-has a bootstrap shell script in bin to handle the initial ruby and puppet
-dependencies by installing the standalone puppet-agent (which includes its own
-ruby).  Because this is installed into /opt, it is isolated from the rest of
-the system.  The script can than use the puppet module tool to install this
-module (and it's dependencies) to a temporary path and then use puppet to apply
-the classes to set up rbenv, dev tools, vm tools, development repositories, the
-dev's own keys, dotfiles etc.
-
-## Vagrantfile
-
-Provides a local vm for testing without destroying the workstation you have
-this repository checked out in.
+uses Bolt for bootstraping initial ruby and puppet dependencies by installing
+the puppet-agent (which includes its own ruby), and for applying the manifests
+on the remote hosts to configure to the desired state.
 
 ### What workstation affects
 
@@ -56,24 +59,83 @@ this repository checked out in.
 * vim plugins/config
 * gems
 
-### Setup Requirements
+### Requirements
 
-The scripts in bin/ provide bootstrapping for installing a puppet-agent into a
-new workstation so that the module may then be run.
+This module requires puppet-bolt to have been installed in order for it to be used.
 
-### Beginning with workstation
+It is intended to be used to configure a separate Ubuntu 18.04 host (vm) that
+you have an account on which you can ssh too, and which you can escalate to
+root via sudo.
 
-You may manually clone pl-dev onto a host and run bin/install.sh, but you will likely need to have already prepared the host with your ssh keys.
+In order for the vcsrepo module to be able to clone repositories from
+git@github.com/foo/bar sources (via ssh), you will need to enable SSH
+ForwardAgent in your ~/.ssh/config for the host. (It's assumed this is a
+freshly minted vm, without your ssh keys, and that even if your private keys
+were present, a password would be required to use them...)
 
-If you are preparing a vm or host with sshd that you have network access to, and you have an account with root or sudo root privileges and ssh keys, then you can just invoke this to install puppet-agent 1.4.1 and apply the workstation manifest on the given host:
-
-``` sh
-$ bin/install.sh -a 1.4.1 -h <user>@<host.vm> [-i ssh-keyfile]
-```
+The required modules for running workstation are listed in in the Boltdir/Puppetfile.
 
 ## Usage
 
-You can customize the modules actions by editing a version of hieradata/common.yaml to change any parameters.  This file can be supplied to bin/install.sh by using the -c flag.
+### Dependencies
+
+Ensure that the module's dependencies are installed b by running bolt puppetfile:
+
+```sh
+bolt puppetfile install
+```
+
+### Configuring SSH
+
+Once you have a vm to configure, ensure that you can ssh to it, and that once
+there, you can `ssh git@github.com` (if you are setting up repositories via ssh).
+
+So, for a hypothetical vm 'work-test' at 192.168.0.2, reachabale as 'ubuntu'
+with the key 'vm.ssh.key.pem', a ~/.ssh/config entry such as:
+
+```
+Host 192.168.0.2 work-test
+User ubuntu
+IdentityFile ~/.ssh/vm.ssh.key.pem'
+ForwardAgent true
+```
+
+Should allow you to `ssh work-test` and from there to `ssh git@github.com`
+assuming you're running an ssh-agent locally with the correct keys for Github.
+
+### Configuring workstation
+
+The module is configured with Hiera data. There is a sample file in the data/
+directory, but that's mostly empty. The test data/vagrant.yaml or my
+workstation configuration under data/jpartlow.yaml should provide what you
+need.
+
+The module expects to find a data/common.yaml (based on hiera.yaml's
+configuration), with the necessary workstation parameters set.
+
+Create a data file and symlink data/common.yaml to it.
+
+The principle parameters that must be set are:
+
+* workstation::account - the account name to setup on the workstation vm
+* workstation::repository_data - the data structure contains the layout and
+  sources for repositories to install -- see data/vagrant.yaml for a simple
+  example, data/jpartlow.yaml for a more complete one and class
+  workstation::repositories and the defined types it uses for the details.
+* workstation::packages - a simple list of packages to install
+* workstation::vim_bundles - if you want to source vim Pathogen plugins (see workstation::vim)
+* workstation::gems - simple list of gems to be installed
+* workstation::ruby::ruby_versions - simple list of ruby versions to be installed via rbenv
+* workstation::ssh_public_keys - to add public keys to the account's ~/.ssh/authorized_keys (see workstation::ssh)
+
+Once data/common.yaml is pointing to the set of parameters you want, run the
+workstation::manage plan:
+
+``` sh
+bolt plan run workstation::manage -n <your-host> --no-host-key-check --run-as root
+```
+
+That should be it, except for whatever didn't work.
 
 ## Reference
 
@@ -92,6 +154,56 @@ You can customize the modules actions by editing a version of hieradata/common.y
 * workstation::sudo - adds user to sudoers
 * workstation::lein - installs leiningen
 * workstation::frankenbuilder - some customization for frankenbuilder work clones
+
+## Testing
+
+### Vagrantfile
+
+Provides a local vm for testing without destroying the workstation you have
+this repository checked out in. It sets up a private network (host only) and
+the test node should be accessible at 172.16.0.2
+
+```sh
+vagrant up
+```
+
+You must set up agent forwarding. The following config added to ~/.ssh/config
+should allow you to `ssh vagrant@dev-test` (assuming that the workstation repo
+was located in the root of your $HOME, otherwise you'll need to adjust
+IdentityFile).
+
+```
+# Vagrant test host for workstation module
+Host 172.16.0.2
+ForwardAgent yes
+UserKnownHostsFile /dev/null
+StrictHostKeyChecking no
+PasswordAuthentication no
+IdentityFile ~/workstation/.vagrant/machines/dev-test/virtualbox/private_key
+```
+
+Then you can select which data file to use. For testing, you can just use the data/vagrant.yaml:
+
+```sh
+pushd data/; ln -s vagrant.yaml common.yaml; popd
+```
+
+Then run bolt to manage the vagrant host.
+
+```sh
+bolt plan run workstation::manage -n 172.16.0.2 -u vagrant --no-host-key-check --run-as root
+```
+
+### Specs
+
+The module has a suite of rspec-puppet tests for the various classes and defines.
+
+To run those, it should be sufficient to:
+
+```sh
+bundle install
+bundle exe rake spec
+```
 
 ## Limitations
 

@@ -11,12 +11,15 @@ class workstation::package_repositories(
 
   $repositories.each |$repo| {
     $repo_package_url = $repo['repo_package_url']
-    $repo_package = split($repo_package_url, '/')[-1]
+    # puppet6-release-bionic.deb
+    $repo_package_deb = split($repo_package_url, '/')[-1]
+    # puppet6-release
+    $repo_package_name = join(split($repo_package_deb, '-')[0,2], '-')
     $packages = $repo['packages']
-    exec { "install ${repo_package} repository package":
-      command => "wget ${repo_package_url} && dpkg -i ${repo_package} && apt-get update",
+    exec { "install ${repo_package_name} repository package":
+      command => "wget ${repo_package_url} && dpkg -i ${repo_package_deb} && apt-get update",
       path    => '/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/bin',
-      unless  => "dpkg -l ${repo_package} | grep -E '^ii'",
+      unless  => "dpkg -l ${repo_package_name} | grep -E '^ii'",
     }
 
     package { $packages:
