@@ -41,9 +41,6 @@ workstation::repository_data:
       -
         source: "git@github.com:jpartlow/facter"
         checkout_branch: "master"
-      -
-        source: "git@github.com:jpartlow/frankenbuilder"
-        checkout_branch: "master"
       - source: "git@github.com:jpartlow/higgs"
       - source: "git@github.com:jpartlow/merge-monitor"
       -
@@ -191,6 +188,10 @@ workstation::repository_data:
       upstream: "puppetlabs"
     repos:
       -
+        clone_name: "frankenbuilder_1"
+        source: "git@github.com:jpartlow/frankenbuilder"
+        checkout_branch: "master"
+      -
         clone_name: "frankenbuilder_2"
         source: "git@github.com:jpartlow/frankenbuilder"
         checkout_branch: "master"
@@ -207,6 +208,10 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/frankenbuilder"
         checkout_branch: "master"
       -
+        clone_name: "pe_acceptance_tests_1"
+        source: "git@github.com:jpartlow/pe_acceptance_tests"
+        checkout_branch: "2018.1.x"
+      -
         clone_name: "pe_acceptance_tests_2"
         source: "git@github.com:jpartlow/pe_acceptance_tests"
         checkout_branch: "2018.1.x"
@@ -222,10 +227,8 @@ workstation::repository_data:
         clone_name: "pe_acceptance_tests_5"
         source: "git@github.com:jpartlow/pe_acceptance_tests"
         checkout_branch: "2018.1.x"
-      - source: "git@github.com:jpartlow/puppetlabs-pe_install"
-      - source: "git@github.com:jpartlow/puppetlabs-pe_manager"
-      - source: "git@github.com:jpartlow/puppetlabs-pe_infrastructure"
-      - source: "git@github.com:jpartlow/puppetlabs-puppet_enterprise"
+
+workstation::frankenbuilder::suffixes: ['1','2','3','4','5']
 
 workstation::vim_bundles:
   -
