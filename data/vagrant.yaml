@@ -43,4 +43,4 @@ workstation::ssh_public_keys:
   - "id_rsa.pub"
 
 workstation::ruby::ruby_versions:
-  - '2.5.1'
+  - '2.5.3'
