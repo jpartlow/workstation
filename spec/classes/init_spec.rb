@@ -90,14 +90,6 @@ describe 'workstation' do
   it { is_expected.to contain_package('baz') }
   it { is_expected.to contain_package('biff') }
 
-  it do
-    is_expected.to contain_class('workstation::lein')
-      .that_requires([
-        'Class[Workstation::Packages]',
-        'File[/home/rspec/bin]',
-      ])
-  end
-
   context 'with minimal params' do
     let(:params) do
       {

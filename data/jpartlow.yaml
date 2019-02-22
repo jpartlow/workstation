@@ -275,6 +275,7 @@ workstation::packages:
   - 'ack-grep'
   - 'curl'
   - 'openjdk-8-jre-headless'
+  - 'leiningen'
   - 'python'
   - 'rsync'
   - 'tree'

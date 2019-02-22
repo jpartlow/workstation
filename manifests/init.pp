@@ -100,14 +100,6 @@ class workstation(
 
   contain 'workstation::sudo'
 
-  class { 'workstation::lein':
-    require => [
-      Class['Workstation::Packages'],
-      File["/home/${account}/bin"],
-    ],
-  }
-  contain 'workstation::lein'
-
   class { 'workstation::frankenbuilder':
     require => Class['workstation::Repositories'],
   }
