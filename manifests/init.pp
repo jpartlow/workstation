@@ -122,6 +122,16 @@ class workstation(
     content => file("/home/${account}/.fog", '/dev/null'),
     *       => $_pooler_file_args,
   }
+
+  # Copying over the QE acceptance SSH private key
+  # Although in general I'm relying on Agent forwarding,
+  # there are some Beaker acceptance tests which assume they can copy this key
+  # from the test runner to the SUTs (opsworks for example)
+  file { "/home/${account}/.ssh/id_rsa-jenkins":
+    content => file("/home/${account}/.ssh/id_rsa-acceptance", '/dev/null'),
+    *       => $_pooler_file_args,
+  }
+
   file { '/s':
     ensure => 'link',
     target => "/home/${account}/work/src",
