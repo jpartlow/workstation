@@ -40,6 +40,9 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/enterprise-dist"
         remotes: []
       -
+        source: "git@github.com:jpartlow/enterprise_tasks"
+        checkout_branch: "master"
+      -
         source: "git@github.com:jpartlow/facter"
         checkout_branch: "master"
       - source: "git@github.com:jpartlow/higgs"
