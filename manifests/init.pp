@@ -46,6 +46,8 @@ class workstation(
 
   contain workstation::packages
 
+  contain workstation::bin_links
+
   contain workstation::package_repositories
 
   contain workstation::git
