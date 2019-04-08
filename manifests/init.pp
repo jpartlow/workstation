@@ -107,6 +107,8 @@ class workstation(
   }
   contain 'workstation::frankenbuilder'
 
+  contain workstation::bolt
+
   $_pooler_file_args = {
     ensure => 'present',
     owner  => $account,

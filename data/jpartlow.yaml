@@ -90,7 +90,7 @@ workstation::repository_data:
 
   - path: "work/src"
     repos:
-      - source: "git@github.com:jpartlow/integration-tools"
+      - source: "git@github.com:jpartlow/meep_tools"
       - source: "git@github.com:puppetlabs/rspec-meep"
 
   - path: "work/src/pem"
