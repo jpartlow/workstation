@@ -110,6 +110,10 @@ workstation::repository_data:
         clone_name: "kearney"
         source: "git@github.com:jpartlow/puppet-enterprise-modules"
         checkout_branch: "kearney"
+      -
+        clone_name: "lovejoy"
+        source: "git@github.com:jpartlow/puppet-enterprise-modules"
+        checkout_branch: "lovejoy"
 
   - path: "work/src/pe-modules"
     defaults:
