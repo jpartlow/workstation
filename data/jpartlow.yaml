@@ -127,13 +127,15 @@ workstation::repository_data:
       -
         source: "git@github.com:jpartlow/puppetlabs-puppet_agent"
         checkout_branch: "master"
+      - 
+        source: "git@github.com:puppetlabs/puppetlabs-pe_bootstrap"
+        checkout_branch: "master"
 
   - path: "work/src/pe-modules"
     defaults:
       remotes: *team_github_accounts
     repos:
       - source: "git@github.com:puppetlabs/puppetlabs-pe_support_script"
-      - source: "git@github.com:puppetlabs/puppetlabs-pe_bootstrap"
 
   - path: "work/src/legacy-pe-modules"
     defaults:
