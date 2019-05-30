@@ -73,6 +73,7 @@ workstation::repository_data:
       - 
         source: "git@github.com:jpartlow/puppet-enterprise-vanagon"
         remotes: []
+      - source: "git@github.com:jpartlow/puppet-enterprise-marketplace-image"
       - source: "git@github.com:jpartlow/puppet-scale-control"
       - source: "git@github.com:jpartlow/puppetlabs-stdlib"
       - source: "git@github.com:jpartlow/puppetlabs-modules"
@@ -189,7 +190,6 @@ workstation::repository_data:
       - source: "git@github.com:puppetlabs/pe_acceptance_tests-control"
       - source: "git@github.com:puppetlabs/pe-rbac-service"
       - source: "git@github.com:puppetlabs/puppet-agent"
-      - source: "git@github.com:puppetlabs/puppet-enterprise-marketplace-image"
       - source: "git@github.com:puppetlabs/puppetdb"
 
   - path: "work/src/alternates"
