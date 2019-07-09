@@ -49,6 +49,7 @@ class workstation::ssh(
     lines => [
       '  StrictHostKeyChecking=no',
       '  UserKnownHostsFile=/dev/null',
+      '  ForwardAgent=yes',
     ],
     order => '10',
   }
