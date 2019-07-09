@@ -5,3 +5,4 @@ Gemfile.lock
 spec/fixtures/modules
 data/common.yaml
 Boltdir/modules
+Boltdir/.rerun.json
