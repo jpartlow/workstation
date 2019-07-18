@@ -23,6 +23,7 @@ class workstation::ssh(
 
   file { $sshdir:
     ensure => 'directory',
+    owner  => $user,
     mode   => '0600',
   }
 
