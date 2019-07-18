@@ -137,6 +137,15 @@ bolt plan run workstation::manage -n <your-host> --no-host-key-check --run-as ro
 
 That should be it, except for whatever didn't work.
 
+### Configuring a meep_tools test host
+
+This plan sets up a vm so that you can run meep_tools/enterprise_tasks plans. It should probably be simplified.
+
+(Below was tested on a centos-7 vm, which required the --tty flag)
+
+```sh
+bolt plan run workstation::setup_test_tools -n <your-host> --no-host-key-check --run-as-root --tty
+```
 ## Reference
 
 * workstation
