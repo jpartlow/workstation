@@ -28,5 +28,18 @@ class workstation::ruby::dependencies(
       'libgdbm-dev',
       'patch'
     ])
+  } elsif $facts['os']['family'] == 'RedHat' {
+    ensure_packages([
+      'centos-release-scl',
+      'devtoolset-7',
+      'bzip2',
+      'openssl-devel',
+      'libyaml-devel',
+      'libffi-devel',
+      'readline-devel',
+      'zlib-devel',
+      'gdbm-devel',
+      'ncurses-devel',
+    ])
   }
 }
