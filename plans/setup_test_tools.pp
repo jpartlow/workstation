@@ -48,49 +48,61 @@ plan workstation::setup_test_tools(
         require => Package['epel-release'],
       }
 
-      $bolt_bin = '/opt/puppetlabs/bolt/bin'
-
-      exec { 'add bolt ruby and local gem bins to path':
-        command => "echo 'export PATH=${bolt_bin}:\$HOME/.gem/ruby/2.5.0/bin:\$PATH' >> /home/${user}/.bash_profile",
-        cwd     => "/home/${user}",
-        path    => '/usr/bin:/usr/bin/local:/bin',
-        user    => $user,
-        unless  => "grep -qE 'export.*bolt' /home/${user}/.bashrc"
+      class { 'workstation::ruby':
+        owner => $user,
+        gems  => [
+          'vmfloaty',
+        ],
       }
 
-      exec { 'install gems':
-        command     => "${bolt_bin}/gem install --no-ri --no-rdoc --user-install vmfloaty",
-        user        => $user,
-        environment => "HOME=/home/${user}",
-        path        => "${bolt_bin}:/bin:/usr/bin",
-        unless      => "${bolt_bin}/gem list vmfloaty | grep -q 'vmfloaty'",
-      }
+      #      $bolt_bin = '/opt/puppetlabs/bolt/bin'
+      #
+      #      exec { 'add bolt ruby and local gem bins to path':
+      #        command => "echo 'export PATH=${bolt_bin}:\$HOME/.gem/ruby/2.5.0/bin:\$PATH' >> /home/${user}/.bash_profile",
+      #        cwd     => "/home/${user}",
+      #        path    => '/usr/bin:/usr/bin/local:/bin',
+      #        user    => $user,
+      #        unless  => "grep -qE 'export.*bolt' /home/${user}/.bashrc"
+      #      }
+      #
+      #      [
+      #        'vmfloaty',
+      #        'bundler',
+      #      ].each |$gem| {
+      #        exec { "install ${gem}":
+      #          command     => "${bolt_bin}/gem install --no-ri --no-rdoc --user-install ${gem}",
+      #          user        => $user,
+      #          environment => "HOME=/home/${user}",
+      #          path        => "${bolt_bin}:/bin:/usr/bin",
+      #          unless      => "${bolt_bin}/gem list ${gem} | grep -q '${gem}'",
+      #        }
+      #      }
 
       contain 'workstation::git'
 
-      class { 'workstation::repositories':
-        repository_data => [{
-          'path'  => "/home/${user}/work/src",
-          'repos' => [
-            {
-              'source'          => "git@github.com:${user}/enterprise_tasks",
-              'upstream'        => 'puppetlabs',
-              'checkout_branch' => 'master',
-            },
-            {
-              'source' => "git@github.com:${user}/meep_tools",
-            },
-          ],
-        }],
-        user            => $user,
-        identity        => 'id_rsa',
-      }
-      contain 'workstation::repositories'
-
-      file { '/s':
-        ensure => link,
-        target => "/home/${user}/work/src",
-      }
+      #      class { 'workstation::repositories':
+      #        repository_data => [{
+      #          'path'  => "/home/${user}/work/src",
+      #          'repos' => [
+      #            {
+      #              'source'          => "git@github.com:${user}/enterprise_tasks",
+      #              'upstream'        => 'puppetlabs',
+      #              'checkout_branch' => 'master',
+      #            },
+      #            {
+      #              'source' => "git@github.com:${user}/meep_tools",
+      #            },
+      #          ],
+      #        }],
+      #        user            => $user,
+      #        identity        => 'id_rsa',
+      #      }
+      #      contain 'workstation::repositories'
+      #
+      #      file { '/s':
+      #        ensure => link,
+      #        target => "/home/${user}/work/src",
+      #      }
 
       class { 'workstation::bolt':
         account => $user,

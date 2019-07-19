@@ -139,7 +139,7 @@ That should be it, except for whatever didn't work.
 
 ### Configuring a meep_tools test host
 
-This plan sets up a vm so that you can run meep_tools/enterprise_tasks plans. It should probably be simplified.
+This plan sets up a vm with ruby.
 
 (Below was tested on a centos-7 vm, which required the --tty flag)
 
