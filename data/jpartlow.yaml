@@ -76,6 +76,9 @@ workstation::repository_data:
       -
         source: "git@github.com:jpartlow/puppetdb"
         checkout_branch: "master"
+      -
+        source: "git@github.com:jpartlow/classifier"
+        checkout_branch: "master"
       - source: "git@github.com:jpartlow/puppet-debugging-kit"
       -
         source: "git@github.com:jpartlow/puppet-enterprise-vanagon"

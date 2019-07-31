@@ -1,0 +1,22 @@
+# Setup a workstation to test meep-tools/enterprise_tasks
+workstation::acount: jpartlow
+workstation::repository_data:
+  - path: "work/src"
+    defaults:
+      checkout_branch: "master"
+    repos:
+      - source: "git@github.com:jpartlow/meep_tools"
+      - 
+        source: "git@github.com:jpartlow/enterprise_tasks"
+        upstream: "puppetlabs"
+  - packages
+    # el7 specific
+    - epel-release
+    - ack
+    - vim
+    - curl
+    - wget
+    - tree
+    - puppet-bolt
+  -workstation::ssh_public_keys:
+    - "id_rsa.pub"
