@@ -41,6 +41,9 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/ci-job-configs"
         checkout_branch: "master"
       -
+        source: "git@github.com:jpartlow/classifier"
+        checkout_branch: "master"
+      -
         source: "git@github.com:jpartlow/enterprise-dist"
         remotes: []
       -
@@ -76,14 +79,14 @@ workstation::repository_data:
       -
         source: "git@github.com:jpartlow/puppetdb"
         checkout_branch: "master"
-      -
-        source: "git@github.com:jpartlow/classifier"
-        checkout_branch: "master"
       - source: "git@github.com:jpartlow/puppet-debugging-kit"
       -
         source: "git@github.com:jpartlow/puppet-enterprise-vanagon"
         remotes: []
       - source: "git@github.com:jpartlow/puppet-enterprise-marketplace-image"
+      -
+        source: "git@github.com:jpartlow/puppet-license-cli"
+        checkout_branch: "master"
       - source: "git@github.com:jpartlow/puppet-scale-control"
       - source: "git@github.com:jpartlow/puppetlabs-stdlib"
       - source: "git@github.com:jpartlow/puppetlabs-modules"
