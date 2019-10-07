@@ -87,6 +87,9 @@ workstation::repository_data:
       -
         source: "git@github.com:jpartlow/puppet-license-cli"
         checkout_branch: "master"
+      -
+        source: "git@github.com:jpartlow/puppet-runtime"
+        checkout_branch: "master"
       - source: "git@github.com:jpartlow/puppet-scale-control"
       - source: "git@github.com:jpartlow/puppetlabs-stdlib"
       - source: "git@github.com:jpartlow/puppetlabs-modules"
