@@ -58,6 +58,10 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/pe_acceptance_tests"
         checkout_branch: "2018.1.x"
       -
+        source: "git@github.com:jpartlow/pe_acceptance_tests-control"
+        checkout_branch: 'production'
+        remotes: []
+      -
         source: "git@github.com:jpartlow/pe-backup-tools"
         remotes: []
       -
@@ -128,9 +132,9 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/puppet-enterprise-modules"
         checkout_branch: "kearney"
       -
-        clone_name: "lovejoy"
+        clone_name: "master"
         source: "git@github.com:jpartlow/puppet-enterprise-modules"
-        checkout_branch: "lovejoy"
+        checkout_branch: "master"
 
   - path: "work/src/pe-modules"
     defaults:
@@ -202,7 +206,6 @@ workstation::repository_data:
       - source: "git@github.com:puppetlabs/beaker-puppet"
       - source: "git@github.com:puppetlabs/kerminator"
       - source: "git@github.com:puppetlabs/packaging"
-      - source: "git@github.com:puppetlabs/pe_acceptance_tests-control"
       - source: "git@github.com:puppetlabs/pe-rbac-service"
       - source: "git@github.com:puppetlabs/puppet-agent"
       - source: "git@github.com:puppetlabs/puppetdb"
