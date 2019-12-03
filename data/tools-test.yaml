@@ -9,7 +9,7 @@ workstation::repository_data:
       - 
         source: "git@github.com:jpartlow/enterprise_tasks"
         upstream: "puppetlabs"
-  - packages
+workstation::packages:
     # el7 specific
     - epel-release
     - ack
@@ -18,5 +18,50 @@ workstation::repository_data:
     - wget
     - tree
     - puppet-bolt
-  -workstation::ssh_public_keys:
-    - "id_rsa.pub"
+workstation::ssh_public_keys:
+  - "id_rsa.pub"
+workstation::ruby::ruby_versions:
+  - '2.5.7'
+workstation::vim_bundles:
+  -
+    clone_name: "vim-ack"
+    source: "https://github.com/mileszs/ack.vim.git"
+  -
+    clone_name: "vim-bash-fold-expr"
+    source: "https://github.com/demophoon/bash-fold-expr.git"
+  -
+    clone_name: "vim-bufexplorer"
+    source: "https://github.com/jlanzarotta/bufexplorer.git"
+  -
+    clone_name: "vim-clojure"
+    source: "https://github.com/vim-scripts/VimClojure.git"
+  -
+    clone_name: "vim-fugitive"
+    source: "https://github.com/tpope/vim-fugitive.git"
+  -
+    clone_name: "vim-gnupg"
+    source: "https://github.com/jamessan/vim-gnupg.git"
+  -
+    clone_name: "vim-markdown"
+    source: "https://github.com/tpope/vim-markdown.git"
+  -
+    clone_name: "vim-markdown-folding"
+    source: "https://github.com/nelstrom/vim-markdown-folding.git"
+  -
+    clone_name: "vim-matchit"
+    source: "https://github.com/adelarsq/vim-matchit.git"
+  -
+    clone_name: "vim-puppet"
+    source: "https://github.com/rodjek/vim-puppet.git"
+  -
+    clone_name: "vim-ps1"
+    source: "https://github.com/PProvost/vim-ps1.git"
+  -
+    clone_name: "vim-ruby"
+    source: "https://github.com/vim-ruby/vim-ruby.git"
+  -
+    clone_name: "vim-syntastic"
+    source: "https://github.com/vim-syntastic/syntastic.git"
+  -
+    clone_name: "vim-vagrant"
+    source: "https://github.com/hashivim/vim-vagrant.git"
