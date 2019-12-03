@@ -47,6 +47,7 @@ plan workstation::setup_test_tools(
         'tree',
         'wget',
         'curl',
+        'tmux',
         'ack', # needs epel ^
       ]
       package { $packages:
