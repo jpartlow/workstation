@@ -8,6 +8,8 @@ plan workstation::setup_test_tools(
   $local_home = system::env('HOME')
   $local_vmfloaty_yml = "${local_home}/.vmfloaty.yml"
   $vmfloaty_yml = "/home/${user}/.vmfloaty.yml"
+  $local_control_repo_key = "${local_home}/.ssh/id-control_repo.rsa"
+  $control_repo_key = "/home/${user}/.ssh/id-control_repo.rsa"
   $repository_data = lookup('workstation::repository_data')
   $vim_bundles = lookup('workstation::vim_bundles')
 
@@ -20,6 +22,7 @@ plan workstation::setup_test_tools(
     }
 
     upload_file($local_vmfloaty_yml, $vmfloaty_yml, $n)
+    upload_file($local_control_repo_key, $control_repo_key, $n)
 
     apply($n) {
       class { 'workstation::ssh':
@@ -28,7 +31,7 @@ plan workstation::setup_test_tools(
       }
       contain workstation::ssh
 
-      file { $vmfloaty_yml:
+      file { [$vmfloaty_yml, $control_repo_key]:
         owner => $user,
         mode  => '0600',
       }
