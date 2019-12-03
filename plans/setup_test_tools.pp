@@ -49,6 +49,7 @@ plan workstation::setup_test_tools(
         'curl',
         'tmux',
         'ack', # needs epel ^
+        'bash-completion',
       ]
       package { $packages:
         ensure  => present,
@@ -59,6 +60,7 @@ plan workstation::setup_test_tools(
         owner => $user,
         gems  => [
           'vmfloaty',
+          'tmuxinator',
         ],
       }
 
@@ -99,6 +101,14 @@ plan workstation::setup_test_tools(
         user => $user,
       }
       contain 'workstation::sudo'
+
+      # Ensure .bash_aliases is included in .bashrc on el7
+      file_line { 'bashrc aliases':
+        ensure => 'present',
+        path   => "/home/${user}/.bashrc",
+        line   => 'if [ -f ~/.bash_aliases ]; then . ~/.bash_aliases; fi',
+        match  => '^if \[ -f ~/.bash_aliases \];',
+      }
     }
   }
 }
