@@ -9,7 +9,7 @@ plan workstation::manage(
     $target_account = lookup(workstation::account)
     out::message("Generating a workstation on ${target} for ${target_account}")
 
-    $results = apply($target, _catch_errors => false) {
+    $results = apply($target, _catch_errors => true) {
       $message = @(WARNING/L)
         This may take several minutes, depending on how many Ruby installations are being downloaded \
         and compiled for this workstation, and how many repositories are being cloned.
@@ -18,28 +18,7 @@ plan workstation::manage(
       include workstation
     }
 
-    $results.each() |$result| {
-      out::message("Logs from: ${result.target}")
-      $report = $result.report()
-      $logs = $report['logs']
-      $logs.each() |$log| {
-        $message = "${log['source']}: ${log['message']}"
-        case $log['level'] {
-          'notice': {
-            out::message($message)
-          }
-          'warning': {
-            warning($message)
-          }
-          'err': {
-            error($message)
-          }
-          default: {
-            # skip info/debug
-          }
-        }
-      }
-    }
+    workstation::display_apply_results($results.first())
     return $results
   }
 }

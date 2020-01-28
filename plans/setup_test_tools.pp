@@ -24,7 +24,7 @@ plan workstation::setup_test_tools(
     upload_file($local_vmfloaty_yml, $vmfloaty_yml, $n)
     upload_file($local_control_repo_key, $control_repo_key, $n)
 
-    apply($n) {
+    $results = apply($n, _catch_errors => true) {
       class { 'workstation::ssh':
         user        => $user,
         public_keys => ['id_rsa.pub'],
@@ -110,5 +110,8 @@ plan workstation::setup_test_tools(
         match  => '^if \[ -f ~/.bash_aliases \];',
       }
     }
+
+    workstation::display_apply_results($results.first())
+    return $results
   }
 }
