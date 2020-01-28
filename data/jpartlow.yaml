@@ -317,8 +317,13 @@ workstation::packages:
   - 'redis-tools'
   - 'graphviz'
   - 'rdesktop'
-  - 'puppet-bolt'
   - 'pdk'
+
+workstation::package_repositories::repositories:
+  -
+    repo_package_url: "https://apt.puppet.com/puppet-tools-release-bionic.deb"
+    packages:
+      - 'puppet-bolt'
 
 workstation::gems:
   - 'vmfloaty'

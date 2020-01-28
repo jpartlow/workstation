@@ -10,14 +10,18 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/enterprise_tasks"
         upstream: "puppetlabs"
 workstation::packages:
-    # el7 specific
-    - epel-release
-    - ack
-    - vim
-    - curl
-    - wget
-    - tree
-    - puppet-bolt
+  # el7 specific
+  - epel-release
+  - ack
+  - vim
+  - curl
+  - wget
+  - tree
+workstation::package_repositories::repositories:
+  -
+    repo_package_url: "https://yum.puppet.com/puppet-tools-release-el-7.noarch.rpm"
+    packages:
+      - puppet-bolt
 workstation::ssh_public_keys:
   - "id_rsa.pub"
 workstation::ruby::ruby_versions:

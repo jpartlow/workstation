@@ -42,7 +42,6 @@ plan workstation::setup_test_tools(
       }
 
       $packages = [
-        'puppet-bolt',
         'vim',
         'tree',
         'wget',
@@ -55,6 +54,8 @@ plan workstation::setup_test_tools(
         ensure  => present,
         require => Package['epel-release'],
       }
+
+      contain 'workstation::package_repositories'
 
       class { 'workstation::ruby':
         owner => $user,
