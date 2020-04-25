@@ -9,7 +9,7 @@ function workstation::display_apply_results(
   case $result {
     ApplyResult: {
       $report = $result.report()
-      if $report['logs'] =~ NotUndef {
+      if ($report =~ NotUndef and $report['logs'] =~ NotUndef) {
         $logs = $report['logs']
       } else {
         $logs = []
@@ -35,5 +35,9 @@ function workstation::display_apply_results(
         # skip info/debug
       }
     }
+  }
+
+  if $result =~ Error {
+    fail_plan($result)
   }
 }
