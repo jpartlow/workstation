@@ -18,8 +18,8 @@
 ## Description
 
 This module will bootstrap a fresh development vm or laptop into a known state
-suitable for PE management development.  Currently only working with Ubuntu
-18.04 as the base platform.
+suitable for PE management development. Should be useable for Ubuntu 18.04 or
+Centos 7.
 
 Currently this is my way of capturing set up for an Ubuntu 18.04 dev box, so
 that I can recreate my dev environment automatically, either to restore on a
@@ -35,8 +35,8 @@ building the catalog locally (after a `bolt puppetfile install` has installed
 dependencies), and then shipping it to remote workstation and applying it
 there.
 
-Configuration of the module is handled by Hiera, through data/common.yaml (see
-below for details)
+Configuration of the module is handled by Hiera, through data/nodes matching
+the target's clientcert (see below for details)
 
 ## Setup
 
@@ -63,9 +63,9 @@ on the remote hosts to configure to the desired state.
 
 This module requires puppet-bolt to have been installed in order for it to be used.
 
-It is intended to be used to configure a separate Ubuntu 18.04 host (vm) that
-you have an account on which you can ssh too, and which you can escalate to
-root via sudo.
+It is intended to be used to configure a separate Ubuntu 18.04 or Centos7 host
+(vm) that you have an account on which you can ssh too, and which you can
+escalate to root via sudo.
 
 In order for the vcsrepo module to be able to clone repositories from
 git@github.com/foo/bar sources (via ssh), you will need to enable SSH
@@ -106,14 +106,17 @@ assuming you're running an ssh-agent locally with the correct keys for Github.
 ### Configuring workstation
 
 The module is configured with Hiera data. There is a sample file in the data/
-directory, but that's mostly empty. The test data/vagrant.yaml or my
-workstation configuration under data/jpartlow.yaml should provide what you
-need.
+directory, but that's mostly empty. My workstation configuration under
+data/jpartlow.yaml should provide guidelines for what you need.
 
-The module expects to find a data/common.yaml (based on hiera.yaml's
-configuration), with the necessary workstation parameters set.
+The module expects to find a yaml file (or symlink) in data/nodes/ matching the
+Puppet certname of the node to be configured. This file should have the
+necessary workstation parameters set. The hieararchy is based on hiera.yaml.
 
-Create a data file and symlink data/common.yaml to it.
+Create a data file and symlink data/nodes/{certname}.yaml to it. So for
+hypothetical vm that has the Puppet certname 'work1.platform9.puppet.net',
+there should be a file or link in data/nodes/work1.platform9.puppet.net.yaml
+with the necessary parameters.
 
 The principle parameters that must be set are:
 
@@ -139,7 +142,10 @@ That should be it, except for whatever didn't work.
 
 ### Configuring a meep_tools test host
 
-This plan sets up a vm with ruby.
+This plan sets up a vm with ruby. Sample config is data/test-tools.yaml.
+Again, a data/nodes/{certname}.yaml must exist for the node you are configuring
+with whatever set of parameters you intend to pass on to the apply block in the
+workstation::setup_test_tools plan...
 
 (Below was tested on a centos-7 vm, which required the --tty flag)
 
@@ -216,7 +222,7 @@ bundle exe rake spec
 
 ## Limitations
 
-Currently only written and tested for an Ubuntu host (18.04 specifically).
+Currently only written and tested for an Ubuntu host (18.04 specifically) and Centos 7.
 
 ## Development
 

@@ -10,10 +10,10 @@ plan workstation::setup_test_tools(
   $vmfloaty_yml = "/home/${user}/.vmfloaty.yml"
   $local_control_repo_key = "${local_home}/.ssh/id-control_repo.rsa"
   $control_repo_key = "/home/${user}/.ssh/id-control_repo.rsa"
-  $repository_data = lookup('workstation::repository_data')
-  $vim_bundles = lookup('workstation::vim_bundles')
 
   get_targets($nodes).each |$n| {
+
+    out::message("Will configure ${n} based on hiera data found for data/nodes/${n.facts['clientcert']}.yaml")
 
     apply($n) {
       class { 'workstation::user':
@@ -25,6 +25,9 @@ plan workstation::setup_test_tools(
     upload_file($local_control_repo_key, $control_repo_key, $n)
 
     $results = apply($n, _catch_errors => true) {
+      $repository_data = lookup('workstation::repository_data')
+      $vim_bundles = lookup('workstation::vim_bundles')
+
       class { 'workstation::ssh':
         user        => $user,
         public_keys => ['id_rsa.pub'],
@@ -111,7 +114,6 @@ plan workstation::setup_test_tools(
         match  => '^if \[ -f ~/.bash_aliases \];',
       }
     }
-
     workstation::display_apply_results($results.first())
     return $results
   }
