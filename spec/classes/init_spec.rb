@@ -39,7 +39,7 @@ describe 'workstation' do
       ],
       "package_repositories" => [
         {
-          'repo_package_url' => 'http://foo/arepo.deb',
+          'repo_package_url' => 'http://foo/arepo-bionic.deb',
           'packages'         => [
             'baz',
             'biff',
@@ -55,6 +55,7 @@ describe 'workstation' do
         'release' => {
           'major' => os_major,
         },
+        'family' => 'Debian',
       },
     }
   end
@@ -88,7 +89,7 @@ describe 'workstation' do
   it { is_expected.to contain_package('bar') }
 
   it { is_expected.to contain_apt__key('puppetlabs') }
-  it { is_expected.to contain_exec('install arepo.deb repository package') }
+  it { is_expected.to contain_exec('install arepo repository package') }
   it { is_expected.to contain_package('baz') }
   it { is_expected.to contain_package('biff') }
 
