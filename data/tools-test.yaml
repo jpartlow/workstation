@@ -6,9 +6,16 @@ workstation::repository_data:
       checkout_branch: "master"
     repos:
       - source: "git@github.com:jpartlow/meep_tools"
-      - 
+      -
         source: "git@github.com:jpartlow/enterprise_tasks"
         upstream: "puppetlabs"
+      -
+        source: "git@github.com:jpartlow/pe_installer"
+        upstream: "puppetlabs"
+      -
+        source: "git@github.com:jpartlow/puppet-enterprise-modules"
+        upstream: "puppetlabs"
+
 workstation::packages:
   # el7 specific
   - epel-release
