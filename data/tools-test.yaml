@@ -15,6 +15,9 @@ workstation::repository_data:
       -
         source: "git@github.com:jpartlow/puppet-enterprise-modules"
         upstream: "puppetlabs"
+      -
+        source: "git@github.com:jpartlow/orchestrator_client-ruby"
+        upstream: "puppetlabs"
 
 workstation::packages:
   # el7 specific
