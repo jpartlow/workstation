@@ -78,9 +78,43 @@ plan workstation::setup_test_tools(
       }
       contain 'workstation::repositories'
 
+      $file_settings = {
+        owner => $user,
+        group => $user,
+        mode  => '0644',
+      }
+
+      # (Change group for nfs mounts)
+      $account = $user # for template
+      file { '/etc/exports':
+        ensure  => 'present',
+        content => template('workstation/exports.erb'),
+        owner   => 'root',
+        group   => $user,
+        mode    => '0664',
+      }
+      # (Loosen mode to 0644 for for nfs mounts)
+      file { "/home/${user}":
+        ensure => directory,
+        *      => $file_settings,
+      }
+      file { "/home/${user}/work":
+        ensure => directory,
+        *      => $file_settings,
+      }
+      file { "/home/${user}/work/src":
+        ensure => directory,
+        *      => $file_settings,
+      }
       file { '/s':
         ensure => link,
         target => "/home/${user}/work/src",
+        *      => $file_settings,
+      }
+
+      service { 'nfs-server':
+        ensure => 'running',
+        enable => true,
       }
 
       class { 'workstation::bolt':
