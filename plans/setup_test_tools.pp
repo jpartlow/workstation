@@ -106,6 +106,10 @@ plan workstation::setup_test_tools(
         ensure => directory,
         *      => $file_settings,
       }
+      file { "/home/${user}/work/src/other":
+        ensure => directory,
+        *      => $file_settings,
+      }
       file { '/s':
         ensure => link,
         target => "/home/${user}/work/src",
