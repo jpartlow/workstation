@@ -1,7 +1,6 @@
 # YAML Macros
 # (Note this is namespaced 'workstation' so that hiera doesn't complain about its presence)
 workstation::team_github_accounts: &team_github_accounts
-  - "highb"
   - "cthorn42"
   - "shaigy"
   - "barriserloth"
@@ -67,6 +66,7 @@ workstation::repository_data:
       -
         source: "git@github.com:jpartlow/pe-backup-tools-vanagon"
         remotes: []
+      - source: "git@github.com:jpartlow/pe_installer"
       - source: "git@github.com:jpartlow/pe-installer-shim"
       - source: "git@github.com:jpartlow/pe-installer-vanagon"
       - source: "git@github.com:jpartlow/pe-modules-vanagon"

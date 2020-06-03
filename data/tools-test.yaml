@@ -10,13 +10,22 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/enterprise_tasks"
         upstream: "puppetlabs"
       -
+        source: "git@github.com:jpartlow/orchestrator_client-ruby"
+        upstream: "puppetlabs"
+      -
         source: "git@github.com:jpartlow/pe_installer"
         upstream: "puppetlabs"
       -
-        source: "git@github.com:jpartlow/puppet-enterprise-modules"
+        source: "git@github.com:jpartlow/pe-installer-shim"
         upstream: "puppetlabs"
       -
-        source: "git@github.com:jpartlow/orchestrator_client-ruby"
+        source: "git@github.com:jpartlow/pe-installer-vanagon"
+        upstream: "puppetlabs"
+      -
+        source: "git@github.com:jpartlow/pe-modules-vanagon"
+        upstream: "puppetlabs"
+      -
+        source: "git@github.com:jpartlow/puppet-enterprise-modules"
         upstream: "puppetlabs"
 
 workstation::packages:
