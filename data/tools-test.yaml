@@ -1,6 +1,8 @@
 # Setup a workstation to test meep-tools/enterprise_tasks
-workstation::acount: jpartlow
-workstation::repository_data:
+workstation::dev_account_base::account: jpartlow
+workstation::dev_account_base::ssh_public_keys:
+  - "id_rsa.pub"
+workstation::dev_account_base::repository_data:
   - path: "work/src"
     defaults:
       checkout_branch: "master"
@@ -28,24 +30,14 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/puppet-enterprise-modules"
         upstream: "puppetlabs"
 
-workstation::packages:
-  # el7 specific
-  - epel-release
-  - ack
-  - vim
-  - curl
-  - wget
-  - tree
 workstation::package_repositories::repositories:
   -
     repo_package_url: "https://yum.puppet.com/puppet-tools-release-el-7.noarch.rpm"
     packages:
       - puppet-bolt
-workstation::ssh_public_keys:
-  - "id_rsa.pub"
 workstation::ruby::ruby_versions:
   - '2.5.7'
-workstation::vim_bundles:
+workstation::dev_account_base::vim_bundles:
   -
     clone_name: "vim-ack"
     source: "https://github.com/mileszs/ack.vim.git"
