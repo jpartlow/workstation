@@ -9,6 +9,8 @@ workstation::team_github_accounts: &team_github_accounts
   - "actowery"
 
 # Puppet parameters
+workstation::profiles:
+  - 'workstation'
 workstation::account: jpartlow
 workstation::repository_data:
   - path: "work/src"

@@ -1,42 +1,27 @@
-# Setup a workstation to test meep-tools/enterprise_tasks
+---
+workstation::profiles:
+  - 'workstation::dev_account_base'
+  - 'workstation::k8s'
+workstation::k8s::krew_user: jpartlow
 workstation::dev_account_base::account: jpartlow
+workstation::dev_account_base::additional_packages: []
 workstation::dev_account_base::ssh_public_keys:
   - "id_rsa.pub"
 workstation::dev_account_base::repository_data:
   - path: "work/src"
     defaults:
-      checkout_branch: "master"
+      upstream: 'puppetlabs'
     repos:
-      - source: "git@github.com:jpartlow/meep_tools"
       -
-        source: "git@github.com:jpartlow/enterprise_tasks"
-        upstream: "puppetlabs"
+        source: 'git@github.com:jpartlow/holodeck-manifests'
+        checkout_branch: 'main'
+        remotes:
+          - 'MikaelSmith'
       -
-        source: "git@github.com:jpartlow/orchestrator_client-ruby"
-        upstream: "puppetlabs"
-      -
-        source: "git@github.com:jpartlow/pe_installer"
-        upstream: "puppetlabs"
-      -
-        source: "git@github.com:jpartlow/pe-installer-shim"
-        upstream: "puppetlabs"
-      -
-        source: "git@github.com:jpartlow/pe-installer-vanagon"
-        upstream: "puppetlabs"
-      -
-        source: "git@github.com:jpartlow/pe-modules-vanagon"
-        upstream: "puppetlabs"
-      -
-        source: "git@github.com:jpartlow/puppet-enterprise-modules"
-        upstream: "puppetlabs"
-
-workstation::package_repositories::repositories:
-  -
-    repo_package_url: "https://yum.puppet.com/puppet-tools-release-el-7.noarch.rpm"
-    packages:
-      - puppet-bolt
-workstation::ruby::ruby_versions:
-  - '2.5.7'
+        source: 'git@github.com:jpartlow/pupperware'
+        checkout_branch: 'master'
+        remotes:
+          - 'Iristyle'
 workstation::dev_account_base::vim_bundles:
   -
     clone_name: "vim-ack"
@@ -53,9 +38,6 @@ workstation::dev_account_base::vim_bundles:
   -
     clone_name: "vim-fugitive"
     source: "https://github.com/tpope/vim-fugitive.git"
-  -
-    clone_name: "vim-gnupg"
-    source: "https://github.com/jamessan/vim-gnupg.git"
   -
     clone_name: "vim-markdown"
     source: "https://github.com/tpope/vim-markdown.git"
@@ -77,6 +59,3 @@ workstation::dev_account_base::vim_bundles:
   -
     clone_name: "vim-syntastic"
     source: "https://github.com/vim-syntastic/syntastic.git"
-  -
-    clone_name: "vim-vagrant"
-    source: "https://github.com/hashivim/vim-vagrant.git"

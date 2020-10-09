@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-puppetversion = ENV.key?('PUPPET_VERSION') ? "#{ENV['PUPPET_VERSION']}" : ['~> 5.5']
+puppetversion = ENV.key?('PUPPET_VERSION') ? "#{ENV['PUPPET_VERSION']}" : ['~> 6.17']
 gem 'puppet', puppetversion
 gem 'puppetlabs_spec_helper', '~> 2.7'
 gem 'rspec-puppet', '~> 2.6'

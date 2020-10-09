@@ -23,5 +23,6 @@ RSpec.configure do |config|
     :osfamily        => 'Debian',
     :operatingsystem => 'Ubuntu',
     :puppetversion   => '5.5.1',
+    :path            => '/bin:/usr/bin',
   }
 end
