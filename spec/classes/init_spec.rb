@@ -70,11 +70,10 @@ describe 'workstation' do
   it { is_expected.to contain_user('rspec') }
 
   it { is_expected.to contain_file('/home/rspec/work/src') }
-  it { is_expected.to contain_file('/home/rspec/work/src/pe-modules') }
-  it { is_expected.to contain_file('/home/rspec/work/src/puppetlabs') }
-  it { is_expected.to contain_file('/home/rspec/work/src/alternates') }
   it { is_expected.to contain_file('/home/rspec/work/src/other') }
 
+  it { is_expected.to contain_file('/home/rspec/some') }
+  it { is_expected.to contain_file('/home/rspec/some/path') }
   it { is_expected.to contain_vcsrepo('/home/rspec/some/path/foo') }
   it { is_expected.to contain_vcsrepo('/home/rspec/some/path/bar') }
   it { is_expected.to contain_vcsrepo('/home/rspec/some/other/path/baz') }

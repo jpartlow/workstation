@@ -68,9 +68,6 @@ class workstation(
   file { "/home/${account}/bin": }
   file { "/home/${account}/work": }
   file { "/home/${account}/work/src": }
-  file { "/home/${account}/work/src/pe-modules": }
-  file { "/home/${account}/work/src/puppetlabs": }
-  file { "/home/${account}/work/src/alternates": }
   file { "/home/${account}/work/src/other": }
   file { "/home/${account}/work/tmp": }
 
@@ -80,9 +77,6 @@ class workstation(
     identity        => 'id_rsa',
     require         => [
       Class['Workstation::Git'],
-      File["/home/${account}/work/src/pe-modules"],
-      File["/home/${account}/work/src/puppetlabs"],
-      File["/home/${account}/work/src/alternates"],
     ],
   }
   contain workstation::repositories

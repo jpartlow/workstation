@@ -56,9 +56,15 @@ class workstation::repositories(
   String $identity,
 ) {
   $repository_data.each |$parameters| {
-    $path = $parameters['path'] ? {
-      /^\//   => $parameters['path'],
-      default => "/home/${user}/${parameters['path']}",
+    case $parameters['path'] {
+      /^\//: {
+        $_root_prefix = ''
+        $path = $parameters['path']
+      }
+      default: {
+        $_root_prefix = "/home/${user}"
+        $path = "${_root_prefix}/${parameters['path']}"
+      }
     }
 
     $repo_names = $parameters['repos'].map |$params| {
@@ -67,6 +73,12 @@ class workstation::repositories(
         undef   => $repo_name,
         default => $params['clone_name'],
       }
+    }
+
+    workstation::make_p { "Generating ${path} for ${repo_names}":
+      path        => $parameters['path'],
+      root_prefix => $_root_prefix,
+      user        => $user,
     }
 
     workstation::repos { "${path}/${repo_names}":
