@@ -22,6 +22,12 @@ workstation::dev_account_base::repository_data:
         checkout_branch: 'master'
         remotes:
           - 'Iristyle'
+      -
+        source: 'git@github.com:jpartlow/pupperware-commercial'
+        checkout_branch: 'master'
+        remotes:
+          - 'Iristyle'
+          - 'MikaelSmith'
 workstation::dev_account_base::vim_bundles:
   -
     clone_name: "vim-ack"
