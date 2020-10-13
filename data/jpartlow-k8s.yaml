@@ -4,7 +4,8 @@ workstation::profiles:
   - 'workstation::k8s'
 workstation::k8s::krew_user: jpartlow
 workstation::dev_account_base::account: jpartlow
-workstation::dev_account_base::additional_packages: []
+workstation::dev_account_base::additional_packages:
+  - 'lsof'
 workstation::dev_account_base::ssh_public_keys:
   - "id_rsa.pub"
 workstation::dev_account_base::repository_data:
