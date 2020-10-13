@@ -13,6 +13,7 @@
 define workstation::k8s::krew_plugin(
   String $user,
   String $plugin = $title,
+  String $creates = $title,
 ) {
   $home = "/home/${user}"
 
@@ -21,6 +22,6 @@ define workstation::k8s::krew_plugin(
     path    => "${facts['path']}:${home}/.krew/bin",
     cwd     => $home,
     user    => $user,
-    creates => "${home}/.krew/bin/kubectl-${plugin}",
+    creates => "${home}/.krew/bin/kubectl-${creates}",
   }
 }

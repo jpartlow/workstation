@@ -55,6 +55,7 @@ class workstation::k8s(
 
   workstation::k8s::krew_plugin { 'support-bundle':
     user    => $krew_user,
+    creates => 'support_bundle',
     require => Class['workstation::k8s::krew'],
   }
 
