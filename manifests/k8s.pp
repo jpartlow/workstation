@@ -48,8 +48,6 @@ class workstation::k8s(
 
   contain 'workstation::k8s::kots'
 
-  contain 'workstation::k8s::kind'
-
   workstation::k8s::krew_plugin { 'preflight':
     user    => $krew_user,
     require => Class['workstation::k8s::krew'],
@@ -61,7 +59,22 @@ class workstation::k8s(
     require => Class['workstation::k8s::krew'],
   }
 
-  contain 'workstation::k8s::k9s'
+  workstation::install_release_binary { 'derailed/k9s/k9s_Linux_x86_64.tar.gz':
+    creates => 'k9s'
+  }
+
+  workstation::install_release_binary { 'kubernetes-sigs/kind/kind-linux-amd64':
+    creates     => 'kind',
+    install_dir => '/usr/bin',
+  }
+
+  # The embedded the version lookup is for the shell
+  workstation::install_release_binary { 'helm/helm/helm-v${VERSION}-linux-amd64.tar.gz':
+    creates      => 'helm',
+    install_dir  => '/usr/bin',
+    download_url => 'https://get.helm.sh',
+    archive_file => 'linux-amd64/helm',
+  }
 
   service { 'docker':
     ensure  => 'running',
