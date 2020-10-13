@@ -1,8 +1,16 @@
 ---
+# Profiles to be applied
 workstation::profiles:
   - 'workstation::dev_account_base'
   - 'workstation::k8s'
+
+# Kubernetes configuration
 workstation::k8s::krew_user: jpartlow
+workstation::k8s::helm::chart_repos:
+  - name: 'gitlab'
+    url: 'https://charts.gitlab.io/'
+
+# Dev account creation/config
 workstation::dev_account_base::account: jpartlow
 workstation::dev_account_base::additional_packages:
   - 'lsof'

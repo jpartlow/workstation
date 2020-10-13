@@ -68,13 +68,7 @@ class workstation::k8s(
     install_dir => '/usr/bin',
   }
 
-  # The embedded the version lookup is for the shell
-  workstation::install_release_binary { 'helm/helm/helm-v${VERSION}-linux-amd64.tar.gz':
-    creates      => 'helm',
-    install_dir  => '/usr/bin',
-    download_url => 'https://get.helm.sh',
-    archive_file => 'linux-amd64/helm',
-  }
+  contain 'workstation::k8s::helm'
 
   service { 'docker':
     ensure  => 'running',
