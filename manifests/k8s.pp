@@ -15,11 +15,17 @@
 #   Whether to enable source packages.
 # @param krew_user
 #   The user to install the Krew tool for.
+# @param additional_chart_repos
+#   Array of chart repository hashes (name, url) to add to helm.
+# @param additional_packages
+#   Array of extra packages to add.
 class workstation::k8s(
   String $docker_channel = 'stable',
   Boolean $enable_debuginfo_repo = false,
   Boolean $enable_source_repo = false,
   String $krew_user = 'centos',
+  Array[Workstation::Chart_repo] $additional_chart_repos = [],
+  Array[String] $additional_packages = [],
 ) {
   class { 'workstation::k8s::repos':
     docker_channel        => $docker_channel,
@@ -68,7 +74,28 @@ class workstation::k8s(
     install_dir => '/usr/bin',
   }
 
+  # The holodock-manifests Makefile expects to be able to install gitlab
+  # using helm, and requires this repository added.
+  $default_chart_repos = [
+    {
+      name => 'gitlab',
+      url => 'https://charts.gitlab.io/',
+    }
+  ]
+  class { 'workstation::k8s::helm':
+    chart_repos => $default_chart_repos + $additional_chart_repos,
+  }
   contain 'workstation::k8s::helm'
+
+  # This has nothing to do with k8s specifically, but the holodeck-manifests
+  # Makefile makes use of jq to manipulate JSON data returned by PE status
+  # endpoints and the like.
+  $default_packages = [
+    'jq',
+  ]
+  package { ($default_packages + $additional_packages):
+    ensure => 'latest',
+  }
 
   service { 'docker':
     ensure  => 'running',

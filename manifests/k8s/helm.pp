@@ -1,8 +1,6 @@
 class workstation::k8s::helm(
   String $version = 'latest',
-  Array[
-    Struct[{name => String,
-            url  => Pattern[/^http.*/]}]] $chart_repos = [],
+  Array[Workstation::Chart_repo] $chart_repos = [],
 ) {
 
   # The embedded the version lookup is for the shell

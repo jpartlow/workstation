@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe 'workstation::k8s' do
+  let(:params) { {} }
+
   it { is_expected.to compile.with_all_deps }
 
   it 'enables centos extras' do
@@ -123,5 +125,27 @@ describe 'workstation::k8s' do
       contain_exec('krew-install')
         .with_user('centos')
     )
+  end
+
+  it 'adds the gitlab chart repo' do
+    is_expected.to contain_exec('add-helm-repo-gitlab')
+  end
+
+  it 'adds other chart repos' do
+    params[:additional_chart_repos] = [
+      { 'name' => 'test', 'url' => 'https://some.test' },
+    ]
+    is_expected.to contain_exec('add-helm-repo-gitlab')
+    is_expected.to contain_exec('add-helm-repo-test')
+  end
+
+  it 'installs jq' do
+    is_expected.to contain_package('jq')
+  end
+
+  it 'installs extra packages if requested' do
+    params[:additional_packages] = ['thing']
+    is_expected.to contain_package('jq')
+    is_expected.to contain_package('thing')
   end
 end
