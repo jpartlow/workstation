@@ -13,7 +13,7 @@
 define workstation::k8s::krew_plugin(
   String $user,
   String $plugin = $title,
-  String $creates = $title,
+  String $creates = $plugin,
 ) {
   $home = "/home/${user}"
 
