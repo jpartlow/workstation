@@ -48,6 +48,8 @@ class workstation::k8s(
 
   contain 'workstation::k8s::kots'
 
+  contain 'workstation::k8s::kind'
+
   workstation::k8s::krew_plugin { 'preflight':
     user    => $krew_user,
     require => Class['workstation::k8s::krew'],
