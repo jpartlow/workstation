@@ -6,6 +6,9 @@ workstation::profiles:
 
 # Kubernetes configuration
 workstation::k8s::dev_user: jpartlow
+workstation::k8s::replicated_license_file: '/home/jpartlow/keys/josh-partlow-replicated.yaml'
+workstation::k8s::license_links:
+  - '/home/jpartlow/work/src/holodeck-manifests/license.yaml'
 
 # Dev account creation/config
 workstation::dev_account_base::account: jpartlow

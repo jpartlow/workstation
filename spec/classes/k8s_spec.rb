@@ -1,7 +1,11 @@
 require 'spec_helper'
 
 describe 'workstation::k8s' do
-  let(:params) { {} }
+  let(:params) do
+    { replicated_license_file: '/some/license.yaml' }
+  end
+
+  include_context('fake ssh public key', '/some/license.yaml', 'alicense')
 
   it { is_expected.to compile.with_all_deps }
 
@@ -70,6 +74,7 @@ describe 'workstation::k8s' do
   context('test') do
     let(:params) do
       {
+        replicated_license_file: '/some/license.yaml',
         docker_channel: 'test',
       }
     end
@@ -96,6 +101,7 @@ describe 'workstation::k8s' do
   context('source and debuginfo') do
     let(:params) do
       {
+        replicated_license_file: '/some/license.yaml',
         enable_debuginfo_repo: true,
         enable_source_repo: true,
       }
@@ -147,5 +153,26 @@ describe 'workstation::k8s' do
     params[:additional_packages] = ['thing']
     is_expected.to contain_package('jq')
     is_expected.to contain_package('thing')
+  end
+
+  it 'transfers the license file' do
+    params[:dev_user] = 'test'
+    is_expected.to(
+      contain_file('/home/test/license.yaml')
+        .with_ensure('present')
+        .with_content('alicense')
+        .with_mode('0640')
+        .with_owner('test')
+        .with_group('test')
+    )
+  end
+
+  it 'creates links to it' do
+    params[:license_links] = ['/home/centos/linked/license.yaml']
+    is_expected.to(
+      contain_file('/home/centos/linked/license.yaml')
+        .with_ensure('link')
+        .with_target('/home/centos/license.yaml')
+    )
   end
 end

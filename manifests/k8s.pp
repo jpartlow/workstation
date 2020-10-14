@@ -6,6 +6,13 @@
 # Parameters
 # ----------
 #
+# @param replicated_license_file
+#   Absolute path to the license file to transfer to the dev host
+#   so that we can install cd4pe via KOTS. The file will be placed
+#   in /home/${dev_user}, but can be linked elsewhere with $license_links.
+# @param license_links
+#   Array of absolute paths to be created as symlinks to the
+#   $replicated_license_file placed on the dev host.
 # @param docker_channel
 #   The Docker repository channel to download packages from.
 #   (stable, test or nightly)
@@ -22,6 +29,8 @@
 # @param additional_packages
 #   Array of extra packages to add.
 class workstation::k8s(
+  Workstation::Absolute_path $replicated_license_file,
+  Array[Workstation::Absolute_path] $license_links = [],
   String $docker_channel = 'stable',
   Boolean $enable_debuginfo_repo = false,
   Boolean $enable_source_repo = false,
@@ -109,5 +118,22 @@ class workstation::k8s(
   service { 'docker':
     ensure  => 'running',
     require => Package['docker-ce'],
+  }
+
+  $license_file = $replicated_license_file.split(/\//)[-1]
+  $dev_host_license_path = "/home/${dev_user}/${license_file}"
+  file { $dev_host_license_path:
+    ensure  => 'present',
+    content => file($replicated_license_file),
+    mode    => '0640',
+    owner   => $dev_user,
+    group   => $dev_user,
+  }
+
+  $license_links.each |$link| {
+    file { $link:
+      ensure => 'link',
+      target => $dev_host_license_path,
+    }
   }
 }
