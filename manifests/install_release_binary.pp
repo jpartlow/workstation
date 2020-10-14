@@ -33,6 +33,8 @@
 # @param archive_file
 #   The specific file from the archive to install. If not set, assumes
 #   a simple archive that just untars to a single $creates file.
+# @param owner
+#   The user that should own the installed binary.
 define workstation::install_release_binary(
   String $organization = $title.split(/\//)[0],
   String $project = $title.split(/\//)[1],
@@ -42,6 +44,7 @@ define workstation::install_release_binary(
   Workstation::Absolute_path $install_dir = '/usr/local/bin',
   Optional[String] $download_url = undef,
   Optional[String] $archive_file = undef,
+  String $owner = 'root',
 ) {
   if $version == 'latest' {
     $version_lookup = "VERSION=$(curl -sSL -o /dev/null --write-out '%{url_effective}' https://github.com/${organization}/${project}/releases/latest | grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+')"
@@ -63,7 +66,8 @@ define workstation::install_release_binary(
     $binary = $package
   }
 
-  $chmod = "chmod +x ${binary}"
+  $chown = "chown ${owner}:${owner} ${binary}"
+  $chmod = "chmod 0755 ${binary}"
   $move = "mv ${binary} ${install_dir}/${creates}"
 
   $installer_cmds = [
@@ -71,6 +75,7 @@ define workstation::install_release_binary(
     $version_lookup,
     $download,
     $untar,
+    $chown,
     $chmod,
     $move,
   ] - [ undef ]

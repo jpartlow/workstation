@@ -66,19 +66,26 @@ describe 'workstation::install_release_binary' do
       )
     end
 
-    it 'chmods' do
-      is_expected.to(
-        contain_exec('install-test')
-          .with_command(/chmod \+x test/)
-      )
-    end
-
     it 'checks for installed binary' do
       is_expected.to(
         contain_exec('install-test')
           .with_creates('/usr/local/bin/test')
       )
     end
+  end
+
+  it 'chowns' do
+    is_expected.to(
+      contain_exec('install-test')
+        .with_command(/chown root:root test/)
+    )
+  end
+
+  it 'chmods' do
+    is_expected.to(
+      contain_exec('install-test')
+        .with_command(/chmod 0755 test/)
+    )
   end
 
   it 'gets exact version' do

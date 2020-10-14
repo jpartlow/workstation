@@ -52,9 +52,15 @@ class workstation::k8s(
   }
   contain 'workstation::k8s::krew'
 
-  contain 'workstation::k8s::replicated_cli'
+  workstation::bash_installer { 'replicated-cli':
+    url     => 'https://raw.githubusercontent.com/replicatedhq/replicated/master/install.sh',
+    creates => '/usr/local/bin/replicated',
+  }
 
-  contain 'workstation::k8s::kots'
+  workstation::bash_installer { 'kots':
+    url     => 'https://kots.io/install',
+    creates => '/usr/local/bin/kubectl-kots',
+  }
 
   workstation::k8s::krew_plugin { 'preflight':
     user    => $dev_user,
