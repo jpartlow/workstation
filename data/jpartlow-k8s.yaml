@@ -5,7 +5,7 @@ workstation::profiles:
   - 'workstation::k8s'
 
 # Kubernetes configuration
-workstation::k8s::krew_user: jpartlow
+workstation::k8s::dev_user: jpartlow
 
 # Dev account creation/config
 workstation::dev_account_base::account: jpartlow

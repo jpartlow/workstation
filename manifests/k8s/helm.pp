@@ -1,6 +1,7 @@
 class workstation::k8s::helm(
   String $version = 'latest',
   Array[Workstation::Chart_repo] $chart_repos = [],
+  String $user = 'centos',
 ) {
 
   # The embedded the version lookup is for the shell
@@ -19,7 +20,8 @@ class workstation::k8s::helm(
     exec { "add-helm-repo-${name}":
       command => "helm repo add ${name} ${url}",
       path    => $facts['path'],
-      unless  => "helm repo list | grep -q '${url}'",
+      user    => $user,
+      unless  => "helm repo list 2>/dev/null | grep -q '${url}'",
       notify  => Exec['helm-update'],
     }
   }

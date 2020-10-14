@@ -19,7 +19,8 @@ describe 'workstation::k8s::helm' do
     is_expected.to(
       contain_exec('add-helm-repo-test')
         .with_command('helm repo add test https://some.test')
-        .with_unless("helm repo list | grep -q 'https://some.test'")
+        .with_unless("helm repo list 2>/dev/null | grep -q 'https://some.test'")
+        .with_user('centos')
     )
   end
 

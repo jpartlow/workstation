@@ -13,8 +13,10 @@
 #   Whether to enable packages with debuginfo.
 # @param enable_source_repo
 #   Whether to enable source packages.
-# @param krew_user
-#   The user to install the Krew tool for.
+# @param dev_user
+#   Install unprivileged tools like krew, and add helm chart repos
+#   for this user. (Any tool that needs to work with local user
+#   config, basically).
 # @param additional_chart_repos
 #   Array of chart repository hashes (name, url) to add to helm.
 # @param additional_packages
@@ -23,7 +25,7 @@ class workstation::k8s(
   String $docker_channel = 'stable',
   Boolean $enable_debuginfo_repo = false,
   Boolean $enable_source_repo = false,
-  String $krew_user = 'centos',
+  String $dev_user = 'centos',
   Array[Workstation::Chart_repo] $additional_chart_repos = [],
   Array[String] $additional_packages = [],
 ) {
@@ -45,7 +47,7 @@ class workstation::k8s(
   }
 
   class { 'workstation::k8s::krew':
-    user    => $krew_user,
+    user    => $dev_user,
     require => Package['kubectl'],
   }
   contain 'workstation::k8s::krew'
@@ -55,12 +57,12 @@ class workstation::k8s(
   contain 'workstation::k8s::kots'
 
   workstation::k8s::krew_plugin { 'preflight':
-    user    => $krew_user,
+    user    => $dev_user,
     require => Class['workstation::k8s::krew'],
   }
 
   workstation::k8s::krew_plugin { 'support-bundle':
-    user    => $krew_user,
+    user    => $dev_user,
     creates => 'support_bundle',
     require => Class['workstation::k8s::krew'],
   }
@@ -83,6 +85,7 @@ class workstation::k8s(
     }
   ]
   class { 'workstation::k8s::helm':
+    user        => $dev_user,
     chart_repos => $default_chart_repos + $additional_chart_repos,
   }
   contain 'workstation::k8s::helm'
