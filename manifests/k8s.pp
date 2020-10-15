@@ -34,6 +34,8 @@ class workstation::k8s(
   String $docker_channel = 'stable',
   Boolean $enable_debuginfo_repo = false,
   Boolean $enable_source_repo = false,
+  String $kots_version = 'latest',
+  String $helm_version = 'latest',
   String $dev_user = 'centos',
   Array[Workstation::Chart_repo] $additional_chart_repos = [],
   Array[String] $additional_packages = [],
@@ -66,9 +68,10 @@ class workstation::k8s(
     creates => '/usr/local/bin/replicated',
   }
 
-  workstation::bash_installer { 'kots':
-    url     => 'https://kots.io/install',
-    creates => '/usr/local/bin/kubectl-kots',
+  workstation::install_release_binary { 'replicatedhq/kots/kots_linux_amd64.tar.gz':
+    version      => $kots_version,
+    archive_file => 'kots',
+    creates      => 'kubectl-kots',
   }
 
   workstation::k8s::krew_plugin { 'preflight':
@@ -101,6 +104,7 @@ class workstation::k8s(
   ]
   class { 'workstation::k8s::helm':
     user        => $dev_user,
+    version     => $helm_version,
     chart_repos => $default_chart_repos + $additional_chart_repos,
   }
   contain 'workstation::k8s::helm'

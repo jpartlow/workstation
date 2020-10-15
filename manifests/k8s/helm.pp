@@ -18,12 +18,13 @@ class workstation::k8s::helm(
     $url  = $repo_info['url']
 
     exec { "add-helm-repo-${name}":
-      command        => "helm repo add ${name} ${url}",
-      path           => $facts['path'],
-      user           => $user,
+      command     => "helm repo add ${name} ${url}",
+      path        => $facts['path'],
+      user        => $user,
       environment => ["USER=${user}", "HOME=/home/${user}"],
-      unless         => "helm repo list 2>/dev/null | grep -q '${url}'",
-      notify         => Exec['helm-update'],
+      unless      => "helm repo list 2>/dev/null | grep -q '${url}'",
+      notify      => Exec['helm-update'],
+      require     => Workstation::Install_release_binary['helm/helm/helm-v${VERSION}-linux-amd64.tar.gz'],
     }
   }
 
