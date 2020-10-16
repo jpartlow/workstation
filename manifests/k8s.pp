@@ -135,6 +135,14 @@ class workstation::k8s(
     creates => 'conftest',
   }
 
+  # This installs yarn, a nodejs package manager used by the PipelinesInfra
+  # repo which holodeck-manifest's Makefile relies on for integration testing
+  # of cd4pe.
+  class { 'workstation::yarn':
+    user => $dev_user,
+  }
+  contain 'workstation::yarn'
+
   # This has nothing to do with k8s specifically, but the holodeck-manifests
   # Makefile makes use of jq to manipulate JSON data returned by PE status
   # endpoints and the like.
