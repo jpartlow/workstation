@@ -1,6 +1,22 @@
 # Class: workstation::k8s
 #
-# Controls setup of kubernettes on a centos node.
+# Controls setup of kubernettes and related tools on a centos node.
+#
+# The base docker installation is docker-ce from docker.com yum repos.
+# The kubernetes packages come from google.com yum repos.
+# (see workstation::k8s::repos)
+#
+# For management of the kubernetes cluster KinD is installed, *but* the manifest
+# does not initialize the cluster. You will need to do that yourself with kind and
+# whatever supporting config is required after the manifest finishes.
+#
+# Also be aware that outside of the established package channels mentioned
+# above, there is a lot of `curl | bash` and downloads from github releases
+# going on for these various third party tools that aren't using package
+# managers, and there is currently no attempt to validate checksums or
+# signatures (if such things exist). So I wouldn't use this on anything other
+# than a dev host.
+#
 # Tested against Centos 7.6.
 #
 # Parameters
@@ -20,6 +36,10 @@
 #   Whether to enable packages with debuginfo.
 # @param enable_source_repo
 #   Whether to enable source packages.
+# @param kots_version
+#   The KOTS version to install. Defaults to latest.
+# @param heml_version
+#   The helm version to install. Defaults to latest.
 # @param dev_user
 #   Install unprivileged tools like krew, and add helm chart repos
 #   for this user. (Any tool that needs to work with local user
@@ -108,6 +128,12 @@ class workstation::k8s(
     chart_repos => $default_chart_repos + $additional_chart_repos,
   }
   contain 'workstation::k8s::helm'
+
+  # This is a configuration testing tool used by holodeck-manifests unit tests
+  # to validate container configurations.
+  workstation::install_release_binary { 'open-policy-agent/conftest/conftest_${VERSION}_Linux_x86_64.tar.gz':
+    creates => 'conftest',
+  }
 
   # This has nothing to do with k8s specifically, but the holodeck-manifests
   # Makefile makes use of jq to manipulate JSON data returned by PE status
