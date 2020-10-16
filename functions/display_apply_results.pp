@@ -37,7 +37,7 @@ function workstation::display_apply_results(
     }
   }
 
-  if $result =~ Error {
-    fail_plan($result)
+  if !$result.ok() {
+    fail_plan($result.error())
   }
 }
