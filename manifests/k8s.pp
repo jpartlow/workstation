@@ -124,6 +124,12 @@ class workstation::k8s(
     require => Package['docker-ce'],
   }
 
+  user { $dev_user:
+    ensure  => present,
+    groups  => ['docker'],
+    require => Package['docker-ce'],
+  }
+
   $license_file = $replicated_license_file.split(/\//)[-1]
   $dev_host_license_path = "/home/${dev_user}/${license_file}"
   file { $dev_host_license_path:
