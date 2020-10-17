@@ -129,19 +129,11 @@ class workstation::k8s(
   }
   contain 'workstation::k8s::helm'
 
-  # This is a configuration testing tool used by holodeck-manifests unit tests
-  # to validate container configurations.
-  workstation::install_release_binary { 'open-policy-agent/conftest/conftest_${VERSION}_Linux_x86_64.tar.gz':
-    creates => 'conftest',
+  # Unit/integration testing tools and lib dependencies for holodeck-manifests
+  class { 'workstation::k8s::holodeck_testing':
+    dev_user => $dev_user,
   }
-
-  # This installs yarn, a nodejs package manager used by the PipelinesInfra
-  # repo which holodeck-manifest's Makefile relies on for integration testing
-  # of cd4pe.
-  class { 'workstation::yarn':
-    user => $dev_user,
-  }
-  contain 'workstation::yarn'
+  contain 'workstation::k8s::holodeck_testing'
 
   # This has nothing to do with k8s specifically, but the holodeck-manifests
   # Makefile makes use of jq to manipulate JSON data returned by PE status
