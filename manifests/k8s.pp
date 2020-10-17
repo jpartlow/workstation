@@ -50,7 +50,8 @@
 #   Array of extra packages to add.
 class workstation::k8s(
   Workstation::Absolute_path $replicated_license_file,
-  Array[Workstation::Absolute_path] $license_links = [],
+  Workstation::Absolute_path $cd4pe_license_file,
+  Optional[Workstation::License_links_struct] $license_links = {},
   String $docker_channel = 'stable',
   Boolean $enable_debuginfo_repo = false,
   Boolean $enable_source_repo = false,
@@ -156,20 +157,15 @@ class workstation::k8s(
     require => Package['docker-ce'],
   }
 
-  $license_file = $replicated_license_file.split(/\//)[-1]
-  $dev_host_license_path = "/home/${dev_user}/${license_file}"
-  file { $dev_host_license_path:
-    ensure  => 'present',
-    content => file($replicated_license_file),
-    mode    => '0640',
-    owner   => $dev_user,
-    group   => $dev_user,
+  workstation::copy_secret_and_link { 'copy-replicated-license':
+    local_file => $replicated_license_file,
+    user       => $dev_user,
+    links      => $license_links['replicated'],
   }
 
-  $license_links.each |$link| {
-    file { $link:
-      ensure => 'link',
-      target => $dev_host_license_path,
-    }
+  workstation::copy_secret_and_link { 'copy-cd4pe-license':
+    local_file => $cd4pe_license_file,
+    user       => $dev_user,
+    links      => $license_links['cd4pe'],
   }
 }

@@ -2,10 +2,13 @@ require 'spec_helper'
 
 describe 'workstation::k8s' do
   let(:params) do
-    { replicated_license_file: '/some/license.yaml' }
+    {
+      replicated_license_file: '/some/license.yaml',
+      cd4pe_license_file: '/some/cd4pe.json',
+    }
   end
 
-  include_context('fake ssh public key', '/some/license.yaml', 'alicense')
+  include_context('fake files', { '/some/license.yaml' => 'alicense', '/some/cd4pe.json' => 'acd4pelicense'})
 
   it { is_expected.to compile.with_all_deps }
 
