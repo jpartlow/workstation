@@ -19,6 +19,26 @@
 #
 # Tested against Centos 7.6.
 #
+# Manages
+# -------
+#
+# * docker and k8s yum repositories
+# * docker-ce/docker-ce-cli
+# * kubectl/kubeadm/kubelet
+# * KinD
+# * Kots
+# * krew (and plugins)
+#   * preflight
+#   * support bundle
+# * replicated-cli
+# * helm
+#   * gitlab helm chart repository
+# * testing tools used by holodeck-manifests
+#   * conftest (for spec manifest testing)
+#   * yarn (for installing jest/puppeteer for workflow tests that exercise the cd4pe UI)
+#   * chromium-headless
+# * transferring required replicated/cd4pe license secrets from localhost to workstation for testing
+#
 # Parameters
 # ----------
 #

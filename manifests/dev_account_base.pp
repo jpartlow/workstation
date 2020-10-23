@@ -1,3 +1,40 @@
+# Class: workstation::dev_account_base
+# ====================================
+#
+# Just manages the basics of:
+#
+# * user account
+# * ssh public keys to log into the account
+# * git
+# * vim and vim bundles if you want them
+# * optional git repos to check out
+# * any additional packages to install
+# * dotfiles (can be skipped)
+# * sets up sudo for the account (see {workstation::sudo})
+# * adds .bash_aliases to .bashrc
+#
+# *NOTE* this class is specific to centos atm...
+#
+# Parameters
+# ----------
+#
+# @param account
+#   The user account to manage on the workstation.
+# @param ssh_public_keys
+#   An array of public key files from your local ~/.ssh
+#   to add to the workstation account's authorized_keys.
+# @param repository_data
+#   Any git repositories you want checked out (see
+#   {workstation::repositories} and examples in data/ for
+#   the structure needed here.
+# @param vim_bundles
+#   Any vim bundles to install via pathogen (see
+#   {workstation::vim}).
+# @param additional_packages
+#   Additional centos packages to install.
+# @param manage_dotfiles
+#   Set this false to not manage a dotfiles repository.
+#   (skips {workstation::dotfiles} being included)
 class workstation::dev_account_base(
   String $account,
   Array[String] $ssh_public_keys,

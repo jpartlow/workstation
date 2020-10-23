@@ -18,25 +18,24 @@
 ## Description
 
 This module will bootstrap a fresh development vm or laptop into a known state
-suitable for PE management development. Should be useable for Ubuntu 18.04 or
-Centos 7.
+suitable for PE management development. The base workstation classes should be
+useable for Ubuntu 18.04 or Centos 7. The workstation::k8s classes are specific
+to el7 atm.
 
 Currently this is my way of capturing set up for an Ubuntu 18.04 dev box, so
 that I can recreate my dev environment automatically, either to restore on a
-new laptop or to do dev work from a vm.  Intention is to allow me to work with
+new laptop or to do dev work from a vm. Intention is to allow me to work with
 new/clean configuration without risking my current dev environment's stability
-for handling day to day work items.  From there can be expanded to other
-platforms (notably OSX) for onboarding, or throw away development testing.
+for handling day to day work items. From there it could be expanded to other
+platforms (perhaps OSX) for onboarding, or throw away development testing.
 
-The module makes use of Bolt to manage the workstation.  The
+The module makes use of Bolt to manage the workstation. The
 workstation::manage plan (in plans/manage.pp) uses apply_prep to get
-puppet-agent installed on the node, and then can apply 'include workstation'
-building the catalog locally (after a `bolt puppetfile install` has installed
-dependencies), and then shipping it to remote workstation and applying it
-there.
+puppet-agent installed on the node, and then can apply whatever class list
+it's given via hiera and the 'workstation::profiles' array to manage the node(s).
 
 Configuration of the module is handled by Hiera, through data/nodes matching
-the target's clientcert (see below for details)
+the target's clientcert (see below for details).
 
 ## Setup
 
@@ -73,7 +72,7 @@ ForwardAgent in your ~/.ssh/config for the host. (It's assumed this is a
 freshly minted vm, without your ssh keys, and that even if your private keys
 were present, a password would be required to use them...)
 
-The required modules for running workstation are listed in in the Boltdir/Puppetfile.
+The required modules for running workstation are listed in the Boltdir/Puppetfile.
 
 ## Usage
 
@@ -103,7 +102,16 @@ ForwardAgent true
 Should allow you to `ssh work-test` and from there to `ssh git@github.com`
 assuming you're running an ssh-agent locally with the correct keys for Github.
 
-### Configuring workstation
+### Configuring [workstation](manifests/init.pp)
+
+*Note*: The workstation class is very specific to my environment preferences.
+It expects to find a {user}/dotfiles repository in Github, for example, and local
+config/token files for things like vmfloaty and fog. It sets up repos like
+frankenbuilder, preps sudo and nfs and similar pecularities I use working on
+PE. As such its probably not useful for general workstation setup without some
+additional work.
+
+---
 
 The module is configured with Hiera data. There is a sample file in the data/
 directory, but that's mostly empty. My workstation configuration under
@@ -140,12 +148,46 @@ bolt plan run workstation::manage -n <your-host> --no-host-key-check --run-as ro
 
 That should be it, except for whatever didn't work.
 
+### Configuring [workstation::dev_account_base](manifests/dev_account_base)
+
+This will perform a basic dev setup on an el host without any of my PE centric
+bits the workstation class has (such as frankenbuilder or nfs).
+
+It is handy coupled with workstation::k8s if you want to manage checkout of
+[holodeck-manifests] at the same time, for example.
+
+Unless you are using a similar dotfiles scheme as I am ([jpartlow/dotfiles]),
+you will probably want workstation::dev_account_base::manage_dotfiles set to
+false.
+
+### Configuring [workstation::k8s](manifests/k8s.pp)
+
+This class is intended to be generally useful for prepping the k8s environment
+required by [holodeck-manifests] on an el7 host. It was tested on a [platform9]
+centos_7_x86_64 xl host (8GB memory is insufficient).
+
+See the class for the details of what it manages.
+
+[data/k8s-dev-el7.platform9.puppet.net.yaml](data/k8s-dev-el7.platform9.net.yaml) is a hiera config I'm using.
+
+The required workstation::profiles is just 'workstation::k8s'; the
+dev_account_base class is setting up my dev environment in addition to k8s.
+
+The required k8s parameters are:
+
+* workstation::k8s::dev_user - the user account to install some tools and copy license files to
+* workstation::k8s::replicated_license_file - local path to your replicated license yaml
+* workstation::k8s::cd4pe_license_file - local path to your cd4pe license json
+
+The latter two files are used by [holodeck-manifests] when running test targets.
+
 ### Configuring a meep_tools test host
 
-This plan sets up a vm with ruby. Sample config is data/test-tools.yaml.
-Again, a data/nodes/{certname}.yaml must exist for the node you are configuring
-with whatever set of parameters you intend to pass on to the apply block in the
-workstation::setup_test_tools plan...
+This plan is a little more minimal than applying 'workstation' and sets up a vm
+with ruby and bolt for pe-installer tooling work. Sample config is
+data/test-tools.yaml.  Again, a data/nodes/{certname}.yaml must exist for the
+node you are configuring with whatever set of parameters you intend to pass on
+to the apply block in the workstation::setup_test_tools plan...
 
 (Below was tested on a centos-7 vm, which required the --tty flag)
 
@@ -223,7 +265,12 @@ bundle exe rake spec
 ## Limitations
 
 Currently only written and tested for an Ubuntu host (18.04 specifically) and Centos 7.
+(Not all the main profile classes work for both platforms atm, see above).
 
 ## Development
 
 joshua.partlow@puppetlabs.com
+
+[holodeck-manifests]: https://github.com/puppetlabs/holodeck-manifests
+[platform9]: https://puppet.platform9.net
+[jpartlow/dotfiles]: https://github.com/jpartlow/dotfiles
