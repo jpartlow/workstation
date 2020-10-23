@@ -8,11 +8,11 @@
     * [Setup requirements](#setup-requirements)
     * [Beginning with workstation](#beginning-with-workstation)
 1. [Usage](#usage)
-    * [bolt plan workstation::manage](#bolt-plan-workstation::manage)
+    * [Manage](#manage)
     * [Profile Classes](#profile-classes)
         * [Configuring workstation](#configuring-workstation)
-        * [Configuring workstation::dev_account_base](#configuring-workstation::dev_account_base)
-        * [Configuring workstation::k8s](#configuring-workstation::k8s)
+        * [Configuring workstation::dev_account_base](#configuring-dev_account_base)
+        * [Configuring workstation::k8s](#configuring-k8s)
 1. [Reference - Short list of class/defined type references](#reference)
 1. [Testing](#testing)
     * [Vagrantfile - A test host](#vagrantfile)
@@ -72,7 +72,7 @@ It is intended to be used to configure a separate Ubuntu 18.04 or Centos7 host
 escalate to root via sudo.
 
 In order for the vcsrepo module to be able to clone repositories from
-git@github.com/foo/bar sources (via ssh), you will need to enable SSH
+git\@github.com/foo/bar sources (via ssh), you will need to enable SSH
 ForwardAgent in your ~/.ssh/config for the host. (It's assumed this is a
 freshly minted vm, without your ssh keys, and that even if your private keys
 were present, a password would be required to use them...)
@@ -107,7 +107,7 @@ ForwardAgent true
 Should allow you to `ssh work-test` and from there to `ssh git@github.com`
 assuming you're running an ssh-agent locally with the correct keys for Github.
 
-### bolt plan [workstation::manage](plans/manage.pp)
+### Manage
 
 The manage plan is configured with Hiera data as configured by the module's
 [hiera.yaml](hiera.yaml).  There is a sample file in the data/ directory, but
@@ -168,7 +168,7 @@ The principle parameters that must be set are:
 
 It should work on both Ubuntu/Centos (tested on ubuntu 18.04, centos7).
 
-#### Configuring [workstation::dev_account_base](manifests/dev_account_base)
+#### Configuring [dev_account_base](manifests/dev_account_base.pp)
 
 This will perform a basic dev setup on an el host without any of my PE centric
 bits the workstation class has (such as frankenbuilder or nfs).
@@ -180,7 +180,7 @@ Unless you are using a similar dotfiles scheme as I am ([jpartlow/dotfiles]),
 you will probably want workstation::dev_account_base::manage_dotfiles set to
 false.
 
-#### Configuring [workstation::k8s](manifests/k8s.pp)
+#### Configuring [k8s](manifests/k8s.pp)
 
 This class is intended to be generally useful for prepping the k8s environment
 required by [holodeck-manifests] on an el7 host. It was tested on a [platform9]
@@ -188,7 +188,7 @@ centos_7_x86_64 xl host (8GB memory is insufficient).
 
 See the class for the details of what it manages.
 
-[data/k8s-dev-el7.platform9.puppet.net.yaml](data/k8s-dev-el7.platform9.net.yaml)
+[data/jpartlow-k8s.yaml](data/jpartlow-k8s.yaml)
 is a hiera config I'm using.
 
 The required workstation::profiles is just 'workstation::k8s'; the
