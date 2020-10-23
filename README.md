@@ -7,7 +7,12 @@
     * [What workstation affects](#what-workstation-affects)
     * [Setup requirements](#setup-requirements)
     * [Beginning with workstation](#beginning-with-workstation)
-1. [Usage - Configuration options and additional functionality](#usage)
+1. [Usage](#usage)
+    * [bolt plan workstation::manage](#bolt-plan-workstation::manage)
+    * [Profile Classes](#profile-classes)
+        * [Configuring workstation](#configuring-workstation)
+        * [Configuring workstation::dev_account_base](#configuring-workstation::dev_account_base)
+        * [Configuring workstation::k8s](#configuring-workstation::k8s)
 1. [Reference - Short list of class/defined type references](#reference)
 1. [Testing](#testing)
     * [Vagrantfile - A test host](#vagrantfile)
@@ -102,29 +107,51 @@ ForwardAgent true
 Should allow you to `ssh work-test` and from there to `ssh git@github.com`
 assuming you're running an ssh-agent locally with the correct keys for Github.
 
-### Configuring [workstation](manifests/init.pp)
+### bolt plan [workstation::manage](plans/manage.pp)
 
-*Note*: The workstation class is very specific to my environment preferences.
-It expects to find a {user}/dotfiles repository in Github, for example, and local
-config/token files for things like vmfloaty and fog. It sets up repos like
-frankenbuilder, preps sudo and nfs and similar pecularities I use working on
-PE. As such its probably not useful for general workstation setup without some
-additional work.
-
----
-
-The module is configured with Hiera data. There is a sample file in the data/
-directory, but that's mostly empty. My workstation configuration under
-data/jpartlow.yaml should provide guidelines for what you need.
+The manage plan is configured with Hiera data as configured by the module's
+[hiera.yaml](hiera.yaml).  There is a sample file in the data/ directory, but
+that's mostly empty. My workstation configuration under data/jpartlow.yaml
+should provide guidelines for what you need.
 
 The module expects to find a yaml file (or symlink) in data/nodes/ matching the
 Puppet certname of the node to be configured. This file should have the
 necessary workstation parameters set. The hieararchy is based on hiera.yaml.
 
-Create a data file and symlink data/nodes/{certname}.yaml to it. So for
+Create a data file and symlink data/nodes/{certname}.yaml to it. So for a
 hypothetical vm that has the Puppet certname 'work1.platform9.puppet.net',
 there should be a file or link in data/nodes/work1.platform9.puppet.net.yaml
 with the necessary parameters.
+
+The manage plan applies classes to the host based on the list of classes given
+in the 'workstation::profiles' array. This parameter must be set in hiera or
+nothing happens. The plan applies each class individually. This has the benefit
+of ignoring dependencies/conflicts across classes, and the drawback of ignoring
+dependencies/conflicts across classes...so you need to keep in mind that class
+2 could overwrite changes from class 1, for example...and that 1 needs to
+setup whatever 2 might need to proceed...).
+
+Once data/common.yaml is pointing to the set of parameters you want, and you've
+added at least one class to 'workstation::profiles' run the workstation::manage
+plan:
+
+``` sh
+bolt plan run workstation::manage -n <your-host> --no-host-key-check --run-as root
+```
+
+That should be it, except for whatever didn't work.
+
+### Profile Classes
+
+#### Configuring [workstation](manifests/init.pp)
+
+*Note*: The workstation class is very specific to my environment preferences.
+It expects to find a {user}/dotfiles repository in Github, for example, and local
+config/token files for things like vmfloaty and fog. It installs ruby via rbenv,
+sets up repos like frankenbuilder, preps sudo and nfs and similar pecularities
+I use working on PE. As such it's probably not useful for general workstation
+setup without some additional work. If you want some base account setup, see
+workstation::dev_account_base below.
 
 The principle parameters that must be set are:
 
@@ -139,16 +166,9 @@ The principle parameters that must be set are:
 * workstation::ruby::ruby_versions - simple list of ruby versions to be installed via rbenv
 * workstation::ssh_public_keys - to add public keys to the account's ~/.ssh/authorized_keys (see workstation::ssh)
 
-Once data/common.yaml is pointing to the set of parameters you want, run the
-workstation::manage plan:
+It should work on both Ubuntu/Centos (tested on ubuntu 18.04, centos7).
 
-``` sh
-bolt plan run workstation::manage -n <your-host> --no-host-key-check --run-as root
-```
-
-That should be it, except for whatever didn't work.
-
-### Configuring [workstation::dev_account_base](manifests/dev_account_base)
+#### Configuring [workstation::dev_account_base](manifests/dev_account_base)
 
 This will perform a basic dev setup on an el host without any of my PE centric
 bits the workstation class has (such as frankenbuilder or nfs).
@@ -160,7 +180,7 @@ Unless you are using a similar dotfiles scheme as I am ([jpartlow/dotfiles]),
 you will probably want workstation::dev_account_base::manage_dotfiles set to
 false.
 
-### Configuring [workstation::k8s](manifests/k8s.pp)
+#### Configuring [workstation::k8s](manifests/k8s.pp)
 
 This class is intended to be generally useful for prepping the k8s environment
 required by [holodeck-manifests] on an el7 host. It was tested on a [platform9]
@@ -168,7 +188,8 @@ centos_7_x86_64 xl host (8GB memory is insufficient).
 
 See the class for the details of what it manages.
 
-[data/k8s-dev-el7.platform9.puppet.net.yaml](data/k8s-dev-el7.platform9.net.yaml) is a hiera config I'm using.
+[data/k8s-dev-el7.platform9.puppet.net.yaml](data/k8s-dev-el7.platform9.net.yaml)
+is a hiera config I'm using.
 
 The required workstation::profiles is just 'workstation::k8s'; the
 dev_account_base class is setting up my dev environment in addition to k8s.
@@ -211,6 +232,8 @@ bolt plan run workstation::setup_test_tools -n <your-host> --no-host-key-check -
 * workstation::sudo - adds user to sudoers
 * workstation::lein - installs leiningen
 * workstation::frankenbuilder - some customization for frankenbuilder work clones
+* workstation::k8s - kubernetes configuration for [holodeck-manifests] (el7)
+* workstation::dev_account_base - a slimmer dev set up (no ruby, lein, frakenbuilder, nfs) (el7)
 
 ## Testing
 
