@@ -1,6 +1,15 @@
 # Ensure puppet is installed, and then ensure the given node
 # is managed as a workstation, based on the hieradata configuration.
 #
+# Assumes data/nodes contains a hiera yaml file with configuration
+# for a particular host in the passed targets.
+#
+# So if running `bolt plan workstation::manage nodes=some.workstation.net`
+# there should be configuration in data/nodes/some.workstation.net.yaml.
+#
+# At a minimum, there must be a 'workstation::profiles' array with a set
+# of classes to be applied.
+#
 # @param nodes [TargetSpec] nodes to manage.
 plan workstation::manage(
   TargetSpec $nodes,
@@ -26,8 +35,21 @@ plan workstation::manage(
     # obtain the profile list as an array before we begin applying.
     file::write("/tmp/${target.name}-facts.json", "${to_json_pretty($target.facts())}")
     $local_user = system::env('USER')
-    $result_json = run_command("/opt/puppetlabs/bolt/bin/puppet lookup --hiera_config ${workstation::project_root()}/hiera.yaml --facts /tmp/${target.name}-facts.json --render-as json workstation::profiles", 'localhost', 'run_as' => $local_user).first['stdout'].strip
-    $profiles = parsejson($result_json)
+    $hiera_command = "/opt/puppetlabs/bolt/bin/puppet lookup --hiera_config ${workstation::project_root()}/hiera.yaml --facts /tmp/${target.name}-facts.json --render-as json workstation::profiles"
+    $result = run_command(
+      $hiera_command,
+      'localhost',
+      'run_as'        => $local_user,
+      '_catch_errors' => true,
+    ).first()
+    if !$result.ok() {
+      out::message("${result.error()}")
+    }
+    $result_json = $result['stdout'].strip
+    $profiles = empty($result_json) ? {
+      true    => [],
+      default => parsejson($result_json),
+    }
 
     if empty($profiles) {
       fail("No 'profiles' found in data/nodes/${target.facts['clientcert']}.yaml. Nothing to apply.")
