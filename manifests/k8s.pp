@@ -38,7 +38,7 @@
 #   Whether to enable source packages.
 # @param kots_version
 #   The KOTS version to install. Defaults to latest.
-# @param heml_version
+# @param helm_version
 #   The helm version to install. Defaults to latest.
 # @param dev_user
 #   Install unprivileged tools like krew, and add helm chart repos
