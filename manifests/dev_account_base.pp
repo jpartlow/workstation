@@ -4,6 +4,7 @@ class workstation::dev_account_base(
   Array[Hash] $repository_data = [],
   Array[Hash] $vim_bundles = [],
   Array[String] $additional_packages = [],
+  Boolean $manage_dotfiles = true,
 ) {
   class { 'workstation::user':
     account => $account,
@@ -46,11 +47,13 @@ class workstation::dev_account_base(
   }
   contain 'workstation::repositories'
 
-  class { 'workstation::dotfiles':
-    user     => $account,
-    identity => 'id_rsa',
+  if $manage_dotfiles {
+    class { 'workstation::dotfiles':
+      user     => $account,
+      identity => 'id_rsa',
+    }
+    contain workstation::dotfiles
   }
-  contain workstation::dotfiles
 
   class { 'workstation::vim':
     user    => $account,
