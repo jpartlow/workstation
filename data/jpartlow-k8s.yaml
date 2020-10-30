@@ -81,3 +81,6 @@ workstation::dev_account_base::vim_bundles:
   -
     clone_name: "vim-syntastic"
     source: "https://github.com/vim-syntastic/syntastic.git"
+  -
+    clone_name: "vim-dockerfile"
+    source: "https://github.com/ekalinin/Dockerfile.vim.git"
