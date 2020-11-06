@@ -92,6 +92,21 @@ class workstation::profile::holodeck(
   }
   contain 'workstation::profile::k8s'
 
+  # The holodock-manifests Makefile expects to be able to install gitlab
+  # using helm, and requires this repository added.
+  $default_chart_repos = [
+    {
+      name => 'gitlab',
+      url => 'https://charts.gitlab.io/',
+    }
+  ]
+  class { 'workstation::profile::k8s_tools':
+    dev_user               => $dev_user,
+    helm_version           => $helm_version,
+    additional_chart_repos => $default_chart_repos + $additional_chart_repos,
+  }
+  contain 'workstation::profile::k8s_tools'
+
   class { 'workstation::k8s::krew':
     user    => $dev_user,
     require => Package['kubectl'],
@@ -120,29 +135,10 @@ class workstation::profile::holodeck(
     require => Class['workstation::k8s::krew'],
   }
 
-  workstation::install_release_binary { 'derailed/k9s/k9s_Linux_x86_64.tar.gz':
-    creates => 'k9s'
-  }
-
   workstation::install_release_binary { 'kubernetes-sigs/kind/kind-linux-amd64':
     creates     => 'kind',
     install_dir => '/usr/bin',
   }
-
-  # The holodock-manifests Makefile expects to be able to install gitlab
-  # using helm, and requires this repository added.
-  $default_chart_repos = [
-    {
-      name => 'gitlab',
-      url => 'https://charts.gitlab.io/',
-    }
-  ]
-  class { 'workstation::k8s::helm':
-    user        => $dev_user,
-    version     => $helm_version,
-    chart_repos => $default_chart_repos + $additional_chart_repos,
-  }
-  contain 'workstation::k8s::helm'
 
   # Unit/integration testing tools and lib dependencies for holodeck-manifests
   class { 'workstation::k8s::holodeck_testing':
