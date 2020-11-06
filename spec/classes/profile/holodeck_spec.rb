@@ -78,6 +78,7 @@ describe 'workstation::profile::holodeck' do
     let(:params) do
       {
         replicated_license_file: '/some/license.yaml',
+        cd4pe_license_file: '/some/cd4pe.json',
         docker_channel: 'test',
       }
     end
@@ -105,6 +106,7 @@ describe 'workstation::profile::holodeck' do
     let(:params) do
       {
         replicated_license_file: '/some/license.yaml',
+        cd4pe_license_file: '/some/cd4pe.json',
         enable_debuginfo_repo: true,
         enable_source_repo: true,
       }
@@ -171,7 +173,7 @@ describe 'workstation::profile::holodeck' do
   end
 
   it 'creates links to it' do
-    params[:license_links] = ['/home/centos/linked/license.yaml']
+    params[:license_links] = { 'replicated' => ['/home/centos/linked/license.yaml'] }
     is_expected.to(
       contain_file('/home/centos/linked/license.yaml')
         .with_ensure('link')

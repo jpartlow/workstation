@@ -84,22 +84,13 @@ class workstation::profile::holodeck(
   Array[Workstation::Chart_repo] $additional_chart_repos = [],
   Array[String] $additional_packages = [],
 ) {
-  class { 'workstation::k8s::repos':
+  class { 'workstation::profile::k8s':
+    dev_user              => $dev_user,
     docker_channel        => $docker_channel,
     enable_debuginfo_repo => $enable_debuginfo_repo,
     enable_source_repo    => $enable_source_repo,
   }
-  contain 'workstation::k8s::repos'
-
-  package { ['docker-ce-cli', 'docker-ce']:
-    ensure  => 'latest',
-    require => Class['workstation::k8s::repos'],
-  }
-
-  package { ['kubelet', 'kubectl', 'kubeadm']:
-    ensure  => 'latest',
-    require => Class['workstation::k8s::repos'],
-  }
+  contain 'workstation::profile::k8s'
 
   class { 'workstation::k8s::krew':
     user    => $dev_user,
@@ -167,17 +158,6 @@ class workstation::profile::holodeck(
   ]
   package { ($default_packages + $additional_packages):
     ensure => 'latest',
-  }
-
-  service { 'docker':
-    ensure  => 'running',
-    require => Package['docker-ce'],
-  }
-
-  user { $dev_user:
-    ensure  => present,
-    groups  => ['docker'],
-    require => Package['docker-ce'],
   }
 
   workstation::copy_secret_and_link { 'copy-replicated-license':
