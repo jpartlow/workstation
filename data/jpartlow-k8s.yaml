@@ -28,6 +28,9 @@ workstation::profile::dev_account_base::repository_data:
   - path: "work/src"
     defaults:
       upstream: 'puppetlabs'
+      checkout_branch: 'master'
+      remotes:
+        - 'Iristyle'
     repos:
       -
         source: 'git@github.com:jpartlow/holodeck-manifests'
@@ -35,16 +38,27 @@ workstation::profile::dev_account_base::repository_data:
         remotes:
           - 'MikaelSmith'
       -
+        source: 'git@github.com:jpartlow/pe-bolt-vanagon'
+      -
+        source: 'git@github.com:jpartlow/pe-console-services'
+        checkout_branch: '2019.8.x'
+      -
+        source: 'git@github.com:jpartlow/pe-orchestration-services'
+      -
+        source: 'git@github.com:jpartlow/pe-puppetdb-extensions'
+      -
+        source: 'git@github.com:jpartlow/pe-puppet-server-extensions'
+      -
+        source: 'git@github.com:jpartlow/pe-puppetserver'
+        checkout_branch: 'kearney'
+      -
         source: 'git@github.com:jpartlow/pupperware'
-        checkout_branch: 'master'
-        remotes:
-          - 'Iristyle'
       -
         source: 'git@github.com:jpartlow/pupperware-commercial'
-        checkout_branch: 'master'
         remotes:
           - 'Iristyle'
           - 'MikaelSmith'
+
 workstation::profile::dev_account_base::vim_bundles:
   -
     clone_name: "vim-ack"
