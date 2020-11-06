@@ -1,0 +1,9 @@
+---
+# Profiles to be applied
+workstation::profiles:
+  - 'workstation::profile::k8s'
+  - 'workstation::profile::k8s_tools'
+
+# Kubernetes configuration
+workstation::profile::k8s::container_type: 'containerd'
+workstation::profile::k8s_tools::helm_version: '3.3.1'

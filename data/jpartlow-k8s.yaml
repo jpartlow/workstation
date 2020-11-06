@@ -16,7 +16,7 @@ workstation::profile::holodeck::license_links:
 workstation::profile::holodeck::kots_version: '1.19.4'
 workstation::profile::holodeck::helm_version: '3.3.1'
 
-# Dev accou::profile::holodeckeation/config
+# Dev account creation/config
 workstation::profile::dev_account_base::account: jpartlow
 workstation::profile::dev_account_base::additional_packages:
   - 'lsof'
