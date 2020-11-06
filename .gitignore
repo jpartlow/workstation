@@ -8,3 +8,4 @@ data/nodes
 Boltdir/modules
 Boltdir/.rerun.json
 Boltdir/.resource_types
+spec/fixtures/manifests/site.pp
