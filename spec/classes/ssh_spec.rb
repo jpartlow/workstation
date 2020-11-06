@@ -11,7 +11,7 @@ describe 'workstation::ssh' do
     }
   end
 
-  include_context('fake ssh public key', '/tmp/ssh-test/foo-id_rsa.pub', 'ssh-rsa abcde foo')
+  include_context('fake files', { '/tmp/ssh-test/foo-id_rsa.pub' => 'ssh-rsa abcde foo' })
 
   it { is_expected.to compile.with_all_deps }
   it do
