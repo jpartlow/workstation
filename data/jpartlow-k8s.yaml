@@ -1,7 +1,7 @@
 ---
 # Profiles to be applied
 workstation::profiles:
-  - 'workstation::dev_account_base'
+  - 'workstation::profile::dev_account_base'
   - 'workstation::k8s'
 
 # Kubernetes configuration
@@ -17,14 +17,14 @@ workstation::k8s::kots_version: '1.19.4'
 workstation::k8s::helm_version: '3.3.1'
 
 # Dev account creation/config
-workstation::dev_account_base::account: jpartlow
-workstation::dev_account_base::additional_packages:
+workstation::profile::dev_account_base::account: jpartlow
+workstation::profile::dev_account_base::additional_packages:
   - 'lsof'
   - 'htop'
-workstation::dev_account_base::ssh_public_keys:
+workstation::profile::dev_account_base::ssh_public_keys:
   - "id_rsa.pub"
-workstation::dev_account_base::manage_dotfiles: true
-workstation::dev_account_base::repository_data:
+workstation::profile::dev_account_base::manage_dotfiles: true
+workstation::profile::dev_account_base::repository_data:
   - path: "work/src"
     defaults:
       upstream: 'puppetlabs'
@@ -45,7 +45,7 @@ workstation::dev_account_base::repository_data:
         remotes:
           - 'Iristyle'
           - 'MikaelSmith'
-workstation::dev_account_base::vim_bundles:
+workstation::profile::dev_account_base::vim_bundles:
   -
     clone_name: "vim-ack"
     source: "https://github.com/mileszs/ack.vim.git"

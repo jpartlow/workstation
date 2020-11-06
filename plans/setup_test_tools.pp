@@ -26,7 +26,7 @@ plan workstation::setup_test_tools(
 
     $results = apply($n, _catch_errors => true) {
 
-      contain 'workstation::dev_account_base'
+      contain 'workstation::profile::dev_account_base'
 
       file { [$vmfloaty_yml, $control_repo_key]:
         owner => $user,

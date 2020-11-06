@@ -1,7 +1,7 @@
-# Class: workstation::dev_account_base
+# Class: workstation::profile::dev_account_base
 # ====================================
 #
-# Just manages the basics of:
+# Manages the basics of:
 #
 # * user account
 # * ssh public keys to log into the account
@@ -35,7 +35,7 @@
 # @param manage_dotfiles
 #   Set this false to not manage a dotfiles repository.
 #   (skips {workstation::dotfiles} being included)
-class workstation::dev_account_base(
+class workstation::profile::dev_account_base(
   String $account,
   Array[String] $ssh_public_keys,
   Array[Hash] $repository_data = [],

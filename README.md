@@ -11,7 +11,7 @@
     * [Manage](#manage)
     * [Profile Classes](#profile-classes)
         * [Configuring workstation](#configuring-workstation)
-        * [Configuring workstation::dev_account_base](#configuring-dev_account_base)
+        * [Configuring workstation::profile::dev_account_base](#configuring-dev_account_base)
         * [Configuring workstation::k8s](#configuring-k8s)
 1. [Reference - Short list of class/defined type references](#reference)
 1. [Testing](#testing)
@@ -151,7 +151,7 @@ config/token files for things like vmfloaty and fog. It installs ruby via rbenv,
 sets up repos like frankenbuilder, preps sudo and nfs and similar pecularities
 I use working on PE. As such it's probably not useful for general workstation
 setup without some additional work. If you want some base account setup, see
-workstation::dev_account_base below.
+workstation::profile::dev_account_base below.
 
 The principle parameters that must be set are:
 
@@ -168,7 +168,7 @@ The principle parameters that must be set are:
 
 It should work on both Ubuntu/Centos (tested on ubuntu 18.04, centos7).
 
-#### Configuring [dev_account_base](manifests/dev_account_base.pp)
+#### Configuring [dev_account_base](manifests/profile/dev_account_base.pp)
 
 This will perform a basic dev setup on an el host without any of my PE centric
 bits the workstation class has (such as frankenbuilder or nfs).
@@ -177,7 +177,7 @@ It is handy coupled with workstation::k8s if you want to manage checkout of
 [holodeck-manifests] at the same time, for example.
 
 Unless you are using a similar dotfiles scheme as I am ([jpartlow/dotfiles]),
-you will probably want workstation::dev_account_base::manage_dotfiles set to
+you will probably want workstation::profile::dev_account_base::manage_dotfiles set to
 false.
 
 #### Configuring [k8s](manifests/k8s.pp)
