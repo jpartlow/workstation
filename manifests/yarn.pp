@@ -34,6 +34,7 @@ class workstation::yarn(
     cwd         => $home,
     user        => $user,
     environment => ["USER=${user}", "HOME=${home}"],
-    unless      => 'which yarn',
+    provider    => 'shell',
+    unless      => "source ${home}/.nvm/nvm.sh && /usr/bin/which yarn",
   }
 }
