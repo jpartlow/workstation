@@ -12,7 +12,7 @@
     * [Profile Classes](#profile-classes)
         * [Configuring workstation](#configuring-workstation)
         * [Configuring workstation::profile::dev_account_base](#configuring-dev_account_base)
-        * [Configuring workstation::k8s](#configuring-k8s)
+        * [Configuring workstation::profile::holodeck](#configuring-for-holodeck)
 1. [Reference - Short list of class/defined type references](#reference)
 1. [Testing](#testing)
     * [Vagrantfile - A test host](#vagrantfile)
@@ -173,14 +173,14 @@ It should work on both Ubuntu/Centos (tested on ubuntu 18.04, centos7).
 This will perform a basic dev setup on an el host without any of my PE centric
 bits the workstation class has (such as frankenbuilder or nfs).
 
-It is handy coupled with workstation::k8s if you want to manage checkout of
-[holodeck-manifests] at the same time, for example.
+It is handy coupled with workstation::profile::holodeck if you want to manage
+checkout of [holodeck-manifests] at the same time, for example.
 
 Unless you are using a similar dotfiles scheme as I am ([jpartlow/dotfiles]),
 you will probably want workstation::profile::dev_account_base::manage_dotfiles set to
 false.
 
-#### Configuring [k8s](manifests/k8s.pp)
+#### Configuring [Holodeck](manifests/profile/holodeck.pp)
 
 This class is intended to be generally useful for prepping the k8s environment
 required by [holodeck-manifests] on an el7 host. It was tested on a [platform9]
@@ -191,14 +191,14 @@ See the class for the details of what it manages.
 [data/jpartlow-k8s.yaml](data/jpartlow-k8s.yaml)
 is a hiera config I'm using.
 
-The required workstation::profiles is just 'workstation::k8s'; the
+The required workstation::profile is just 'workstation::profile::holodeck'; the
 dev_account_base class is setting up my dev environment in addition to k8s.
 
 The required k8s parameters are:
 
-* workstation::k8s::dev_user - the user account to install some tools and copy license files to
-* workstation::k8s::replicated_license_file - local path to your replicated license yaml
-* workstation::k8s::cd4pe_license_file - local path to your cd4pe license json
+* workstation::profile::holodeck::dev_user - the user account to install some tools and copy license files to
+* workstation::profile::holodeck::replicated_license_file - local path to your replicated license yaml
+* workstation::profile::holodeck::cd4pe_license_file - local path to your cd4pe license json
 
 The latter two files are used by [holodeck-manifests] when running test targets.
 
@@ -232,8 +232,9 @@ bolt plan run workstation::setup_test_tools -n <your-host> --no-host-key-check -
 * workstation::sudo - adds user to sudoers
 * workstation::lein - installs leiningen
 * workstation::frankenbuilder - some customization for frankenbuilder work clones
-* workstation::k8s - kubernetes configuration for [holodeck-manifests] (el7)
-* workstation::dev_account_base - a slimmer dev set up (no ruby, lein, frakenbuilder, nfs) (el7)
+* workstation::k8s - kubernetes related configuration
+* workstation::profile::holodeck - kubernetes configuration specific for [holodeck-manifests] (el7)
+* workstation::profile::dev_account_base - a slimmer dev set up (no ruby, lein, frakenbuilder, nfs) (el7)
 
 ## Testing
 
@@ -296,4 +297,4 @@ joshua.partlow@puppetlabs.com
 
 [holodeck-manifests]: https://github.com/puppetlabs/holodeck-manifests
 [platform9]: https://puppet.platform9.net
-[jpartlow/dotfiles]: https://github.com/jpartlow/dotfiles
+[jpartlow/dotfiles]: https://github.com/jpartlow/dotfilesz

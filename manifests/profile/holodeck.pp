@@ -1,6 +1,9 @@
-# Class: workstation::k8s
+# Class: workstation::profile::holodeck
 #
-# Controls setup of kubernettes and related tools on a centos node.
+# Controls setup of kubernettes and related tools on a centos node
+# specifically to prepare that host for testing and dev work for the
+# [holodeck-manifests](https://github.com/puppetlabs/holodeck-manifests)
+# repository.
 #
 # The base docker installation is docker-ce from docker.com yum repos.
 # The kubernetes packages come from google.com yum repos.
@@ -68,7 +71,7 @@
 #   Array of chart repository hashes (name, url) to add to helm.
 # @param additional_packages
 #   Array of extra packages to add.
-class workstation::k8s(
+class workstation::profile::holodeck(
   Workstation::Absolute_path $replicated_license_file,
   Workstation::Absolute_path $cd4pe_license_file,
   Optional[Workstation::License_links_struct] $license_links = {},

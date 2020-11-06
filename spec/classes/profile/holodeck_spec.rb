@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'workstation::k8s' do
+describe 'workstation::profile::holodeck' do
   let(:params) do
     {
       replicated_license_file: '/some/license.yaml',

@@ -2,21 +2,21 @@
 # Profiles to be applied
 workstation::profiles:
   - 'workstation::profile::dev_account_base'
-  - 'workstation::k8s'
+  - 'workstation::profile::holodeck'
 
 # Kubernetes configuration
-workstation::k8s::dev_user: jpartlow
-workstation::k8s::replicated_license_file: '/home/jpartlow/keys/josh-partlow-replicated.yaml'
-workstation::k8s::cd4pe_license_file: '/home/jpartlow/keys/cd4pe_license.json'
-workstation::k8s::license_links:
+workstation::profile::holodeck::dev_user: jpartlow
+workstation::profile::holodeck::replicated_license_file: '/home/jpartlow/keys/josh-partlow-replicated.yaml'
+workstation::profile::holodeck::cd4pe_license_file: '/home/jpartlow/keys/cd4pe_license.json'
+workstation::profile::holodeck::license_links:
   replicated:
     - '/home/jpartlow/work/src/holodeck-manifests/license.yaml'
   cd4pe:
     - '/home/jpartlow/work/src/holodeck-manifests/cd4pe_license.json'
-workstation::k8s::kots_version: '1.19.4'
-workstation::k8s::helm_version: '3.3.1'
+workstation::profile::holodeck::kots_version: '1.19.4'
+workstation::profile::holodeck::helm_version: '3.3.1'
 
-# Dev account creation/config
+# Dev accou::profile::holodeckeation/config
 workstation::profile::dev_account_base::account: jpartlow
 workstation::profile::dev_account_base::additional_packages:
   - 'lsof'
