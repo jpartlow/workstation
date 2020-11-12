@@ -32,10 +32,15 @@ class workstation(
   Array[String] $packages = [],
   Workstation::Package_repo_struct $package_repositories = [],
 ){
-  class { 'workstation::user':
-    account => $::workstation::account,
+
+  class { 'workstation::profile::dev_account_base':
+    account             => $account,
+    ssh_public_keys     => $ssh_public_keys,
+    repository_data     => $repository_data,
+    vim_bundles         => $vim_bundles,
+    additional_packages => $packages,
   }
-  contain workstation::user
+  contain 'workstation::profile::dev_account_base'
 
   class { 'workstation::ruby':
     owner => $account,
@@ -44,20 +49,11 @@ class workstation(
   contain workstation::ruby
   Class['Workstation::User'] -> Class['Workstation::Ruby']
 
-  contain workstation::packages
-
   contain workstation::bin_links
 
   contain workstation::package_repositories
 
-  contain workstation::git
-
   contain workstation::known_hosts
-
-  class { 'workstation::ssh':
-    public_keys => $ssh_public_keys,
-  }
-  contain workstation::ssh
 
   File {
     ensure => directory,
@@ -66,35 +62,7 @@ class workstation(
   }
   file { "/home/${account}": }
   file { "/home/${account}/bin": }
-  file { "/home/${account}/work": }
-  file { "/home/${account}/work/src": }
-  file { "/home/${account}/work/src/other": }
   file { "/home/${account}/work/tmp": }
-
-  class { 'workstation::repositories':
-    repository_data => $::workstation::repository_data,
-    user            => $::workstation::user::account,
-    identity        => 'id_rsa',
-    require         => [
-      Class['Workstation::Git'],
-    ],
-  }
-  contain workstation::repositories
-
-  class { 'workstation::dotfiles':
-    user     => $::workstation::user::account,
-    identity => 'id_rsa',
-  }
-  contain workstation::dotfiles
-
-  class { 'workstation::vim':
-    user    => $::workstation::user::account,
-    bundles => $vim_bundles,
-    require => Class['Workstation::Repositories'],
-  }
-  contain workstation::vim
-
-  contain 'workstation::sudo'
 
   class { 'workstation::frankenbuilder':
     require => Class['workstation::Repositories'],
