@@ -71,6 +71,11 @@ class workstation(
 
   contain workstation::bolt
 
+  class { 'workstation::profile::nfs':
+    user => $account,
+  }
+  contain 'workstation::profile::nfs'
+
   $_pooler_file_args = {
     ensure => 'present',
     owner  => $account,
@@ -96,20 +101,6 @@ class workstation(
   file { "/home/${account}/.ssh/id_rsa-jenkins":
     content => file("/home/${account}/.ssh/id_rsa-acceptance", '/dev/null'),
     *       => $_pooler_file_args,
-  }
-
-  file { '/s':
-    ensure => 'link',
-    target => "/home/${account}/work/src",
-  }
-
-  # Prep an exports file for nfs mounts from test hosts
-  file { '/etc/exports':
-    ensure  => 'present',
-    content => template('workstation/exports.erb'),
-    owner   => 'root',
-    group   => $account,
-    mode    => '0664',
   }
 
   # If the image has LANG=C.UTF-8, for example, facter complains
