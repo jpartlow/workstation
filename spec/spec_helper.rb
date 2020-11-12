@@ -22,7 +22,10 @@ end
 
 RSpec.configure do |config|
   config.default_facts = {
-    :osfamily        => 'Debian',
+    :osfamily => 'Debian',
+    :os       => {
+      :family => 'Debian',
+    },
     :operatingsystem => 'Ubuntu',
     :puppetversion   => '5.5.1',
     :path            => '/bin:/usr/bin',

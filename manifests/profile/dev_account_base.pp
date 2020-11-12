@@ -13,8 +13,6 @@
 # * sets up sudo for the account (see {workstation::sudo})
 # * adds .bash_aliases to .bashrc
 #
-# *NOTE* this class is specific to centos atm...
-#
 # Parameters
 # ----------
 #
@@ -30,8 +28,10 @@
 # @param vim_bundles
 #   Any vim bundles to install via pathogen (see
 #   {workstation::vim}).
+# @param default_pacakges
+#   A set of packages I install on dev hosts; replace if unwanted.
 # @param additional_packages
-#   Additional centos packages to install.
+#   Additional packages to install.
 # @param manage_dotfiles
 #   Set this false to not manage a dotfiles repository.
 #   (skips {workstation::dotfiles} being included)
@@ -40,6 +40,15 @@ class workstation::profile::dev_account_base(
   Array[String] $ssh_public_keys,
   Array[Hash] $repository_data = [],
   Array[Hash] $vim_bundles = [],
+  Array[String] $default_packages = [
+    'vim',
+    'tree',
+    'wget',
+    'curl',
+    'tmux',
+    'ack', # (needs epel on el)
+    'bash-completion',
+  ],
   Array[String] $additional_packages = [],
   Boolean $manage_dotfiles = true,
 ) {
@@ -54,25 +63,11 @@ class workstation::profile::dev_account_base(
   }
   contain 'workstation::ssh'
 
-  # el7 specific
-  package { 'epel-release':
-    ensure => present,
+  $_packages = $default_packages + $additional_packages
+  class { 'workstation::packages':
+    packages => $_packages,
   }
-
-  $packages = [
-    'vim',
-    'tree',
-    'wget',
-    'curl',
-    'tmux',
-    'ack', # needs epel ^
-    'bash-completion',
-  ]
-  $_packages = $packages + $additional_packages
-  package { $_packages:
-    ensure  => present,
-    require => Package['epel-release'],
-  }
+  contain 'workstation::packages'
 
   contain 'workstation::git'
 
