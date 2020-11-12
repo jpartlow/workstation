@@ -1,6 +1,7 @@
 pkg
 *.sw?
 .vagrant
+.byebug_history
 Gemfile.lock
 spec/fixtures/modules
 data/common.yaml
