@@ -166,7 +166,7 @@ describe 'workstation::profile::holodeck' do
       contain_file('/home/test/license.yaml')
         .with_ensure('present')
         .with_content('alicense')
-        .with_mode('0640')
+        .with_mode('0600')
         .with_owner('test')
         .with_group('test')
     )

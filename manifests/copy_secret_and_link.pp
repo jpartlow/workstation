@@ -19,6 +19,7 @@
 define workstation::copy_secret_and_link(
   Workstation::Absolute_path $local_file,
   String $user,
+  Pattern[/0\d\d\d/] $mode = '0600',
   Array[Workstation::Absolute_path] $links = [],
 ) {
   $filename = $local_file.split(/\//)[-1]
@@ -26,7 +27,7 @@ define workstation::copy_secret_and_link(
   file { $dev_host_file:
     ensure  => 'present',
     content => file($local_file),
-    mode    => '0640',
+    mode    => $mode,
     owner   => $user,
     group   => $user,
   }
