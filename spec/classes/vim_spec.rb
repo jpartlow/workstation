@@ -24,13 +24,13 @@ describe 'workstation::vim' do
     it { is_expected.to contain_file('/home/someone/.vim/bundle') }
 
     it do
-      is_expected.to contain_vcsrepo('/home/someone/work/src/other/vim-pathogen')
+      is_expected.to contain_vcsrepo('/home/someone/vim-pathogen')
     end
     it do
       is_expected.to contain_file('/home/someone/.vim/autoload/pathogen.vim')
         .with_ensure('link')
-        .with_source('/home/someone/work/src/other/vim-pathogen/autoload/pathogen.vim')
-        .that_requires('Vcsrepo[/home/someone/work/src/other/vim-pathogen]')
+        .with_target('/home/someone/vim-pathogen/autoload/pathogen.vim')
+        .that_requires('Vcsrepo[/home/someone/vim-pathogen]')
     end
   end
 

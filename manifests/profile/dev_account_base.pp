@@ -90,7 +90,6 @@ class workstation::profile::dev_account_base(
   class { 'workstation::vim':
     user    => $account,
     bundles => $vim_bundles,
-    require => Class['Workstation::Repositories'],
   }
   contain workstation::vim
 

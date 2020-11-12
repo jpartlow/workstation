@@ -69,12 +69,6 @@ describe 'workstation' do
   it { is_expected.to contain_package('git') }
   it { is_expected.to contain_user('rspec') }
 
-  it do
-    pending("workstation::vim is hard set to use work/src/other, but I'm not guaranting that anywhere now")
-    is_expected.to contain_file('/home/rspec/work/src')
-    is_expected.to contain_file('/home/rspec/work/src/other')
-  end
-
   it { is_expected.to contain_file('/home/rspec/some') }
   it { is_expected.to contain_file('/home/rspec/some/path') }
   it { is_expected.to contain_vcsrepo('/home/rspec/some/path/foo') }
@@ -83,10 +77,7 @@ describe 'workstation' do
 
   it { is_expected.to contain_vcsrepo('/home/rspec/.dotfiles') }
 
-  it do
-    is_expected.to contain_class('workstation::vim')
-      .that_requires('Class[Workstation::Repositories]')
-  end
+  it { is_expected.to contain_class('workstation::vim') }
 
   it { is_expected.to contain_package('bar') }
 
