@@ -98,11 +98,24 @@ class workstation::profile::dev_account_base(
   }
   contain 'workstation::sudo'
 
-  # Ensure .bash_aliases is included in .bashrc on el7
-  file_line { 'bashrc aliases':
-    ensure => 'present',
-    path   => "/home/${account}/.bashrc",
-    line   => 'if [ -f ~/.bash_aliases ]; then . ~/.bash_aliases; fi',
-    match  => '^if \[ -f ~/.bash_aliases \];',
+  case $facts['os']['family'] {
+    'RedHat': {
+       # Ensure .bash_aliases is included in .bashrc on el7
+       file_line { 'bashrc aliases':
+         ensure => 'present',
+         path   => "/home/${account}/.bashrc",
+         line   => 'if [ -f ~/.bash_aliases ]; then . ~/.bash_aliases; fi',
+         match  => '^if \[ -f ~/.bash_aliases \];',
+       }
+    }
+    'Debian': {
+      # If the image has LANG=C.UTF-8, for example, facter complains
+      exec { 'ensure sane locale':
+        command => 'update-locale LANG=en_US.UTF-8',
+        path    => '/usr/bin:/usr/sbin:/usr/bin/local:/bin',
+        unless  => "grep -q 'LANG=en_US.UTF-8' /etc/default/locale",
+      }
+    }
+    default: { fail("Unsupported platform ${facts['os']['family']}") }
   }
 }
