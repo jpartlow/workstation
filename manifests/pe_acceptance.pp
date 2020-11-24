@@ -22,7 +22,8 @@ class workstation::pe_acceptance(
   # Beaker acceptance tests which assume they can copy this key from the
   # test runner to the SUTs (opsworks for example)
   workstation::copy_secret_and_link { "/home/${user}/.ssh/id_rsa-acceptance":
-    user        => $user,
-    destination => "/home/${user}/.ssh/id_rsa-jenkins",
+    user            => $user,
+    destination     => "/home/${user}/.ssh/id_rsa-jenkins",
+    fail_if_missing => false,
   }
 }

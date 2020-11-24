@@ -86,10 +86,16 @@ class workstation(
     }
   }
 
-  # Copying in .fog and .vmfloaty assumes that the account we are generating on the
+  # Copying these assumes that the account we are generating on the
   # workstation is the same as the account we are running the plan from...
-  file { "/home/${account}/.vmfloaty.yml":
-    content => file("/home/${account}/.vmfloaty.yml", '/dev/null'),
-    *       => $_pooler_file_args,
+  workstation::copy_secret_and_link { "/home/${account}/.vmfloaty.yml":
+    user => $account,
+  }
+  # Needed if a Bolt plan for installing PE needs to copy this dev
+  # control repo private key for code manager setup onto a PE test host.
+  workstation::copy_secret_and_link { "/home/${account}/.ssh/id-control_repo.rsa":
+    user            => $account,
+    destination     => "/home/${account}/.ssh/id-control_repo.rsa",
+    fail_if_missing => false,
   }
 }
