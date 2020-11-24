@@ -4,6 +4,9 @@ workstation::profiles:
 workstation::account: jpartlow
 workstation::ssh_public_keys:
   - "id_rsa.pub"
+workstation::profile::dev_account_base::additional_packages:
+  - 'htop'
+  - 'ack' # el specific
 workstation::repository_data:
   - path: "work/src"
     defaults:

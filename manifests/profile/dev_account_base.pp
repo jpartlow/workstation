@@ -46,7 +46,6 @@ class workstation::profile::dev_account_base(
     'wget',
     'curl',
     'tmux',
-    'ack', # (needs epel on el)
     'bash-completion',
   ],
   Array[String] $additional_packages = [],

@@ -304,15 +304,11 @@ workstation::vim_bundles:
     source: "https://github.com/hashivim/vim-vagrant.git"
 
 workstation::packages:
-  - 'ack-grep'
-  - 'curl'
+  - 'ack-grep' # Debian specific
   - 'openjdk-8-jre-headless'
   - 'leiningen'
   - 'python'
   - 'rsync'
-  - 'tree'
-  - 'vim'
-  - 'wget'
   - 'shellcheck'
   - 'aptitude'
   - 'redis-tools'
