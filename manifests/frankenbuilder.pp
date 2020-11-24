@@ -20,10 +20,18 @@ class workstation::frankenbuilder(
 ) {
   $homedir = "/home/${user}"
 
+  $mode = '0644'
+
+  workstation::make_p { 'work/src/alternates':
+    root_prefix => $homedir,
+    user        => $user,
+    mode        => $mode,
+  }
+
   $file_args = {
     owner => $user,
     group => $user,
-    mode  => '0644',
+    mode  => $mode,
   }
 
   file { "${homedir}/pe_builds":

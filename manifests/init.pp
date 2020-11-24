@@ -62,12 +62,8 @@ class workstation(
   }
   file { "/home/${account}": }
   file { "/home/${account}/bin": }
+  file { "/home/${account}/work": }
   file { "/home/${account}/work/tmp": }
-
-  class { 'workstation::frankenbuilder':
-    require => Class['workstation::Repositories'],
-  }
-  contain 'workstation::frankenbuilder'
 
   contain workstation::bolt
 
@@ -87,19 +83,6 @@ class workstation(
   # workstation is the same as the account we are running the plan from...
   file { "/home/${account}/.vmfloaty.yml":
     content => file("/home/${account}/.vmfloaty.yml", '/dev/null'),
-    *       => $_pooler_file_args,
-  }
-  file { "/home/${account}/.fog":
-    content => file("/home/${account}/.fog", '/dev/null'),
-    *       => $_pooler_file_args,
-  }
-
-  # Copying over the QE acceptance SSH private key
-  # Although in general I'm relying on Agent forwarding,
-  # there are some Beaker acceptance tests which assume they can copy this key
-  # from the test runner to the SUTs (opsworks for example)
-  file { "/home/${account}/.ssh/id_rsa-jenkins":
-    content => file("/home/${account}/.ssh/id_rsa-acceptance", '/dev/null'),
     *       => $_pooler_file_args,
   }
 
