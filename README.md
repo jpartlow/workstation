@@ -204,17 +204,12 @@ The latter two files are used by [holodeck-manifests] when running test targets.
 
 ### Configuring a meep_tools test host
 
-This plan is a little more minimal than applying 'workstation' and sets up a vm
-with ruby and bolt for pe-installer tooling work. Sample config is
-data/test-tools.yaml.  Again, a data/nodes/{certname}.yaml must exist for the
+This hiera config is a little more minimal than the 'workstation' example and
+sets up a vm with ruby and bolt for pe-installer tooling work. Sample config is
+data/test-tools.yaml. Again, a data/nodes/{certname}.yaml must exist for the
 node you are configuring with whatever set of parameters you intend to pass on
-to the apply block in the workstation::setup_test_tools plan...
+to the apply block in the workstation::manage plan...
 
-(Below was tested on a centos-7 vm, which required the --tty flag)
-
-```sh
-bolt plan run workstation::setup_test_tools -n <your-host> --no-host-key-check --run-as-root --tty
-```
 ## Reference
 
 * workstation
