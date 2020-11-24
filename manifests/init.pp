@@ -31,6 +31,7 @@ class workstation(
   Array[String] $gems = [],
   Array[String] $packages = [],
   Workstation::Package_repo_struct $package_repositories = [],
+  Boolean $skip_pe_acceptance = true,
 ){
 
   class { 'workstation::profile::dev_account_base':
@@ -77,6 +78,12 @@ class workstation(
     owner  => $account,
     group  => $account,
     mode   => '0600',
+  }
+
+  if !$skip_pe_acceptance {
+    class { 'workstation::pe_acceptance':
+      user => $account,
+    }
   }
 
   # Copying in .fog and .vmfloaty assumes that the account we are generating on the
