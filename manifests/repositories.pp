@@ -45,15 +45,21 @@
 # Parameters
 # ----------
 #
-# @param repository_data [Array<Hash>] Array of workstation::repos parameter hashes.
-# @param user [String] User to clone for. Defaults to workstation::user::account
-# @param identity [String] SSH key to use during clone; must be either a
-#   passwordless key accessible to root, or one in an ssh-agent accessible by
-#   SSH_AUTH_SOCK
+# @param repository_data
+#   Array of workstation::repos parameter hashes.
+# @param user
+#   User to clone for. Defaults to workstation::user::account
+# @param identity
+#   SSH key to use during clone; must be either a passwordless key accessible
+#   to root, or one in an ssh-agent accessible by SSH_AUTH_SOCK
+# @param mode
+#   The permissions on subdirectory paths that we construct to place
+#   repos into.
 class workstation::repositories(
   Array[Hash] $repository_data,
   String $user,
   String $identity,
+  String $mode = '0640',
 ) {
   $repository_data.each |$parameters| {
     case $parameters['path'] {
@@ -79,6 +85,7 @@ class workstation::repositories(
       path        => $parameters['path'],
       root_prefix => $_root_prefix,
       user        => $user,
+      mode        => $mode,
     }
 
     workstation::repos { "${path}/${repo_names}":

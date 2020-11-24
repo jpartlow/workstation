@@ -25,6 +25,9 @@
 #   Any git repositories you want checked out (see
 #   {workstation::repositories} and examples in data/ for
 #   the structure needed here.
+# @param repository_subdir_mode
+#   The permissions to set on any subdirectory structure we create to hold
+#   repository checkouts.
 # @param vim_bundles
 #   Any vim bundles to install via pathogen (see
 #   {workstation::vim}).
@@ -39,6 +42,7 @@ class workstation::profile::dev_account_base(
   String $account,
   Array[String] $ssh_public_keys,
   Array[Hash] $repository_data = [],
+  String $repository_subdir_mode = '0640',
   Array[Hash] $vim_bundles = [],
   Array[String] $default_packages = [
     'vim',
@@ -75,6 +79,7 @@ class workstation::profile::dev_account_base(
     user            => $account,
     identity        => 'id_rsa',
     require         => [Class['Workstation::Git']],
+    mode            => $repository_subdir_mode,
   }
   contain 'workstation::repositories'
 

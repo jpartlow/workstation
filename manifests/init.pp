@@ -35,11 +35,12 @@ class workstation(
 ){
 
   class { 'workstation::profile::dev_account_base':
-    account             => $account,
-    ssh_public_keys     => $ssh_public_keys,
-    repository_data     => $repository_data,
-    vim_bundles         => $vim_bundles,
-    additional_packages => $packages,
+    account                => $account,
+    ssh_public_keys        => $ssh_public_keys,
+    repository_data        => $repository_data,
+    repository_subdir_mode => '0644', # open for NFS traversal
+    vim_bundles            => $vim_bundles,
+    additional_packages    => $packages,
   }
   contain 'workstation::profile::dev_account_base'
 
