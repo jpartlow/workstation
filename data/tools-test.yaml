@@ -80,3 +80,6 @@ workstation::profile::dev_account_base::vim_bundles:
   -
     clone_name: "vim-vagrant"
     source: "https://github.com/hashivim/vim-vagrant.git"
+workstation::gems:
+  - 'vmfloaty'
+  - 'tmuxinator'
