@@ -1,11 +1,10 @@
 require 'spec_helper'
 
 describe 'workstation::copy_secret_and_link' do
-  let(:title) { 'test' }
+  let(:title) { '/some/file' }
   let(:params) do
     {
       user: 'test',
-      local_file: '/some/file',
     }
   end
 
@@ -41,5 +40,19 @@ describe 'workstation::copy_secret_and_link' do
     is_expected.to contain_file('/some/where/else')
       .with_ensure('present')
       .with_content('stuff')
+  end
+
+  context 'when local file is missing' do
+    let(:title) { '/not/present' }
+
+    it 'fails' do
+      is_expected.to compile.and_raise_error(/Could not find any files/)
+    end
+
+    it 'warns but does not fail it is told not to' do
+      params[:fail_if_missing] = false
+      is_expected.to compile
+      expect(@logs.map(&:message)).to include(/Unable to find local file/)
+    end
   end
 end

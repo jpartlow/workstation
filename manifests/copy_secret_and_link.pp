@@ -27,21 +27,31 @@ define workstation::copy_secret_and_link(
   Optional[Workstation::Absolute_path] $destination = undef,
   Pattern[/0\d\d\d/] $mode = '0600',
   Array[Workstation::Absolute_path] $links = [],
+  Boolean $fail_if_missing = true,
 ) {
   $filename = $local_file.split(/\//)[-1]
   $dev_host_file = pick($destination, "/home/${user}/${filename}")
-  file { $dev_host_file:
-    ensure  => 'present',
-    content => file($local_file),
-    mode    => $mode,
-    owner   => $user,
-    group   => $user,
+  $contents = $fail_if_missing ? {
+    true  => file($local_file),
+    false => file($local_file, '/dev/null')
   }
 
-  $links.each |$link| {
-    file { $link:
-      ensure => 'link',
-      target => $dev_host_file,
+  if empty($contents) {
+    warning("Unable to find local file: ${local_file}! Nothing copied.")
+  } else {
+    file { $dev_host_file:
+      ensure  => 'present',
+      content => file($local_file),
+      mode    => $mode,
+      owner   => $user,
+      group   => $user,
+    }
+
+    $links.each |$link| {
+      file { $link:
+        ensure => 'link',
+        target => $dev_host_file,
+      }
     }
   }
 }
