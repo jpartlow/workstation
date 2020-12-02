@@ -167,4 +167,15 @@ class workstation::profile::holodeck(
     user       => $dev_user,
     links      => $license_links['cd4pe'],
   }
+
+  workstation::make_p { 'bin':
+    root_prefix => "/home/${dev_user}",
+    user        => $dev_user,
+    mode        => '0600',
+  }
+  file { "/home/${dev_user}/bin/cycle-tests":
+    source => 'puppet:///modules/workstation/cycle-tests',
+    owner  => $dev_user,
+    mode   => '0750',
+  }
 }

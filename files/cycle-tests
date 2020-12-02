@@ -1,0 +1,51 @@
+#! /bin/bash
+
+# Utlity for runing holodeck-manifests workflow-tests with logging.
+
+started=$(date)
+
+phase=$1
+
+report() {
+  code=$1
+
+  echo "*******************"
+  echo "** Benchmarks"
+  echo "Started: ${started}"
+  echo "Cleaned: ${cleaned}"
+  echo "Running: ${running}"
+  echo "Tested:  ${tested}"
+  if [ "$code" != "0" ]; then
+    echo "FAILED! (${code})"
+  fi
+  exit $1
+}
+
+echo "***********"
+echo "** Cleaning"
+echo "***********"
+GITHUB_ACTIONS=dummy make clean destroy-ingress-controller destroy-kots destroy-application destroy-testinfra --debug 2>&1 | tee make-clean.log
+success=${PIPESTATUS[0]}
+cleaned=$(date)
+if [ "$phase" = "clean" ] || [ "$success" != "0" ]; then
+  report $success
+fi
+
+echo "***********"
+echo "** Starting"
+echo "***********"
+GITHUB_ACTIONS=dummy make start-testinfra start-test-instance wait-testinfra wait-test-instance --debug 2>&1 | tee make-start.log
+success=${PIPESTATUS[0]}
+running=$(date)
+
+if [ "$phase" = "build" ] || [ "$success" != "0" ]; then
+  report $success
+fi
+
+echo "***********"
+echo "** Testing"
+echo "***********"
+CD4PE_FAST_WORKFLOW_SUITE=false make workflow-test --debug 2>&1 | tee make-workflow-test.log
+success=${PIPESTATUS[0]}
+tested=$(date)
+report $success
