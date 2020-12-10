@@ -13,7 +13,7 @@ workstation::profile::holodeck::license_links:
     - '/home/jpartlow/work/src/holodeck-manifests/license.yaml'
   cd4pe:
     - '/home/jpartlow/work/src/holodeck-manifests/cd4pe_license.json'
-workstation::profile::holodeck::kots_version: '1.19.4'
+workstation::profile::holodeck::kots_version: '1.24.2'
 workstation::profile::holodeck::helm_version: '3.3.1'
 
 # Dev account creation/config
