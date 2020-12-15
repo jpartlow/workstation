@@ -314,7 +314,6 @@ workstation::packages:
   - 'redis-tools'
   - 'graphviz'
   - 'rdesktop'
-  - 'pdk'
 
 workstation::package_repositories::repositories:
   -
