@@ -30,7 +30,7 @@ class workstation::vim(
     mode   => '0644',
   }
 
-  $pathogen_clone_path = "/home/${user}/work/src/other"
+  $pathogen_clone_path = "/home/${user}"
   workstation::repo { 'vim-pathogen':
     path        => $pathogen_clone_path,
     source      => 'https://github.com/tpope/vim-pathogen.git',
@@ -41,7 +41,7 @@ class workstation::vim(
   }
   -> file { "${vim_path}/autoload/pathogen.vim":
     ensure => 'link',
-    source => "${pathogen_clone_path}/vim-pathogen/autoload/pathogen.vim",
+    target => "${pathogen_clone_path}/vim-pathogen/autoload/pathogen.vim",
   }
 
   $bundles.each |$bundle| {

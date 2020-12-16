@@ -1,6 +1,9 @@
-# Class: workstation::k8s
+# Class: workstation::profile::holodeck
 #
-# Controls setup of kubernettes and related tools on a centos node.
+# Controls setup of kubernettes and related tools on a centos node
+# specifically to prepare that host for testing and dev work for the
+# [holodeck-manifests](https://github.com/puppetlabs/holodeck-manifests)
+# repository.
 #
 # The base docker installation is docker-ce from docker.com yum repos.
 # The kubernetes packages come from google.com yum repos.
@@ -68,7 +71,7 @@
 #   Array of chart repository hashes (name, url) to add to helm.
 # @param additional_packages
 #   Array of extra packages to add.
-class workstation::k8s(
+class workstation::profile::holodeck(
   Workstation::Absolute_path $replicated_license_file,
   Workstation::Absolute_path $cd4pe_license_file,
   Optional[Workstation::License_links_struct] $license_links = {},
@@ -81,22 +84,28 @@ class workstation::k8s(
   Array[Workstation::Chart_repo] $additional_chart_repos = [],
   Array[String] $additional_packages = [],
 ) {
-  class { 'workstation::k8s::repos':
+  class { 'workstation::profile::k8s':
+    dev_user              => $dev_user,
     docker_channel        => $docker_channel,
     enable_debuginfo_repo => $enable_debuginfo_repo,
     enable_source_repo    => $enable_source_repo,
   }
-  contain 'workstation::k8s::repos'
+  contain 'workstation::profile::k8s'
 
-  package { ['docker-ce-cli', 'docker-ce']:
-    ensure  => 'latest',
-    require => Class['workstation::k8s::repos'],
+  # The holodock-manifests Makefile expects to be able to install gitlab
+  # using helm, and requires this repository added.
+  $default_chart_repos = [
+    {
+      name => 'gitlab',
+      url => 'https://charts.gitlab.io/',
+    }
+  ]
+  class { 'workstation::profile::k8s_tools':
+    dev_user               => $dev_user,
+    helm_version           => $helm_version,
+    additional_chart_repos => $default_chart_repos + $additional_chart_repos,
   }
-
-  package { ['kubelet', 'kubectl', 'kubeadm']:
-    ensure  => 'latest',
-    require => Class['workstation::k8s::repos'],
-  }
+  contain 'workstation::profile::k8s_tools'
 
   class { 'workstation::k8s::krew':
     user    => $dev_user,
@@ -126,29 +135,10 @@ class workstation::k8s(
     require => Class['workstation::k8s::krew'],
   }
 
-  workstation::install_release_binary { 'derailed/k9s/k9s_Linux_x86_64.tar.gz':
-    creates => 'k9s'
-  }
-
   workstation::install_release_binary { 'kubernetes-sigs/kind/kind-linux-amd64':
     creates     => 'kind',
     install_dir => '/usr/bin',
   }
-
-  # The holodock-manifests Makefile expects to be able to install gitlab
-  # using helm, and requires this repository added.
-  $default_chart_repos = [
-    {
-      name => 'gitlab',
-      url => 'https://charts.gitlab.io/',
-    }
-  ]
-  class { 'workstation::k8s::helm':
-    user        => $dev_user,
-    version     => $helm_version,
-    chart_repos => $default_chart_repos + $additional_chart_repos,
-  }
-  contain 'workstation::k8s::helm'
 
   # Unit/integration testing tools and lib dependencies for holodeck-manifests
   class { 'workstation::k8s::holodeck_testing':
@@ -166,17 +156,6 @@ class workstation::k8s(
     ensure => 'latest',
   }
 
-  service { 'docker':
-    ensure  => 'running',
-    require => Package['docker-ce'],
-  }
-
-  user { $dev_user:
-    ensure  => present,
-    groups  => ['docker'],
-    require => Package['docker-ce'],
-  }
-
   workstation::copy_secret_and_link { 'copy-replicated-license':
     local_file => $replicated_license_file,
     user       => $dev_user,
@@ -187,5 +166,16 @@ class workstation::k8s(
     local_file => $cd4pe_license_file,
     user       => $dev_user,
     links      => $license_links['cd4pe'],
+  }
+
+  workstation::make_p { 'bin':
+    root_prefix => "/home/${dev_user}",
+    user        => $dev_user,
+    mode        => '0600',
+  }
+  file { "/home/${dev_user}/bin/cycle-tests":
+    source => 'puppet:///modules/workstation/cycle-tests',
+    owner  => $dev_user,
+    mode   => '0750',
   }
 }

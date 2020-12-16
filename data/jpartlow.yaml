@@ -23,19 +23,19 @@ workstation::repository_data:
         checkout_branch: "master"
       -
         source: "git@github.com:jpartlow/beaker-answers"
-        checkout_branch: "master"
+        checkout_branch: "main"
       -
         source: "git@github.com:jpartlow/beaker-hostgenerator"
         checkout_branch: "master"
       -
         source: "git@github.com:jpartlow/beaker-pe"
-        checkout_branch: "master"
+        checkout_branch: "main"
       -
         source: "git@github.com:jpartlow/beaker-pe-large-environments"
         checkout_branch: "master"
       -
         source: "git@github.com:jpartlow/bolt"
-        checkout_branch: "master"
+        checkout_branch: "main"
         remotes: []
       - source: "git@github.com:jpartlow/chloride"
       -
@@ -43,13 +43,13 @@ workstation::repository_data:
         checkout_branch: "master"
       -
         source: "git@github.com:jpartlow/classifier"
-        checkout_branch: "master"
+        checkout_branch: "main"
       -
         source: "git@github.com:jpartlow/enterprise-dist"
         remotes: []
       -
         source: "git@github.com:jpartlow/enterprise_tasks"
-        checkout_branch: "master"
+        checkout_branch: "main"
       -
         source: "git@github.com:jpartlow/facter"
         checkout_branch: "master"
@@ -149,7 +149,7 @@ workstation::repository_data:
         checkout_branch: "master"
       -
         source: "git@github.com:jpartlow/puppetlabs-puppet_agent"
-        checkout_branch: "master"
+        checkout_branch: "main"
       -
         source: "git@github.com:puppetlabs/puppetlabs-pe_bootstrap"
         checkout_branch: "master"
@@ -185,7 +185,7 @@ workstation::repository_data:
       - source: "git@github.com:jpartlow/puppetlabs-pe_staging"
       -
         source: "git@github.com:jpartlow/puppetlabs-puppet_agent"
-        checkout_branch: "master"
+        checkout_branch: "main"
       -
         source: "git@github.com:jpartlow/puppetlabs-puppet_enterprise"
         checkout_branch: "irving"
@@ -304,22 +304,16 @@ workstation::vim_bundles:
     source: "https://github.com/hashivim/vim-vagrant.git"
 
 workstation::packages:
-  - 'ack-grep'
-  - 'curl'
+  - 'ack-grep' # Debian specific
   - 'openjdk-8-jre-headless'
   - 'leiningen'
   - 'python'
   - 'rsync'
-  - 'tree'
-  - 'vim'
-  - 'wget'
   - 'shellcheck'
   - 'aptitude'
-  - 'nfs-kernel-server'
   - 'redis-tools'
   - 'graphviz'
   - 'rdesktop'
-  - 'pdk'
 
 workstation::package_repositories::repositories:
   -
@@ -335,5 +329,6 @@ workstation::ssh_public_keys:
   - "id_rsa.pub"
 
 workstation::ruby::ruby_versions:
-  - '2.4.5'
-  - '2.5.3'
+  - '2.5.8'
+
+workstation::skip_pe_acceptance: false

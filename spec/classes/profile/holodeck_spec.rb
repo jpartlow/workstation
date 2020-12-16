@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'workstation::k8s' do
+describe 'workstation::profile::holodeck' do
   let(:params) do
     {
       replicated_license_file: '/some/license.yaml',
@@ -78,6 +78,7 @@ describe 'workstation::k8s' do
     let(:params) do
       {
         replicated_license_file: '/some/license.yaml',
+        cd4pe_license_file: '/some/cd4pe.json',
         docker_channel: 'test',
       }
     end
@@ -105,6 +106,7 @@ describe 'workstation::k8s' do
     let(:params) do
       {
         replicated_license_file: '/some/license.yaml',
+        cd4pe_license_file: '/some/cd4pe.json',
         enable_debuginfo_repo: true,
         enable_source_repo: true,
       }
@@ -164,14 +166,14 @@ describe 'workstation::k8s' do
       contain_file('/home/test/license.yaml')
         .with_ensure('present')
         .with_content('alicense')
-        .with_mode('0640')
+        .with_mode('0600')
         .with_owner('test')
         .with_group('test')
     )
   end
 
   it 'creates links to it' do
-    params[:license_links] = ['/home/centos/linked/license.yaml']
+    params[:license_links] = { 'replicated' => ['/home/centos/linked/license.yaml'] }
     is_expected.to(
       contain_file('/home/centos/linked/license.yaml')
         .with_ensure('link')

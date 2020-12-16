@@ -1,7 +1,7 @@
-# Class: workstation::dev_account_base
+# Class: workstation::profile::dev_account_base
 # ====================================
 #
-# Just manages the basics of:
+# Manages the basics of:
 #
 # * user account
 # * ssh public keys to log into the account
@@ -12,8 +12,6 @@
 # * dotfiles (can be skipped)
 # * sets up sudo for the account (see {workstation::sudo})
 # * adds .bash_aliases to .bashrc
-#
-# *NOTE* this class is specific to centos atm...
 #
 # Parameters
 # ----------
@@ -27,19 +25,33 @@
 #   Any git repositories you want checked out (see
 #   {workstation::repositories} and examples in data/ for
 #   the structure needed here.
+# @param repository_subdir_mode
+#   The permissions to set on any subdirectory structure we create to hold
+#   repository checkouts.
 # @param vim_bundles
 #   Any vim bundles to install via pathogen (see
 #   {workstation::vim}).
+# @param default_pacakges
+#   A set of packages I install on dev hosts; replace if unwanted.
 # @param additional_packages
-#   Additional centos packages to install.
+#   Additional packages to install.
 # @param manage_dotfiles
 #   Set this false to not manage a dotfiles repository.
 #   (skips {workstation::dotfiles} being included)
-class workstation::dev_account_base(
+class workstation::profile::dev_account_base(
   String $account,
   Array[String] $ssh_public_keys,
   Array[Hash] $repository_data = [],
+  String $repository_subdir_mode = '0640',
   Array[Hash] $vim_bundles = [],
+  Array[String] $default_packages = [
+    'vim',
+    'tree',
+    'wget',
+    'curl',
+    'tmux',
+    'bash-completion',
+  ],
   Array[String] $additional_packages = [],
   Boolean $manage_dotfiles = true,
 ) {
@@ -54,25 +66,11 @@ class workstation::dev_account_base(
   }
   contain 'workstation::ssh'
 
-  # el7 specific
-  package { 'epel-release':
-    ensure => present,
+  $_packages = $default_packages + $additional_packages
+  class { 'workstation::packages':
+    packages => $_packages,
   }
-
-  $packages = [
-    'vim',
-    'tree',
-    'wget',
-    'curl',
-    'tmux',
-    'ack', # needs epel ^
-    'bash-completion',
-  ]
-  $_packages = $packages + $additional_packages
-  package { $_packages:
-    ensure  => present,
-    require => Package['epel-release'],
-  }
+  contain 'workstation::packages'
 
   contain 'workstation::git'
 
@@ -81,6 +79,7 @@ class workstation::dev_account_base(
     user            => $account,
     identity        => 'id_rsa',
     require         => [Class['Workstation::Git']],
+    mode            => $repository_subdir_mode,
   }
   contain 'workstation::repositories'
 
@@ -95,7 +94,6 @@ class workstation::dev_account_base(
   class { 'workstation::vim':
     user    => $account,
     bundles => $vim_bundles,
-    require => Class['Workstation::Repositories'],
   }
   contain workstation::vim
 
@@ -104,11 +102,24 @@ class workstation::dev_account_base(
   }
   contain 'workstation::sudo'
 
-  # Ensure .bash_aliases is included in .bashrc on el7
-  file_line { 'bashrc aliases':
-    ensure => 'present',
-    path   => "/home/${account}/.bashrc",
-    line   => 'if [ -f ~/.bash_aliases ]; then . ~/.bash_aliases; fi',
-    match  => '^if \[ -f ~/.bash_aliases \];',
+  case $facts['os']['family'] {
+    'RedHat': {
+       # Ensure .bash_aliases is included in .bashrc on el7
+       file_line { 'bashrc aliases':
+         ensure => 'present',
+         path   => "/home/${account}/.bashrc",
+         line   => 'if [ -f ~/.bash_aliases ]; then . ~/.bash_aliases; fi',
+         match  => '^if \[ -f ~/.bash_aliases \];',
+       }
+    }
+    'Debian': {
+      # If the image has LANG=C.UTF-8, for example, facter complains
+      exec { 'ensure sane locale':
+        command => 'update-locale LANG=en_US.UTF-8',
+        path    => '/usr/bin:/usr/sbin:/usr/bin/local:/bin',
+        unless  => "grep -q 'LANG=en_US.UTF-8' /etc/default/locale",
+      }
+    }
+    default: { fail("Unsupported platform ${facts['os']['family']}") }
   }
 }

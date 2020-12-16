@@ -11,8 +11,8 @@
     * [Manage](#manage)
     * [Profile Classes](#profile-classes)
         * [Configuring workstation](#configuring-workstation)
-        * [Configuring workstation::dev_account_base](#configuring-dev_account_base)
-        * [Configuring workstation::k8s](#configuring-k8s)
+        * [Configuring workstation::profile::dev_account_base](#configuring-dev_account_base)
+        * [Configuring workstation::profile::holodeck](#configuring-for-holodeck)
 1. [Reference - Short list of class/defined type references](#reference)
 1. [Testing](#testing)
     * [Vagrantfile - A test host](#vagrantfile)
@@ -151,7 +151,7 @@ config/token files for things like vmfloaty and fog. It installs ruby via rbenv,
 sets up repos like frankenbuilder, preps sudo and nfs and similar pecularities
 I use working on PE. As such it's probably not useful for general workstation
 setup without some additional work. If you want some base account setup, see
-workstation::dev_account_base below.
+workstation::profile::dev_account_base below.
 
 The principle parameters that must be set are:
 
@@ -168,19 +168,19 @@ The principle parameters that must be set are:
 
 It should work on both Ubuntu/Centos (tested on ubuntu 18.04, centos7).
 
-#### Configuring [dev_account_base](manifests/dev_account_base.pp)
+#### Configuring [dev_account_base](manifests/profile/dev_account_base.pp)
 
 This will perform a basic dev setup on an el host without any of my PE centric
 bits the workstation class has (such as frankenbuilder or nfs).
 
-It is handy coupled with workstation::k8s if you want to manage checkout of
-[holodeck-manifests] at the same time, for example.
+It is handy coupled with workstation::profile::holodeck if you want to manage
+checkout of [holodeck-manifests] at the same time, for example.
 
 Unless you are using a similar dotfiles scheme as I am ([jpartlow/dotfiles]),
-you will probably want workstation::dev_account_base::manage_dotfiles set to
+you will probably want workstation::profile::dev_account_base::manage_dotfiles set to
 false.
 
-#### Configuring [k8s](manifests/k8s.pp)
+#### Configuring [Holodeck](manifests/profile/holodeck.pp)
 
 This class is intended to be generally useful for prepping the k8s environment
 required by [holodeck-manifests] on an el7 host. It was tested on a [platform9]
@@ -191,30 +191,25 @@ See the class for the details of what it manages.
 [data/jpartlow-k8s.yaml](data/jpartlow-k8s.yaml)
 is a hiera config I'm using.
 
-The required workstation::profiles is just 'workstation::k8s'; the
+The required workstation::profile is just 'workstation::profile::holodeck'; the
 dev_account_base class is setting up my dev environment in addition to k8s.
 
 The required k8s parameters are:
 
-* workstation::k8s::dev_user - the user account to install some tools and copy license files to
-* workstation::k8s::replicated_license_file - local path to your replicated license yaml
-* workstation::k8s::cd4pe_license_file - local path to your cd4pe license json
+* workstation::profile::holodeck::dev_user - the user account to install some tools and copy license files to
+* workstation::profile::holodeck::replicated_license_file - local path to your replicated license yaml
+* workstation::profile::holodeck::cd4pe_license_file - local path to your cd4pe license json
 
 The latter two files are used by [holodeck-manifests] when running test targets.
 
 ### Configuring a meep_tools test host
 
-This plan is a little more minimal than applying 'workstation' and sets up a vm
-with ruby and bolt for pe-installer tooling work. Sample config is
-data/test-tools.yaml.  Again, a data/nodes/{certname}.yaml must exist for the
+This hiera config is a little more minimal than the 'workstation' example and
+sets up a vm with ruby and bolt for pe-installer tooling work. Sample config is
+data/test-tools.yaml. Again, a data/nodes/{certname}.yaml must exist for the
 node you are configuring with whatever set of parameters you intend to pass on
-to the apply block in the workstation::setup_test_tools plan...
+to the apply block in the workstation::manage plan...
 
-(Below was tested on a centos-7 vm, which required the --tty flag)
-
-```sh
-bolt plan run workstation::setup_test_tools -n <your-host> --no-host-key-check --run-as-root --tty
-```
 ## Reference
 
 * workstation
@@ -232,8 +227,9 @@ bolt plan run workstation::setup_test_tools -n <your-host> --no-host-key-check -
 * workstation::sudo - adds user to sudoers
 * workstation::lein - installs leiningen
 * workstation::frankenbuilder - some customization for frankenbuilder work clones
-* workstation::k8s - kubernetes configuration for [holodeck-manifests] (el7)
-* workstation::dev_account_base - a slimmer dev set up (no ruby, lein, frakenbuilder, nfs) (el7)
+* workstation::k8s - kubernetes related configuration
+* workstation::profile::holodeck - kubernetes configuration specific for [holodeck-manifests] (el7)
+* workstation::profile::dev_account_base - a slimmer dev set up (no ruby, lein, frakenbuilder, nfs) (el7)
 
 ## Testing
 
@@ -296,4 +292,4 @@ joshua.partlow@puppetlabs.com
 
 [holodeck-manifests]: https://github.com/puppetlabs/holodeck-manifests
 [platform9]: https://puppet.platform9.net
-[jpartlow/dotfiles]: https://github.com/jpartlow/dotfiles
+[jpartlow/dotfiles]: https://github.com/jpartlow/dotfilesz

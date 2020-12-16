@@ -31,11 +31,18 @@ class workstation(
   Array[String] $gems = [],
   Array[String] $packages = [],
   Workstation::Package_repo_struct $package_repositories = [],
+  Boolean $skip_pe_acceptance = true,
 ){
-  class { 'workstation::user':
-    account => $::workstation::account,
+
+  class { 'workstation::profile::dev_account_base':
+    account                => $account,
+    ssh_public_keys        => $ssh_public_keys,
+    repository_data        => $repository_data,
+    repository_subdir_mode => '0644', # open for NFS traversal
+    vim_bundles            => $vim_bundles,
+    additional_packages    => $packages,
   }
-  contain workstation::user
+  contain 'workstation::profile::dev_account_base'
 
   class { 'workstation::ruby':
     owner => $account,
@@ -44,20 +51,11 @@ class workstation(
   contain workstation::ruby
   Class['Workstation::User'] -> Class['Workstation::Ruby']
 
-  contain workstation::packages
-
   contain workstation::bin_links
 
   contain workstation::package_repositories
 
-  contain workstation::git
-
   contain workstation::known_hosts
-
-  class { 'workstation::ssh':
-    public_keys => $ssh_public_keys,
-  }
-  contain workstation::ssh
 
   File {
     ensure => directory,
@@ -67,41 +65,14 @@ class workstation(
   file { "/home/${account}": }
   file { "/home/${account}/bin": }
   file { "/home/${account}/work": }
-  file { "/home/${account}/work/src": }
-  file { "/home/${account}/work/src/other": }
   file { "/home/${account}/work/tmp": }
 
-  class { 'workstation::repositories':
-    repository_data => $::workstation::repository_data,
-    user            => $::workstation::user::account,
-    identity        => 'id_rsa',
-    require         => [
-      Class['Workstation::Git'],
-    ],
-  }
-  contain workstation::repositories
-
-  class { 'workstation::dotfiles':
-    user     => $::workstation::user::account,
-    identity => 'id_rsa',
-  }
-  contain workstation::dotfiles
-
-  class { 'workstation::vim':
-    user    => $::workstation::user::account,
-    bundles => $vim_bundles,
-    require => Class['Workstation::Repositories'],
-  }
-  contain workstation::vim
-
-  contain 'workstation::sudo'
-
-  class { 'workstation::frankenbuilder':
-    require => Class['workstation::Repositories'],
-  }
-  contain 'workstation::frankenbuilder'
-
   contain workstation::bolt
+
+  class { 'workstation::profile::nfs':
+    user => $account,
+  }
+  contain 'workstation::profile::nfs'
 
   $_pooler_file_args = {
     ensure => 'present',
@@ -110,44 +81,22 @@ class workstation(
     mode   => '0600',
   }
 
-  # Copying in .fog and .vmfloaty assumes that the account we are generating on the
+  if !$skip_pe_acceptance {
+    class { 'workstation::pe_acceptance':
+      user => $account,
+    }
+  }
+
+  # Copying these assumes that the account we are generating on the
   # workstation is the same as the account we are running the plan from...
-  file { "/home/${account}/.vmfloaty.yml":
-    content => file("/home/${account}/.vmfloaty.yml", '/dev/null'),
-    *       => $_pooler_file_args,
+  workstation::copy_secret_and_link { "/home/${account}/.vmfloaty.yml":
+    user => $account,
   }
-  file { "/home/${account}/.fog":
-    content => file("/home/${account}/.fog", '/dev/null'),
-    *       => $_pooler_file_args,
-  }
-
-  # Copying over the QE acceptance SSH private key
-  # Although in general I'm relying on Agent forwarding,
-  # there are some Beaker acceptance tests which assume they can copy this key
-  # from the test runner to the SUTs (opsworks for example)
-  file { "/home/${account}/.ssh/id_rsa-jenkins":
-    content => file("/home/${account}/.ssh/id_rsa-acceptance", '/dev/null'),
-    *       => $_pooler_file_args,
-  }
-
-  file { '/s':
-    ensure => 'link',
-    target => "/home/${account}/work/src",
-  }
-
-  # Prep an exports file for nfs mounts from test hosts
-  file { '/etc/exports':
-    ensure  => 'present',
-    content => template('workstation/exports.erb'),
-    owner   => 'root',
-    group   => $account,
-    mode    => '0664',
-  }
-
-  # If the image has LANG=C.UTF-8, for example, facter complains
-  exec { 'ensure sane locale':
-    command => 'update-locale LANG=en_US.UTF-8',
-    path    => '/usr/bin:/usr/sbin:/usr/bin/local:/bin',
-    unless  => "grep -q 'LANG=en_US.UTF-8' /etc/default/locale",
+  # Needed if a Bolt plan for installing PE needs to copy this dev
+  # control repo private key for code manager setup onto a PE test host.
+  workstation::copy_secret_and_link { "/home/${account}/.ssh/id-control_repo.rsa":
+    user            => $account,
+    destination     => "/home/${account}/.ssh/id-control_repo.rsa",
+    fail_if_missing => false,
   }
 }

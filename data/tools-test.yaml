@@ -1,8 +1,13 @@
 # Setup a workstation to test meep-tools/enterprise_tasks
-workstation::dev_account_base::account: jpartlow
-workstation::dev_account_base::ssh_public_keys:
+workstation::profiles:
+  - 'workstation'
+workstation::account: jpartlow
+workstation::ssh_public_keys:
   - "id_rsa.pub"
-workstation::dev_account_base::repository_data:
+workstation::profile::dev_account_base::additional_packages:
+  - 'htop'
+  - 'ack' # el specific
+workstation::repository_data:
   - path: "work/src"
     defaults:
       checkout_branch: "master"
@@ -37,7 +42,7 @@ workstation::package_repositories::repositories:
       - puppet-bolt
 workstation::ruby::ruby_versions:
   - '2.5.7'
-workstation::dev_account_base::vim_bundles:
+workstation::vim_bundles:
   -
     clone_name: "vim-ack"
     source: "https://github.com/mileszs/ack.vim.git"
@@ -80,3 +85,7 @@ workstation::dev_account_base::vim_bundles:
   -
     clone_name: "vim-vagrant"
     source: "https://github.com/hashivim/vim-vagrant.git"
+
+workstation::gems:
+  - 'vmfloaty'
+  - 'tmuxinator'

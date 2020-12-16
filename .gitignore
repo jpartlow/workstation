@@ -1,6 +1,7 @@
 pkg
 *.sw?
 .vagrant
+.byebug_history
 Gemfile.lock
 spec/fixtures/modules
 data/common.yaml
@@ -8,3 +9,4 @@ data/nodes
 Boltdir/modules
 Boltdir/.rerun.json
 Boltdir/.resource_types
+spec/fixtures/manifests/site.pp

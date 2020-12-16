@@ -60,7 +60,12 @@ describe 'workstation' do
     }
   end
 
-  include_context('fake ssh public key', '/home/rspec/.ssh/foo.pub', 'ssh-rsa abcde foo')
+  include_context('fake files',
+    {
+      '/home/rspec/.ssh/foo.pub' => 'ssh-rsa abcde foo',
+      '/home/rspec/.vmfloaty.yml'    => 'floaty',
+    }
+  )
 
   it { is_expected.to compile.with_all_deps }
   it { is_expected.to contain_class('Rbenv') }
@@ -68,9 +73,6 @@ describe 'workstation' do
   it { is_expected.to contain_rbenv__gem('foo on 2.5.1') }
   it { is_expected.to contain_package('git') }
   it { is_expected.to contain_user('rspec') }
-
-  it { is_expected.to contain_file('/home/rspec/work/src') }
-  it { is_expected.to contain_file('/home/rspec/work/src/other') }
 
   it { is_expected.to contain_file('/home/rspec/some') }
   it { is_expected.to contain_file('/home/rspec/some/path') }
@@ -80,10 +82,7 @@ describe 'workstation' do
 
   it { is_expected.to contain_vcsrepo('/home/rspec/.dotfiles') }
 
-  it do
-    is_expected.to contain_class('workstation::vim')
-      .that_requires('Class[Workstation::Repositories]')
-  end
+  it { is_expected.to contain_class('workstation::vim') }
 
   it { is_expected.to contain_package('bar') }
 

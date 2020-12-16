@@ -20,6 +20,9 @@
 #   The github project.
 # @param package
 #   The name of the package to download from release.
+# @param skip_release_download_project_dir
+#   Set false to add a project subdir in between the download and version
+#   directory of the download url.
 # @param version
 #   The exact version to download. If 'latest' will lookup latest version.
 # @param creates
@@ -39,6 +42,7 @@ define workstation::install_release_binary(
   String $organization = $title.split(/\//)[0],
   String $project = $title.split(/\//)[1],
   String $package = $title.split(/\//)[2],
+  Boolean $skip_release_download_project_dir = true,
   String $version = 'latest',
   String $creates = $package,
   Workstation::Absolute_path $install_dir = '/usr/local/bin',
@@ -53,7 +57,11 @@ define workstation::install_release_binary(
   }
 
   if empty($download_url) {
-    $download = "curl -fsSL -O \"https://github.com/${organization}/${project}/releases/download/v\${VERSION}/${package}\""
+    $project_dir = $skip_release_download_project_dir ? {
+      false   => "${project}/",
+      default => '',
+    }
+    $download = "curl -fsSL -O \"https://github.com/${organization}/${project}/releases/download/${project_dir}v\${VERSION}/${package}\""
   } else {
     $download = "curl -fsSL -O \"${download_url}/${package}\""
   }
