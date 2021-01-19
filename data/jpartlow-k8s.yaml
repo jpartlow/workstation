@@ -17,6 +17,7 @@ workstation::profile::holodeck::license_links:
     - '/home/jpartlow/work/src/holodeck-manifests/cd4pe_license.json'
 workstation::profile::holodeck::kots_version: '1.24.2'
 workstation::profile::holodeck::helm_version: '3.3.1'
+workstation::profile::holodeck::yq_version: '4.3.2'
 
 # Dev account creation/config
 workstation::profile::dev_account_base::account: jpartlow

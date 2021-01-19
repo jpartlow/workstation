@@ -63,6 +63,8 @@
 #   The KOTS version to install. Defaults to latest.
 # @param helm_version
 #   The helm version to install. Defaults to latest.
+# @param yq_version
+#   The yq version to install. Defaults to latest.
 # @param dev_user
 #   Install unprivileged tools like krew, and add helm chart repos
 #   for this user. (Any tool that needs to work with local user
@@ -80,6 +82,7 @@ class workstation::profile::holodeck(
   Boolean $enable_source_repo = false,
   String $kots_version = 'latest',
   String $helm_version = 'latest',
+  String $yq_version = 'latest',
   String $dev_user = 'centos',
   Array[Workstation::Chart_repo] $additional_chart_repos = [],
   Array[String] $additional_packages = [],
@@ -159,6 +162,12 @@ class workstation::profile::holodeck(
   ]
   package { ($default_packages + $additional_packages):
     ensure => 'latest',
+  }
+
+  workstation::install_release_binary { 'mikefarah/yq/yq_linux_amd64.tar.gz':
+    version      => $yq_version,
+    archive_file => 'yq_linux_amd64',
+    creates      => 'yq',
   }
 
   zip($replicated_licenses, $license_links['replicated']).each |$a| {
