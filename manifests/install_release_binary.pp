@@ -38,6 +38,9 @@
 #   a simple archive that just untars to a single $creates file.
 # @param owner
 #   The user that should own the installed binary.
+# @param version_prefix
+#   Some projects helpfully have a 'v' in front of their versions.
+#   Others do not. yay
 define workstation::install_release_binary(
   String $organization = $title.split(/\//)[0],
   String $project = $title.split(/\//)[1],
@@ -49,6 +52,7 @@ define workstation::install_release_binary(
   Optional[String] $download_url = undef,
   Optional[String] $archive_file = undef,
   String $owner = 'root',
+  String $version_prefix = 'v',
 ) {
   if $version == 'latest' {
     $version_lookup = "VERSION=$(curl -sSL -o /dev/null --write-out '%{url_effective}' https://github.com/${organization}/${project}/releases/latest | grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+')"
@@ -61,7 +65,7 @@ define workstation::install_release_binary(
       false   => "${project}/",
       default => '',
     }
-    $download = "curl -fsSL -O \"https://github.com/${organization}/${project}/releases/download/${project_dir}v\${VERSION}/${package}\""
+    $download = "curl -fsSL -O \"https://github.com/${organization}/${project}/releases/download/${project_dir}${version_prefix}\${VERSION}/${package}\""
   } else {
     $download = "curl -fsSL -O \"${download_url}/${package}\""
   }

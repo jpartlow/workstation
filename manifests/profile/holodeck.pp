@@ -140,6 +140,11 @@ class workstation::profile::holodeck(
     install_dir => '/usr/bin',
   }
 
+  workstation::install_release_binary { 'docker/compose/docker-compose-Linux-x86_64':
+    creates        => 'docker-compose',
+    version_prefix => '',
+  }
+
   # Unit/integration testing tools and lib dependencies for holodeck-manifests
   class { 'workstation::k8s::holodeck_testing':
     dev_user => $dev_user,
