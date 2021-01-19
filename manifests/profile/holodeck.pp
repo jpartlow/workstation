@@ -45,13 +45,13 @@
 # Parameters
 # ----------
 #
-# @param replicated_license_file
-#   Absolute path to the license file to transfer to the dev host
-#   so that we can install cd4pe via KOTS. The file will be placed
+# @param replicated_licenses
+#   Array of absolute pathes to license files to transfer to the dev host
+#   so that we can install a replicated app via KOTS. The file will be placed
 #   in /home/${dev_user}, but can be linked elsewhere with $license_links.
 # @param license_links
 #   Array of absolute paths to be created as symlinks to the
-#   $replicated_license_file placed on the dev host.
+#   $replicated_licenses placed on the dev host.
 # @param docker_channel
 #   The Docker repository channel to download packages from.
 #   (stable, test or nightly)
@@ -72,7 +72,7 @@
 # @param additional_packages
 #   Array of extra packages to add.
 class workstation::profile::holodeck(
-  Workstation::Absolute_path $replicated_license_file,
+  Array[Workstation::Absolute_path] $replicated_licenses,
   Workstation::Absolute_path $cd4pe_license_file,
   Optional[Workstation::License_links_struct] $license_links = {},
   String $docker_channel = 'stable',
@@ -156,10 +156,18 @@ class workstation::profile::holodeck(
     ensure => 'latest',
   }
 
-  workstation::copy_secret_and_link { 'copy-replicated-license':
-    local_file => $replicated_license_file,
-    user       => $dev_user,
-    links      => $license_links['replicated'],
+  zip($replicated_licenses, $license_links['replicated']).each |$a| {
+    $license = $a[0]
+    $links_array = $a[1] =~ Undef ? {
+      true    => [],
+      default => [ $a[1] ],
+    }
+
+    workstation::copy_secret_and_link { "copy-replicated-license ${license}":
+      local_file => $license,
+      user       => $dev_user,
+      links      => $links_array,
+    }
   }
 
   workstation::copy_secret_and_link { 'copy-cd4pe-license':

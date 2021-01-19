@@ -6,7 +6,9 @@ workstation::profiles:
 
 # Kubernetes configuration
 workstation::profile::holodeck::dev_user: jpartlow
-workstation::profile::holodeck::replicated_license_file: '/home/jpartlow/keys/josh-partlow-replicated.yaml'
+workstation::profile::holodeck::replicated_licenses:
+  - '/home/jpartlow/keys/joshua-partlow-cd4pe-license.yaml'
+  - '/home/jpartlow/keys/joshua-partlow-connect-license.yaml'
 workstation::profile::holodeck::cd4pe_license_file: '/home/jpartlow/keys/cd4pe_license.json'
 workstation::profile::holodeck::license_links:
   replicated:
