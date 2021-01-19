@@ -321,14 +321,14 @@ workstation::package_repositories::repositories:
     packages:
       - 'puppet-bolt'
 
-workstation::gems:
-  - 'vmfloaty'
-  - 'tmuxinator'
-
 workstation::ssh_public_keys:
   - "id_rsa.pub"
 
-workstation::ruby::ruby_versions:
+workstation::profile::dev_account_base::ruby_versions:
   - '2.5.8'
+
+workstation::ruby::gems:
+  - 'vmfloaty'
+  - 'tmuxinator'
 
 workstation::skip_pe_acceptance: false

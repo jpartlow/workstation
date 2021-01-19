@@ -54,11 +54,21 @@ class workstation::profile::dev_account_base(
   ],
   Array[String] $additional_packages = [],
   Boolean $manage_dotfiles = true,
+  Array[String] $ruby_versions = [],
 ) {
   class { 'workstation::user':
     account => $account,
   }
   contain 'workstation::user'
+
+  if !empty($ruby_versions) {
+    class { 'workstation::ruby':
+      owner         => $account,
+      ruby_versions => $ruby_versions,
+    }
+    contain workstation::ruby
+    Class['Workstation::User'] -> Class['Workstation::Ruby']
+  }
 
   class { 'workstation::ssh':
     user        => $account,

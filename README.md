@@ -162,8 +162,8 @@ The principle parameters that must be set are:
   workstation::repositories and the defined types it uses for the details.
 * workstation::packages - a simple list of packages to install
 * workstation::vim_bundles - if you want to source vim Pathogen plugins (see workstation::vim)
-* workstation::gems - simple list of gems to be installed
-* workstation::ruby::ruby_versions - simple list of ruby versions to be installed via rbenv
+* workstation::profile::dev_account_base::ruby_versions - simple list of ruby versions to be installed via rbenv
+* workstation::ruby::gems - simple list of gems to be installed
 * workstation::ssh_public_keys - to add public keys to the account's ~/.ssh/authorized_keys (see workstation::ssh)
 
 It should work on both Ubuntu/Centos (tested on ubuntu 18.04, centos7).
