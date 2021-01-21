@@ -38,6 +38,10 @@
 # @param manage_dotfiles
 #   Set this false to not manage a dotfiles repository.
 #   (skips {workstation::dotfiles} being included)
+# @param src_tmux_version
+#   Set this to a particular version of tmux to download and install
+#   from source if you are stuck on a platform that has old tmux
+#   builds in its package manager...like, say, centos7...
 class workstation::profile::dev_account_base(
   String $account,
   Array[String] $ssh_public_keys,
@@ -49,12 +53,13 @@ class workstation::profile::dev_account_base(
     'tree',
     'wget',
     'curl',
-    'tmux',
     'bash-completion',
+    # 'tmux' package will be installed if src_tmux_version is not set...
   ],
   Array[String] $additional_packages = [],
   Boolean $manage_dotfiles = true,
   Array[String] $ruby_versions = [],
+  Optional[String] $src_tmux_version = undef,
 ) {
   class { 'workstation::user':
     account => $account,
@@ -76,11 +81,38 @@ class workstation::profile::dev_account_base(
   }
   contain 'workstation::ssh'
 
-  $_packages = $default_packages + $additional_packages
+  # If we aren't building it from source, install the os package.
+  $tmux_package = $src_tmux_version =~ Undef ? {
+    true  => ['tmux'],
+    false => [],
+  }
+  $_packages = $default_packages + $additional_packages + $tmux_package
   class { 'workstation::packages':
     packages => $_packages,
   }
   contain 'workstation::packages'
+
+  if $src_tmux_version !~ Undef {
+    $package = "tmux-${src_tmux_version}.tar.gz"
+    $url = "https://github.com/tmux/tmux/releases/download/${src_tmux_version}/${package}"
+    $installer_cmds = [
+      "cd $(mktemp -d)",
+      "curl -fsSL -O ${url}",
+      "tar -xf ${package}",
+      "cd tmux-${src_tmux_version}",
+      "./configure && make",
+      "make install",
+    ]
+
+    package { "libevent-devel":
+      ensure => latest,
+    }
+    -> exec { "install-tmux-${src_tmux_version}-from-src":
+      command => $installer_cmds.join(' && '),
+      path    => $facts['path'],
+      creates => '/usr/local/bin/tmux',
+    }
+  }
 
   contain 'workstation::git'
 
