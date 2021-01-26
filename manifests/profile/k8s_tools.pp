@@ -11,9 +11,8 @@ class workstation::profile::k8s_tools(
   String $kustomize_version = 'latest',
   Array[Workstation::Chart_repo] $additional_chart_repos = [],
 ) {
-  workstation::install_release_binary { 'derailed/k9s/k9s_Linux_x86_64.tar.gz':
-    creates => 'k9s'
-  }
+  class { 'workstation::k8s::k9s': }
+  contain 'workstation::k8s::k9s'
 
   workstation::install_release_binary { 'kubernetes-sigs/kustomize/kustomize_v${VERSION}_linux_amd64.tar.gz':
     version                           => $kustomize_version,
