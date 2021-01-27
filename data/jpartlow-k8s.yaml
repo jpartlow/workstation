@@ -110,3 +110,6 @@ workstation::profile::dev_account_base::vim_bundles:
   -
     clone_name: "vim-dockerfile"
     source: "https://github.com/ekalinin/Dockerfile.vim.git"
+  -
+    clone_name: "vim-yaml-folds"
+    source: "https://github.com/pedrohdz/vim-yaml-folds"
