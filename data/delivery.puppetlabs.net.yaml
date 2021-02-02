@@ -1,0 +1,6 @@
+---
+# Profiles to be applied
+workstation::profiles:
+  - 'workstation::profile::holodeck_kurl_delivery_vm'
+  - 'workstation::profile::dev_account_base'
+  - 'workstation::profile::holodeck'

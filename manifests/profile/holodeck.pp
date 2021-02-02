@@ -1,34 +1,21 @@
 # Class: workstation::profile::holodeck
+# =====================================
 #
-# Controls setup of kubernettes and related tools on a centos node
-# specifically to prepare that host for testing and dev work for the
+# Adds tools for testing and dev work used by the
 # [holodeck-manifests](https://github.com/puppetlabs/holodeck-manifests)
 # repository.
 #
-# The base docker installation is docker-ce from docker.com yum repos.
-# The kubernetes packages come from google.com yum repos.
-# (see workstation::k8s::repos)
-#
-# For management of the kubernetes cluster KinD is installed, *but* the manifest
-# does not initialize the cluster. You will need to do that yourself with kind and
-# whatever supporting config is required after the manifest finishes.
-#
-# Also be aware that outside of the established package channels mentioned
-# above, there is a lot of `curl | bash` and downloads from github releases
-# going on for these various third party tools that aren't using package
-# managers, and there is currently no attempt to validate checksums or
-# signatures (if such things exist). So I wouldn't use this on anything other
-# than a dev host.
+# Be aware that there is a lot of `curl | bash` and downloads from github
+# releases going on for these various third party tools that aren't using
+# package managers, and there is currently no attempt to validate checksums
+# or signatures (if such things exist). So I wouldn't use this on anything
+# other than a dev host.
 #
 # Tested against Centos 7.6.
 #
 # Manages
 # -------
 #
-# * docker and k8s yum repositories
-# * docker-ce/docker-ce-cli
-# * kubectl/kubeadm/kubelet
-# * KinD
 # * Kots
 # * krew (and plugins)
 #   * preflight
@@ -40,6 +27,7 @@
 #   * conftest (for spec manifest testing)
 #   * yarn (for installing jest/puppeteer for workflow tests that exercise the cd4pe UI)
 #   * chromium-headless
+# * jq
 # * transferring required replicated/cd4pe license secrets from localhost to workstation for testing
 #
 # Parameters
@@ -52,13 +40,6 @@
 # @param license_links
 #   Array of absolute paths to be created as symlinks to the
 #   $replicated_licenses placed on the dev host.
-# @param docker_channel
-#   The Docker repository channel to download packages from.
-#   (stable, test or nightly)
-# @param enable_debuginfo_repo
-#   Whether to enable packages with debuginfo.
-# @param enable_source_repo
-#   Whether to enable source packages.
 # @param kots_version
 #   The KOTS version to install. Defaults to latest.
 # @param helm_version
@@ -77,9 +58,6 @@ class workstation::profile::holodeck(
   Array[Workstation::Absolute_path] $replicated_licenses,
   Workstation::Absolute_path $cd4pe_license_file,
   Optional[Workstation::License_links_struct] $license_links = {},
-  String $docker_channel = 'stable',
-  Boolean $enable_debuginfo_repo = false,
-  Boolean $enable_source_repo = false,
   String $kots_version = 'latest',
   String $helm_version = 'latest',
   String $yq_version = 'latest',
@@ -87,14 +65,6 @@ class workstation::profile::holodeck(
   Array[Workstation::Chart_repo] $additional_chart_repos = [],
   Array[String] $additional_packages = [],
 ) {
-  class { 'workstation::profile::k8s':
-    dev_user              => $dev_user,
-    docker_channel        => $docker_channel,
-    enable_debuginfo_repo => $enable_debuginfo_repo,
-    enable_source_repo    => $enable_source_repo,
-  }
-  contain 'workstation::profile::k8s'
-
   # The holodock-manifests Makefile expects to be able to install gitlab
   # using helm, and requires this repository added.
   $default_chart_repos = [
@@ -112,7 +82,6 @@ class workstation::profile::holodeck(
 
   class { 'workstation::k8s::krew':
     user    => $dev_user,
-    require => Package['kubectl'],
   }
   contain 'workstation::k8s::krew'
 
@@ -136,11 +105,6 @@ class workstation::profile::holodeck(
     user    => $dev_user,
     creates => 'support_bundle',
     require => Class['workstation::k8s::krew'],
-  }
-
-  workstation::install_release_binary { 'kubernetes-sigs/kind/kind-linux-amd64':
-    creates     => 'kind',
-    install_dir => '/usr/bin',
   }
 
   workstation::install_release_binary { 'docker/compose/docker-compose-Linux-x86_64':

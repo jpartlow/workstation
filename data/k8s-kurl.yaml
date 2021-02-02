@@ -2,11 +2,12 @@
 # Profiles to be applied
 workstation::profiles:
   - 'workstation::profile::dev_account_base'
-  - 'workstation::profile::kind'
+  - 'workstation::profile::kurl'
   - 'workstation::profile::holodeck'
 
 # Kubernetes configuration
-workstation::profile::kind::docker_user: jpartlow
+workstation::profile::kurl::url: 'https://kurl.sh/c473a60'
+workstation::profile::kurl::user: jpartlow
 
 # Dev account creation/config
 workstation::profile::dev_account_base::ruby_versions:

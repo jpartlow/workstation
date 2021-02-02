@@ -1,0 +1,107 @@
+---
+# This configuration is general to any of my vms that are set up
+# for development with holodeck-manifests.
+
+# Kubernetes configuration
+workstation::profile::holodeck::dev_user: jpartlow
+workstation::profile::holodeck::replicated_licenses:
+  - '/home/jpartlow/keys/joshua-partlow-cd4pe-license.yaml'
+  - '/home/jpartlow/keys/joshua-partlow-connect-license.yaml'
+workstation::profile::holodeck::cd4pe_license_file: '/home/jpartlow/keys/cd4pe_license.json'
+workstation::profile::holodeck::license_links:
+  replicated:
+    - '/home/jpartlow/work/src/holodeck-manifests/license.yaml'
+  cd4pe:
+    - '/home/jpartlow/work/src/holodeck-manifests/cd4pe_license.json'
+workstation::profile::holodeck::kots_version: '1.24.2'
+workstation::profile::holodeck::helm_version: '3.3.1'
+workstation::profile::holodeck::yq_version: '4.3.2'
+
+# Dev account creation/config
+workstation::profile::dev_account_base::src_tmux_version: '2.8'
+workstation::profile::dev_account_base::account: jpartlow
+workstation::profile::dev_account_base::ssh_public_keys:
+  - "id_rsa.pub"
+workstation::profile::dev_account_base::manage_dotfiles: true
+workstation::profile::dev_account_base::repository_data:
+  - path: "work/src"
+    defaults:
+      upstream: 'puppetlabs'
+      checkout_branch: '2019.8.x'
+      remotes:
+        - 'Iristyle'
+    repos:
+      -
+        source: 'git@github.com:jpartlow/holodeck-manifests'
+        checkout_branch: 'main'
+        remotes:
+          - 'MikaelSmith'
+      -
+        source: 'git@github.com:jpartlow/pe-bolt-vanagon'
+      -
+        source: 'git@github.com:jpartlow/pe-client-tools-vanagon'
+      -
+        source: 'git@github.com:jpartlow/pe-console-services'
+      -
+        source: 'git@github.com:jpartlow/pe-orchestration-services'
+      -
+        source: 'git@github.com:jpartlow/pe-puppetdb-extensions'
+        checkout_branch: 'master'
+      -
+        source: 'git@github.com:jpartlow/pe-puppet-server-extensions'
+      -
+        source: 'git@github.com:jpartlow/pe-puppetserver'
+        checkout_branch: 'master'
+      -
+        source: 'git@github.com:jpartlow/pupperware'
+        checkout_branch: 'master'
+      -
+        source: 'git@github.com:jpartlow/pupperware-commercial'
+        checkout_branch: 'master'
+        remotes:
+          - 'Iristyle'
+          - 'MikaelSmith'
+
+workstation::profile::dev_account_base::vim_bundles:
+  -
+    clone_name: "vim-ack"
+    source: "https://github.com/mileszs/ack.vim.git"
+  -
+    clone_name: "vim-bash-fold-expr"
+    source: "https://github.com/demophoon/bash-fold-expr.git"
+  -
+    clone_name: "vim-bufexplorer"
+    source: "https://github.com/jlanzarotta/bufexplorer.git"
+  -
+    clone_name: "vim-clojure"
+    source: "https://github.com/vim-scripts/VimClojure.git"
+  -
+    clone_name: "vim-fugitive"
+    source: "https://github.com/tpope/vim-fugitive.git"
+  -
+    clone_name: "vim-markdown"
+    source: "https://github.com/tpope/vim-markdown.git"
+  -
+    clone_name: "vim-markdown-folding"
+    source: "https://github.com/nelstrom/vim-markdown-folding.git"
+  -
+    clone_name: "vim-matchit"
+    source: "https://github.com/adelarsq/vim-matchit.git"
+  -
+    clone_name: "vim-puppet"
+    source: "https://github.com/rodjek/vim-puppet.git"
+  -
+    clone_name: "vim-ps1"
+    source: "https://github.com/PProvost/vim-ps1.git"
+  -
+    clone_name: "vim-ruby"
+    source: "https://github.com/vim-ruby/vim-ruby.git"
+  -
+    clone_name: "vim-syntastic"
+    source: "https://github.com/vim-syntastic/syntastic.git"
+  -
+    clone_name: "vim-dockerfile"
+    source: "https://github.com/ekalinin/Dockerfile.vim.git"
+  -
+    clone_name: "vim-yaml-folds"
+    source: "https://github.com/pedrohdz/vim-yaml-folds"

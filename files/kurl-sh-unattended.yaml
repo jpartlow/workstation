@@ -1,0 +1,9 @@
+apiVersion: "cluster.kurl.sh/v1beta1"
+kind: "Installer"
+metadata:
+  name: "patch"
+spec:
+  firewalldConfig:
+    disableFirewalld: true
+  selinuxConfig:
+    disableSelinux: true

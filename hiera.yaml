@@ -5,7 +5,9 @@ defaults:  # Used for any hierarchy level that omits these keys.
   data_hash: yaml_data  # Use the built-in YAML backend.
 
 hierarchy:
-  - name: "Per node configuration driving the installation"
+  - name: "Per node classification/configuration driving the installation"
     path: "nodes/%{facts.clientcert}.yaml"
+  - name: "Per node common configuration for nodes that are mostly similar"
+    path: "nodes-common/%{facts.clientcert}.yaml"
   - name: "Any common configuration between nodes"
     path: "common.yaml"
