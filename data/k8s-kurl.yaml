@@ -16,3 +16,4 @@ workstation::profile::dev_account_base::additional_packages:
   - 'lsof'
   - 'htop'
   - 'ack' # el specific
+  - 'psmisc' # el specific, provides pstree
