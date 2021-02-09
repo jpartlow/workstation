@@ -159,8 +159,8 @@ class workstation::profile::holodeck(
     user        => $dev_user,
     mode        => '0600',
   }
-  file { "/home/${dev_user}/bin/cycle-tests":
-    source => 'puppet:///modules/workstation/cycle-tests',
+  file { "/home/${dev_user}/bin/cycle-app":
+    source => 'puppet:///modules/workstation/cycle-app',
     owner  => $dev_user,
     mode   => '0750',
   }
