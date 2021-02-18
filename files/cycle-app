@@ -1,10 +1,17 @@
 #! /bin/bash
 
-# Utlity for runing holodeck-manifests workflow-tests with logging.
+# Utlity for tearing down and setting up cd4pe/connect app via holodeck-manifests Makefile
 
 started=$(date)
 
 phase=$1
+app=$2
+
+err() {
+  local msg=$1
+  echo "ERR: ${msg}"
+  exit 1
+}
 
 report() {
   code=$1
@@ -18,7 +25,7 @@ report() {
   if [ "$code" != "0" ]; then
     echo "FAILED! (${code})"
   fi
-  exit $1
+  exit "${code}"
 }
 
 echo "***********"
@@ -28,24 +35,47 @@ GITHUB_ACTIONS=dummy make clean destroy-ingress-controller destroy-kots destroy-
 success=${PIPESTATUS[0]}
 cleaned=$(date)
 if [ "$phase" = "clean" ] || [ "$success" != "0" ]; then
-  report $success
+  report "${success}"
 fi
 
-echo "***********"
-echo "** Starting"
-echo "***********"
-GITHUB_ACTIONS=dummy make start-testinfra start-test-instance wait-testinfra wait-test-instance --debug 2>&1 | tee make-start.log
+if [ ! -e license.yaml ]; then
+  err "Unable to find license.yaml"
+fi
+connect_entitlement=$(yq eval '.spec.entitlements.connect_entitlement.value' license.yaml)
+if [ "${connect_entitlement}" = 'true' ]; then
+  license_app='connect'
+else
+  license_app='cd4pe'
+fi
+if [ -z "${app}" ]; then
+  app="${license_app}"
+elif [ "${app}" != "${license_app}" ]; then
+  err "You asked to build ${app}, but the license.yaml has entitlement for ${license_app}"
+fi
+
+echo "***************************"
+echo "** Starting ${app}"
+echo "***************************"
+if [ "${app}" = "cd4pe" ]; then
+  start_actions=(start-testinfra start-test-instance wait-testinfra wait-test-instance)
+else
+  start_actions=(start-test-instance wait-test-instance)
+fi
+
+GITHUB_ACTIONS=dummy KOTS_APP="${app}" make "${start_actions[@]}" --debug 2>&1 | tee make-start.log
 success=${PIPESTATUS[0]}
 running=$(date)
 
 if [ "$phase" = "build" ] || [ "$success" != "0" ]; then
-  report $success
+  report "${success}"
 fi
 
-echo "***********"
-echo "** Testing"
-echo "***********"
-CD4PE_FAST_WORKFLOW_SUITE=false make workflow-test --debug 2>&1 | tee make-workflow-test.log
-success=${PIPESTATUS[0]}
-tested=$(date)
-report $success
+if [ "${app}" = "cd4pe" ]; then
+  echo "***************************"
+  echo "** Testing ${app}"
+  echo "***************************"
+  CD4PE_FAST_WORKFLOW_SUITE=false KOTS_APP="${app}" make workflow-test --debug 2>&1 | tee make-workflow-test.log
+  success=${PIPESTATUS[0]}
+  tested=$(date)
+  report "${success}"
+fi
