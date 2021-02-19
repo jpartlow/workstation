@@ -17,7 +17,7 @@
 #
 # * docker and k8s yum repositories
 # * docker-ce/docker-ce-cli
-# * kubectl/kubeadm/kubelet
+# * kubelet
 # * KinD
 #
 # Parameters:
@@ -43,6 +43,7 @@ class workstation::profile::kind(
     docker_channel        => $docker_channel,
     enable_debuginfo_repo => $enable_debuginfo_repo,
     enable_source_repo    => $enable_source_repo,
+    k8s_packages          => [ 'kubectl' ],
   }
   contain 'workstation::profile::k8s'
 

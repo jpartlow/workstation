@@ -15,6 +15,7 @@ class workstation::profile::k8s(
   Boolean $enable_debuginfo_repo = false,
   Boolean $enable_source_repo = false,
   Enum['docker','containerd'] $container_type = 'docker',
+  Array[String] $k8s_packages = ['kubelet', 'kubeadm', 'kubectl'],
 ) {
   class { 'workstation::k8s::repos':
     docker_channel        => $docker_channel,
@@ -32,7 +33,7 @@ class workstation::profile::k8s(
     require => Class['workstation::k8s::repos'],
   }
 
-  package { ['kubelet', 'kubectl', 'kubeadm']:
+  package { $k8s_packages:
     ensure  => 'latest',
     require => Class['workstation::k8s::repos'],
   }
