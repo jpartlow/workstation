@@ -12,7 +12,7 @@
     * [Profile Classes](#profile-classes)
         * [Configuring workstation](#configuring-workstation)
         * [Configuring workstation::profile::dev_account_base](#configuring-dev_account_base)
-        * [Configuring workstation::profile::holodeck](#configuring-for-holodeck)
+        * [Configuring workstation::profile::holodeck](#configuring-holodeck)
 1. [Reference - Short list of class/defined type references](#reference)
 1. [Testing](#testing)
     * [Vagrantfile - A test host](#vagrantfile)
@@ -182,7 +182,7 @@ false.
 
 #### Configuring [Holodeck](manifests/profile/holodeck.pp)
 
-This class is intended to be generally useful for prepping the k8s environment
+This class is intended to be generally useful for prepping the k8s tooling
 required by [holodeck-manifests] on an el7 host. It was tested on a [platform9]
 centos_7_x86_64 xl host (8GB memory is insufficient).
 
@@ -201,6 +201,10 @@ The required k8s parameters are:
 * workstation::profile::holodeck::cd4pe_license_file - local path to your cd4pe license json
 
 The latter two files are used by [holodeck-manifests] when running test targets.
+
+The class does not manage the installation of docker/k8s itself. For that,
+either workstation::profile::kurl or workstation::profile::kind should be
+chosen. The kind profile does not yet create the cluster.
 
 ### Configuring a meep_tools test host
 
