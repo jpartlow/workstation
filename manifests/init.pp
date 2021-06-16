@@ -73,7 +73,8 @@ class workstation(
 
   if !$skip_pe_acceptance {
     class { 'workstation::pe_acceptance':
-      user => $account,
+      user    => $account,
+      require => Class['workstation::repositories'],
     }
   }
 
