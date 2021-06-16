@@ -46,18 +46,15 @@ workstation::profile::dev_account_base::repository_data:
         source: 'git@github.com:jpartlow/pe-orchestration-services'
       -
         source: 'git@github.com:jpartlow/pe-puppetdb-extensions'
-        checkout_branch: 'master'
+        checkout_branch: '6.x'
       -
         source: 'git@github.com:jpartlow/pe-puppet-server-extensions'
       -
-        source: 'git@github.com:jpartlow/pe-puppetserver'
-        checkout_branch: 'master'
-      -
         source: 'git@github.com:jpartlow/pupperware'
-        checkout_branch: 'master'
+        checkout_branch: 'main'
       -
         source: 'git@github.com:jpartlow/pupperware-commercial'
-        checkout_branch: 'master'
+        checkout_branch: 'main'
         remotes:
           - 'Iristyle'
           - 'MikaelSmith'
