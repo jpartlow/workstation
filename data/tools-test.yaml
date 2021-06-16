@@ -41,7 +41,7 @@ workstation::package_repositories::repositories:
     packages:
       - puppet-bolt
 workstation::ruby::ruby_versions:
-  - '2.5.7'
+  - '2.7.3'
 workstation::vim_bundles:
   -
     clone_name: "vim-ack"

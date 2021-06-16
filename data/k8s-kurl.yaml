@@ -11,7 +11,7 @@ workstation::profile::kurl::user: jpartlow
 
 # Dev account creation/config
 workstation::profile::dev_account_base::ruby_versions:
-  - '2.5.8'
+  - '2.7.3'
 workstation::profile::dev_account_base::additional_packages:
   - 'lsof'
   - 'htop'
