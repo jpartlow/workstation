@@ -1,5 +1,0 @@
-ssh:
-  run-as-command: 
-    - 'sudo'
-    - '-E'
-    - '-u'

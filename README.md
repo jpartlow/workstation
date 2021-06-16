@@ -83,10 +83,10 @@ The required modules for running workstation are listed in the Boltdir/Puppetfil
 
 ### Dependencies
 
-Ensure that the module's dependencies are installed b by running bolt puppetfile:
+Ensure that the project's dependencies are installed:
 
 ```sh
-bolt puppetfile install
+bolt module install
 ```
 
 ### Configuring SSH

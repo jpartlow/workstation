@@ -6,7 +6,10 @@ Gemfile.lock
 spec/fixtures/modules
 data/common.yaml
 data/nodes
-Boltdir/modules
-Boltdir/.rerun.json
-Boltdir/.resource_types
+.modules
+.rerun.json
+.resource_types
+.plan_cache.json
+.task_cache.json
+Puppetfile
 spec/fixtures/manifests/site.pp
