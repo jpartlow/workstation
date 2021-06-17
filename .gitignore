@@ -6,6 +6,7 @@ Gemfile.lock
 spec/fixtures/modules
 data/common.yaml
 data/nodes
+data/nodes-common
 .modules
 .rerun.json
 .resource_types
