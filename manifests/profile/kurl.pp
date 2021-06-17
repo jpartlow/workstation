@@ -16,8 +16,8 @@
 #   Number of seconds to allow kurl.sh to complete before raising
 #   an error.
 class workstation::profile::kurl(
-  String $url,
   String $user,
+  String $url  = 'https://k8s.kurl.sh/puppet-application-manager-standalone',
   Integer $timeout = 1200,
 ) {
 

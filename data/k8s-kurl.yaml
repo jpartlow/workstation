@@ -6,7 +6,6 @@ workstation::profiles:
   - 'workstation::profile::holodeck'
 
 # Kubernetes configuration
-workstation::profile::kurl::url: 'https://kurl.sh/c473a60'
 workstation::profile::kurl::user: jpartlow
 
 # Dev account creation/config
