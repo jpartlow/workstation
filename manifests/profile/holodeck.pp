@@ -44,6 +44,8 @@
 #   The KOTS version to install. Defaults to latest.
 # @param helm_version
 #   The helm version to install. Defaults to latest.
+# @param kustomize_version
+#   The kustomize version to install. Defaults to latest.
 # @param yq_version
 #   The yq version to install. Defaults to latest.
 # @param dev_user
@@ -60,6 +62,7 @@ class workstation::profile::holodeck(
   Optional[Workstation::License_links_struct] $license_links = {},
   String $kots_version = 'latest',
   String $helm_version = 'latest',
+  String $kustomize_version = 'latest',
   String $yq_version = 'latest',
   String $dev_user = 'centos',
   Array[Workstation::Chart_repo] $additional_chart_repos = [],
@@ -76,6 +79,7 @@ class workstation::profile::holodeck(
   class { 'workstation::profile::k8s_tools':
     dev_user               => $dev_user,
     helm_version           => $helm_version,
+    kustomize_version      => $kustomize_version,
     additional_chart_repos => $default_chart_repos + $additional_chart_repos,
   }
   contain 'workstation::profile::k8s_tools'

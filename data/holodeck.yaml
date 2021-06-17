@@ -16,6 +16,7 @@ workstation::profile::holodeck::license_links:
 workstation::profile::holodeck::kots_version: '1.24.2'
 workstation::profile::holodeck::helm_version: '3.5.0'
 workstation::profile::holodeck::yq_version: '4.3.2'
+workstation::profile::holodeck::kustomize_version: '4.1.3'
 
 # Dev account creation/config
 workstation::profile::dev_account_base::src_tmux_version: '2.8'
