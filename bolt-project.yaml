@@ -15,3 +15,7 @@ modules:
     version_requirement: "6.4.0"
   - name: "puppetlabs-apt"
     version_requirement: "6.2.1"
+  - name: "puppetlabs-inifile"
+    version_requirement: "5.0.1"
+  - name: "saz-resolv_conf"
+    version_requirement: "4.2.1"

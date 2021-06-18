@@ -22,6 +22,12 @@ fixtures:
     apt:
       repo: "git@github.com:puppetlabs/puppetlabs-apt.git"
       ref: 6.2.1
+    inifile:
+      repo: "git@github.com:puppetlabs/puppetlabs-inifile.git"
+      ref: 'v5.0.1'
+    resolv_conf:
+      repo: "git@github.com:saz/puppet-resolv_conf.git"
+      ref: 'v4.2.1'
     yumrepo_core:
       repo: "git@github.com:puppetlabs/puppetlabs-yumrepo_core.git"
       ref: 1.0.7
