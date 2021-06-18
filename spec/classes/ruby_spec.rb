@@ -19,7 +19,7 @@ describe 'workstation::ruby' do
 
   it { is_expected.to compile.with_all_deps }
   it { is_expected.to contain_package('build-essential') }
-  it { is_expected.to contain_package('libgdbm3') }
+  it { is_expected.to contain_package('libgdbm-dev') }
   it do
     is_expected.to contain_class('Rbenv')
       .with_owner('biscuit')

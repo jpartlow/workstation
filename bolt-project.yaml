@@ -1,6 +1,5 @@
 name: workstation
 analytics: false
-format: rainbow
 modules:
   - name: "puppetlabs-stdlib"
     version_requirement: "5.2.0"

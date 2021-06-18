@@ -282,7 +282,7 @@ To run those, it should be sufficient to:
 
 ```sh
 bundle install
-bundle exe rake spec
+bundle exec rake spec
 ```
 
 ## Limitations
