@@ -42,7 +42,7 @@ class workstation::profile::kurl(
     user        => $user,
     cwd         => "/home/${user}",
     timeout     => $timeout,
-    unless      => 'which kubectl && kubectl get nodes',
-    environment => ["USER=${user}", "HOME=${home}"],
+    unless      => ['/usr/bin/which kubectl', '/usr/bin/kubectl get nodes'],
+    environment => ["USER=${user}", "HOME=${home}", 'KUBECONFIG=/etc/kubernetes/admin.conf'],
   }
 }
