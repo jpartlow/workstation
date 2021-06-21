@@ -32,7 +32,7 @@ class workstation::gcp_engineering_scratchpad(
         setting => 'DNS',
         value   => $nameservers.join(','),
       }
-      ~> service { 'systemd.resolved':
+      ~> service { 'systemd-resolved':
         ensure => running,
       }
     }
