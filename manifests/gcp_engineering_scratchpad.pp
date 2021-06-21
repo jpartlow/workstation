@@ -25,6 +25,16 @@ class workstation::gcp_engineering_scratchpad(
       }
     }
     'Debian': {
+      ini_setting { 'Resolved.conf':
+        ensure  => present,
+        path    => '/etc/systemd/resolved.conf',
+        section => 'Resolve',
+        setting => 'DNS',
+        value   => $nameservers.join(','),
+      }
+      ~> service { 'systemd.resolved':
+        ensure => running,
+      }
     }
     default: { fail("Unsupported platform ${facts['os']['family']}") }
   }

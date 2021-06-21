@@ -164,4 +164,10 @@ class workstation::profile::dev_account_base(
     }
     default: { fail("Unsupported platform ${facts['os']['family']}") }
   }
+
+  # Set resolver for internal dns if host is setup in the
+  # engineering-scratchpad project (based on domain name...)
+  if ($facts['gce'] !~ Undef and $facts['networking']['domain'] == 'c.engineering-scratchpad.internal') {
+    include 'workstation::gcp_engineering_scratchpad'
+  }
 }
