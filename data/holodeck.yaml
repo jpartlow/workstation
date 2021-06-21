@@ -38,6 +38,10 @@ workstation::profile::dev_account_base::repository_data:
         remotes:
           - 'MikaelSmith'
       -
+        source: 'git@github.com:jpartlow/kurl_test'
+        checkout_branch: 'main'
+        remotes: []
+      -
         source: 'git@github.com:jpartlow/pe-bolt-vanagon'
       -
         source: 'git@github.com:jpartlow/pe-client-tools-vanagon'

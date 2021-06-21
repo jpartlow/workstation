@@ -54,6 +54,10 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/facter"
         checkout_branch: "main"
       - source: "git@github.com:jpartlow/higgs"
+      -
+        source: 'git@github.com:jpartlow/kurl_test'
+        checkout_branch: 'main'
+        remotes: []
       - source: "git@github.com:jpartlow/merge-monitor"
       -
         source: "git@github.com:jpartlow/pe_acceptance_tests"
