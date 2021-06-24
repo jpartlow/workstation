@@ -55,6 +55,10 @@ workstation::repository_data:
         checkout_branch: "main"
       - source: "git@github.com:jpartlow/higgs"
       -
+        source: 'git@github.com:jpartlow/holodeck-manifests'
+        checkout_branch: 'main'
+        remotes: []
+      -
         source: 'git@github.com:jpartlow/kurl_test'
         checkout_branch: 'main'
         remotes: []
@@ -101,6 +105,9 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/puppet-runtime"
         checkout_branch: "master"
       - source: "git@github.com:jpartlow/puppet-scale-control"
+      -
+        source: "git@github.com:jpartlow/puppetlabs-packer"
+        remotes: []
       - source: "git@github.com:jpartlow/puppetlabs-stdlib"
       - source: "git@github.com:jpartlow/puppetlabs-modules"
       - source: "git@github.com:jpartlow/rspec-puppet"

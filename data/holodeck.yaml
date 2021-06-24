@@ -63,6 +63,10 @@ workstation::profile::dev_account_base::repository_data:
         remotes:
           - 'Iristyle'
           - 'MikaelSmith'
+      -
+        source: "git@github.com:jpartlow/puppetlabs-packer"
+        checkout_branch: 'master'
+        remotes: []
 
 workstation::profile::dev_account_base::vim_bundles:
   -
