@@ -31,7 +31,11 @@ report() {
 echo "***********"
 echo "** Cleaning"
 echo "***********"
-GITHUB_ACTIONS=dummy make clean destroy-ingress-controller destroy-kots destroy-application destroy-testinfra --debug 2>&1 | tee make-clean.log
+CLEAN_TARGETS=(clean destroy-ingress-controller destroy-application destroy-testinfra)
+if ! pgrep kurl_proxy; then
+  CLEAN_TARGETS+=('destroy-kots')
+fi
+GITHUB_ACTIONS=dummy make "${CLEAN_TARGETS[@]}" --debug 2>&1 | tee make-clean.log
 success=${PIPESTATUS[0]}
 cleaned=$(date)
 if [ "$phase" = "clean" ] || [ "$success" != "0" ]; then
