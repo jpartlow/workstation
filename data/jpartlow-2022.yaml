@@ -1,14 +1,14 @@
-# tied to jpartlow-dev ubuntu 18.04
+# tied to jpartlow-dev-skeletor ubuntu 20.04
 
 # YAML Macros
 # (Note this is namespaced 'workstation' so that hiera doesn't complain about its presence)
-workstation::team_github_accounts: &team_github_accounts
-  - "cthorn42"
-  - "shaigy"
-  - "barriserloth"
+workstation::skeletor_github_accounts: &skeletor_github_accounts
+  - "mcdonaldseanp"
+  - "donoghuc"
+  - "nicklewis"
+workstation::dumpling_github_accounts: &dumpling_github_accounts
   - "nmburgan"
-  - "npwalker"
-  - "actowery"
+  - "shaigy"
 
 # Puppet parameters
 workstation::profiles:
@@ -18,56 +18,31 @@ workstation::repository_data:
   - path: "work/src"
     defaults:
       upstream: "puppetlabs"
-      remotes: *team_github_accounts
+      remotes: *dumpling_github_accounts
+      checkout_branch: "main"
     repos:
       -
         source: "git@github.com:jpartlow/beaker"
         checkout_branch: "master"
-      -
-        source: "git@github.com:jpartlow/beaker-answers"
-        checkout_branch: "main"
+      - source: "git@github.com:jpartlow/beaker-answers"
       -
         source: "git@github.com:jpartlow/beaker-hostgenerator"
         checkout_branch: "master"
-      -
-        source: "git@github.com:jpartlow/beaker-pe"
-        checkout_branch: "main"
+      - source: "git@github.com:jpartlow/beaker-pe"
       -
         source: "git@github.com:jpartlow/beaker-pe-large-environments"
         checkout_branch: "master"
-      -
-        source: "git@github.com:jpartlow/bolt"
-        checkout_branch: "main"
-        remotes: []
-      - source: "git@github.com:jpartlow/chloride"
-      -
-        source: "git@github.com:jpartlow/ci-job-configs"
-        checkout_branch: "master"
-      -
-        source: "git@github.com:jpartlow/classifier"
-        checkout_branch: "main"
+      - source: "git@github.com:jpartlow/ci-job-configs"
+      - source: "git@github.com:jpartlow/classifier"
       -
         source: "git@github.com:jpartlow/enterprise-dist"
         remotes: []
+      - source: "git@github.com:jpartlow/enterprise_tasks"
+      - source: "git@github.com:jpartlow/facter"
       -
-        source: "git@github.com:jpartlow/enterprise_tasks"
-        checkout_branch: "main"
-      -
-        source: "git@github.com:jpartlow/facter"
-        checkout_branch: "main"
-      - source: "git@github.com:jpartlow/higgs"
-      -
-        source: 'git@github.com:jpartlow/holodeck-manifests'
-        checkout_branch: 'main'
-        remotes: []
-      -
-        source: 'git@github.com:jpartlow/kurl_test'
-        checkout_branch: 'main'
-        remotes: []
-      - source: "git@github.com:jpartlow/merge-monitor"
-      -
-        source: "git@github.com:jpartlow/pe_acceptance_tests"
-        checkout_branch: "2018.1.x"
+        source: "git@github.com:jpartlow/merge-monitor"
+        checkout_branch: "master"
+      - source: "git@github.com:jpartlow/pe_acceptance_tests"
       -
         source: "git@github.com:jpartlow/pe_acceptance_tests-control"
         checkout_branch: 'production'
@@ -89,40 +64,46 @@ workstation::repository_data:
         source: "git@github.com:jpartlow/pe-opsworks-tools-vanagon"
         remotes: []
       - source: "git@github.com:jpartlow/peteam-statusboard"
+      - source: "git@github.com:jpartlow/puppet"
+      - source: "git@github.com:jpartlow/puppetdb"
       -
-        source: "git@github.com:jpartlow/puppet"
-        checkout_branch: "main"
-      -
-        source: "git@github.com:jpartlow/puppetdb"
-        checkout_branch: "main"
-      - source: "git@github.com:jpartlow/puppet-debugging-kit"
+        source: "git@github.com:jpartlow/puppet-debugging-kit"
+        checkout_branch: "master"
       -
         source: "git@github.com:jpartlow/puppet-enterprise-vanagon"
         remotes: []
       - source: "git@github.com:jpartlow/puppet-enterprise-marketplace-image"
       -
-        source: "git@github.com:jpartlow/puppet-license-cli"
-        checkout_branch: "master"
-      -
         source: "git@github.com:jpartlow/puppet-runtime"
         checkout_branch: "master"
-      - source: "git@github.com:jpartlow/puppet-scale-control"
       -
-        source: "git@github.com:jpartlow/puppetlabs-packer"
-        remotes: []
-      - source: "git@github.com:jpartlow/puppetlabs-stdlib"
+        source: "git@github.com:jpartlow/puppet-scale-control"
+        checkout_branch: "production"
       - source: "git@github.com:jpartlow/puppetlabs-modules"
       - source: "git@github.com:jpartlow/rspec-puppet"
       -
         source: "git@github.com:puppetlabs/vanagon"
         remotes: []
-      -
-        source: "git@github.com:jpartlow/vmfloaty"
-        upstream: "briancain"
+      - source: "git@github.com:jpartlow/vmfloaty"
+      - source: "git@github.com:jpartlow/puppetlabs-stdlib"
       -
         source: "git@github.com:jpartlow/winston"
-        checkout_branch: "main"
         remotes: []
+      -
+        source: 'git@github.com:jpartlow/holodeck-manifests'
+        remotes: []
+      -
+        source: 'git@github.com:jpartlow/kurl_test'
+        remotes: []
+
+  - path: "work/src"
+    defaults:
+      upstream: "puppetlabs"
+      remotes: *skeletor_github_accounts
+      checkout_branch: "main"
+    repos:
+      - source: "git@github.com:jpartlow/bolt"
+      - source: "git@github.com:jpartlow/orchestrator"
 
   - path: "work/src"
     repos:
@@ -132,20 +113,16 @@ workstation::repository_data:
   - path: "work/src/pem"
     defaults:
       upstream: "puppetlabs"
-      remotes: *team_github_accounts
+      remotes: *dumpling_github_accounts
     repos:
       -
-        clone_name: "irving"
+        clone_name: "2019.8.x"
         source: "git@github.com:jpartlow/puppet-enterprise-modules"
-        checkout_branch: "irving"
+        checkout_branch: "2019.8.x"
       -
-        clone_name: "johnson"
+        clone_name: "2021.7.x"
         source: "git@github.com:jpartlow/puppet-enterprise-modules"
-        checkout_branch: "johnson"
-      -
-        clone_name: "kearney"
-        source: "git@github.com:jpartlow/puppet-enterprise-modules"
-        checkout_branch: "kearney"
+        checkout_branch: "2021.7.x"
       -
         clone_name: "main"
         source: "git@github.com:jpartlow/puppet-enterprise-modules"
@@ -154,7 +131,7 @@ workstation::repository_data:
   - path: "work/src/pe-modules"
     defaults:
       upstream: "puppetlabs"
-      remotes: *team_github_accounts
+      remotes: *dumpling_github_accounts
     repos:
       - source: "git@github.com:jpartlow/puppetlabs-pe_r10k"
       -
@@ -166,103 +143,45 @@ workstation::repository_data:
 
   - path: "work/src/pe-modules"
     defaults:
-      remotes: *team_github_accounts
+      remotes: *dumpling_github_accounts
     repos:
       - source: "git@github.com:puppetlabs/puppetlabs-pe_support_script"
-
-  - path: "work/src/legacy-pe-modules"
-    defaults:
-      upstream: "puppetlabs"
-      remotes: *team_github_accounts
-    repos:
-      -
-        source: "git@github.com:jpartlow/puppetlabs-pe_infrastructure"
-        checkout_branch: "irving"
-      -
-        source: "git@github.com:jpartlow/puppetlabs-pe_install"
-        checkout_branch: "irving"
-      -
-        source: "git@github.com:jpartlow/puppetlabs-pe_manager"
-        checkout_branch: "irving"
-      - source: "git@github.com:jpartlow/puppetlabs-pe_postgresql"
-      - source: "git@github.com:jpartlow/puppetlabs-pe_r10k"
-      -
-        source: "git@github.com:jpartlow/puppetlabs-pe_repo"
-        checkout_branch: "irving"
-      - source: "git@github.com:jpartlow/puppetlabs-pe_staging"
-      -
-        source: "git@github.com:jpartlow/puppetlabs-puppet_agent"
-        checkout_branch: "main"
-      -
-        source: "git@github.com:jpartlow/puppetlabs-puppet_enterprise"
-        checkout_branch: "irving"
-
-  - path: "work/src/legacy-pe-modules"
-    defaults:
-      remotes: *team_github_accounts
-    repos:
-      - source: "git@github.com:puppetlabs/puppetlabs-pe_accounts"
-      - source: "git@github.com:puppetlabs/puppetlabs-pe_concat"
-      - source: "git@github.com:puppetlabs/puppetlabs-pe_hocon"
-      - source: "git@github.com:puppetlabs/puppetlabs-pe_inifile"
-      - source: "git@github.com:puppetlabs/puppetlabs-pe_java_ks"
-      - source: "git@github.com:puppetlabs/puppetlabs-pe_nginx"
-      - source: "git@github.com:puppetlabs/puppetlabs-pe_puppet_authorization"
-      - source: "git@github.com:puppetlabs/puppetlabs-pe_support_script"
-
-  - path: "work/src/puppetlabs"
-    repos:
-      - source: "git@github.com:puppetlabs/beaker-puppet"
-      - source: "git@github.com:puppetlabs/kerminator"
-      - source: "git@github.com:puppetlabs/packaging"
-      - source: "git@github.com:puppetlabs/pe-rbac-service"
-      - source: "git@github.com:puppetlabs/puppet-agent"
-      - source: "git@github.com:puppetlabs/puppetdb"
 
   - path: "work/src/alternates"
     defaults:
       upstream: "puppetlabs"
+      checkout_branch: "main"
     repos:
       -
         clone_name: "frankenbuilder_1"
         source: "git@github.com:jpartlow/frankenbuilder"
-        checkout_branch: "main"
       -
         clone_name: "frankenbuilder_2"
         source: "git@github.com:jpartlow/frankenbuilder"
-        checkout_branch: "main"
       -
         clone_name: "frankenbuilder_3"
         source: "git@github.com:jpartlow/frankenbuilder"
-        checkout_branch: "main"
       -
         clone_name: "frankenbuilder_4"
         source: "git@github.com:jpartlow/frankenbuilder"
-        checkout_branch: "main"
       -
         clone_name: "frankenbuilder_5"
         source: "git@github.com:jpartlow/frankenbuilder"
-        checkout_branch: "main"
       -
         clone_name: "pe_acceptance_tests_1"
         source: "git@github.com:jpartlow/pe_acceptance_tests"
-        checkout_branch: "2018.1.x"
       -
         clone_name: "pe_acceptance_tests_2"
         source: "git@github.com:jpartlow/pe_acceptance_tests"
-        checkout_branch: "2018.1.x"
       -
         clone_name: "pe_acceptance_tests_3"
         source: "git@github.com:jpartlow/pe_acceptance_tests"
-        checkout_branch: "2018.1.x"
       -
         clone_name: "pe_acceptance_tests_4"
         source: "git@github.com:jpartlow/pe_acceptance_tests"
-        checkout_branch: "2018.1.x"
       -
         clone_name: "pe_acceptance_tests_5"
         source: "git@github.com:jpartlow/pe_acceptance_tests"
-        checkout_branch: "2018.1.x"
 
 workstation::frankenbuilder::suffixes: ['1','2','3','4','5']
 
@@ -307,9 +226,6 @@ workstation::vim_bundles:
     clone_name: "vim-syntastic"
     source: "https://github.com/vim-syntastic/syntastic.git"
   -
-    clone_name: "vim-vagrant"
-    source: "https://github.com/hashivim/vim-vagrant.git"
-  -
     clone_name: "vim-dockerfile"
     source: "https://github.com/ekalinin/Dockerfile.vim.git"
   -
@@ -317,20 +233,19 @@ workstation::vim_bundles:
     source: "https://github.com/pedrohdz/vim-yaml-folds"
 
 workstation::packages:
-  - 'ack-grep' # Debian specific
-  - 'openjdk-8-jre-headless'
+  - 'ack'
+  - 'openjdk-11-jre-headless'
   - 'leiningen'
-  - 'python'
+  - 'jq'
   - 'rsync'
   - 'shellcheck'
-  - 'aptitude'
   - 'redis-tools'
   - 'graphviz'
   - 'rdesktop'
 
 workstation::package_repositories::repositories:
   -
-    repo_package_url: "https://apt.puppet.com/puppet-tools-release-bionic.deb"
+    repo_package_url: "https://apt.puppet.com/puppet-tools-release-jammy.deb"
     packages:
       - 'puppet-bolt'
 
@@ -338,7 +253,7 @@ workstation::ssh_public_keys:
   - "id_rsa.pub"
 
 workstation::profile::dev_account_base::ruby_versions:
-  - '2.7.3'
+  - '2.7.6'
 
 workstation::ruby::gems:
   - 'vmfloaty'

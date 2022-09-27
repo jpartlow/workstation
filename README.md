@@ -136,7 +136,7 @@ added at least one class to 'workstation::profiles' run the workstation::manage
 plan:
 
 ``` sh
-bolt plan run workstation::manage -n <your-host> --no-host-key-check --run-as root
+bolt plan run workstation::manage nodes=<your-host> --no-host-key-check --run-as root
 ```
 
 That should be it, except for whatever didn't work.
