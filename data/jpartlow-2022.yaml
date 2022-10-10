@@ -104,6 +104,7 @@ workstation::repository_data:
     repos:
       - source: "git@github.com:jpartlow/bolt"
       - source: "git@github.com:jpartlow/orchestrator"
+      - source: "git@github.com:jpartlow/pe-orchestration-services"
 
   - path: "work/src"
     repos:
@@ -242,10 +243,12 @@ workstation::packages:
   - 'redis-tools'
   - 'graphviz'
   - 'rdesktop'
+  - 'emacs'
+  - 'postgresql-client'
 
 workstation::package_repositories::repositories:
   -
-    repo_package_url: "https://apt.puppet.com/puppet-tools-release-jammy.deb"
+    repo_package_url: "https://apt.puppet.com/puppet-tools-release-focal.deb"
     packages:
       - 'puppet-bolt'
 
