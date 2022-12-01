@@ -235,7 +235,7 @@ workstation::vim_bundles:
 
 workstation::packages:
   - 'ack'
-  - 'openjdk-11-jre-headless'
+  - 'openjdk-11-jdk-headless'
   - 'leiningen'
   - 'jq'
   - 'rsync'
@@ -244,11 +244,10 @@ workstation::packages:
   - 'graphviz'
   - 'rdesktop'
   - 'emacs'
-  - 'postgresql-client'
 
 workstation::package_repositories::repositories:
   -
-    repo_package_url: "https://apt.puppet.com/puppet-tools-release-focal.deb"
+    repo_package_url: "https://apt.puppet.com/puppet-tools-release-jammy.deb"
     packages:
       - 'puppet-bolt'
 
